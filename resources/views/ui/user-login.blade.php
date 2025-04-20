@@ -22,37 +22,11 @@
 
 <x-ui.header />
 
-<body>
-    <div class="flex items-center justify-center min-h-screen">
-        <div class="flex flex-col gap-10 min-w-1/2 pl-6 pr-6 border">
-            <h2 class="text-3xl font-light mt-10">Log Into Your Account</h2>
-            <form class="flex flex-col gap-4">
-                @csrf
-                <div>
-                    <label for="uname" class="font-medium">Username</label>
-                    <input id="uname" name="uname" type="text" class="relative block w-full mt-2 p-1 border"
-                        required>
-                </div>
-                <div>
-                    <div class="flex justify-between items-center">
-                        <label for="upass" class="font-medium">Password</label>
-                        <p class="text-sm text-gray-600 hover:text-blue-600 hover:underline cursor-pointer">Forgot password?</p>
-                    </div>
-                    <input id="upass" name="upass" type="password" class="relative block w-full mt-2 p-1 border"
-                        required>
-                </div>
-                <button class="bg-teal-700 text-white border border-teal-900 hover:bg-teal-800 hover:border-transparent font-medium py-1 mt-2">
-                    Log in
-                </button>
-                <div class="flex flex-row justify-center gap-1.5 mb-5">
-                    <p class="text-gray-600">No Account?</p>
-                    <p class="underline cursor-pointer text-medium">Register here</p>
-                </div>
-            </form>
-        </div>
+<body class="min-h-screen bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        @include('auth.login.user-login-form')
     </div>
 </body>
 
 <x-ui.footer />
 
-</html>
