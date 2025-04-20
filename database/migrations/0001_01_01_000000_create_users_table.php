@@ -13,11 +13,26 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
+            $table->string('first_name', 300);
+            $table->string('middle_name', 255)->nullable();
+            $table->string('last_name', 555);
+            $table->string('email', 555)->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->string('alternate_email', 555)->nullable();
+            $table->string('mobile_no', 10)->nullable();
+            $table->timestamp('mobile_verified_at')->nullable();
+            $table->string('mobile_otp')->nullable();
+            $table->timestamp('otp_expiry')->nullable();
+            $table->string('phone_no', 15)->nullable();
+            $table->string('bar_code', 55)->nullable();
+            $table->date('create_date')->nullable();
+            $table->integer('usertype')->default(0);
+            $table->integer('schema_id')->default(0);
+            $table->unsignedBigInteger('online_filed_by')->nullable();
             $table->string('password');
-            $table->rememberToken();
+            $table->string('secure_pin', 8)->nullable();
+            $table->integer('question')->default(0);
+            $table->text('answer')->nullable();
             $table->timestamps();
         });
 
