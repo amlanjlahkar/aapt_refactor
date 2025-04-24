@@ -21,6 +21,7 @@ Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login.sho
 // User Authentication Routes
 Route::prefix('user')->group(function () {
     Route::get('/login', [UserController::class, 'showLoginForm'])->name('user.login');
+    Route::post('/login', [UserController::class, 'loginUser'])->name('user.login.submit');
     Route::get('/register', [UserController::class, 'showRegistrationForm'])->name('user.register');
     Route::post('/register', [UserController::class, 'registerUser'])->name('user.register.submit');
 });

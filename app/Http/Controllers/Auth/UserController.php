@@ -7,8 +7,9 @@ use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -59,5 +60,23 @@ class UserController extends Controller
                 ->with('error', 'Failed to register user. Please try again.')
                 ->withInput();
         }
+    }
+
+    public function loginUser(Request $request): RedirectResponse
+    {
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if (Auth::attempt($credentials, true)) {
+            $request->session()->regenerate();
+
+            return redirect()->intended('user.dashboard');
+        }
+
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ])->onlyInput('email');
     }
 }
