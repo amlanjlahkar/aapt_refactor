@@ -25,7 +25,7 @@
 
 <x-ui.header />
 
-<body>
+<body class="min-h-screen bg-gray-100">
     @include('auth.register.user-register-form')
 </body>
 

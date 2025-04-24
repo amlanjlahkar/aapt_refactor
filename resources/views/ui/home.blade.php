@@ -25,7 +25,7 @@
 
 <x-ui.header />
 
-<body>
+<body class="min-h-screen bg-gray-100">
     <!-- <div class="flex flex-row justify-between w-full border-b border-gray-400 p-4"> -->
     <!--     <div class="flex items-center space-x-3"> -->
     <!--         <img src="{{ asset('images/aapt_logo.jpg') }}" alt="Logo" class="h-20"> -->

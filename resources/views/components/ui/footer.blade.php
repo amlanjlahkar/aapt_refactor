@@ -1,4 +1,4 @@
-<footer class="bg-gray-800 text-gray-100 w-full pt-6 pb-6 border-t-2 border-gray-500 fixed bottom-0">
+<footer class="bg-gray-800 text-gray-100 w-full pt-6 pb-6 border-t-2 border-gray-500">
     <div class="max-w-7xl mx-auto px-4 text-sm">
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 text-center md:text-left mb-4">
             <a href="#" class="hover:underline">Terms & Conditions</a>

@@ -4,17 +4,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/home', function () {
-    return view('ui/home');
-});
-
-Route::get('/internal/login', function () {
-    return view('auth/internal/login');
-});
+Route::view('/', 'welcome');
+Route::view('/home', 'ui/home')->name('home');
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login.show');
 

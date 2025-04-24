@@ -25,7 +25,7 @@
 
 <x-ui.header />
 
-<body>
+<body class="min-h-screen bg-gray-100">
     <div class="max-w-md mx-auto mt-10 bg-white rounded-lg shadow-md overflow-hidden p-6">
         <h2 class="text-xl font-semibold mb-6 text-center">Select Login Type</h2>
 
