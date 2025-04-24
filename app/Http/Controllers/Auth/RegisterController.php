@@ -7,20 +7,14 @@ use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class UserController extends Controller
+class RegisterController extends Controller
 {
-    public function showLoginForm(): View
+    public function showUserRegisterPage(): View
     {
-        return view('ui.user-login');
-    }
-
-    public function showRegistrationForm(): View
-    {
-        return view('ui.user-register');
+        return view('auth.register.user-register-page');
     }
 
     public function registerUser(Request $request): RedirectResponse
@@ -51,32 +45,15 @@ class UserController extends Controller
                 'last_name' => $request->last_name,
                 'email' => $request->email,
                 'mobile_no' => $request->mobile_no,
-                'password' => Hash::make($request->password)
+                'password' => Hash::make($request->password),
             ]);
-            return redirect()->route('user.dashboard')
+
+            return redirect()->route('mail_verify_notice')
                 ->with('success', 'User registered successfully!');
         } catch (\Exception $e) {
             return redirect()->back()
                 ->with('error', 'Failed to register user. Please try again.')
                 ->withInput();
         }
-    }
-
-    public function loginUser(Request $request): RedirectResponse
-    {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
-
-        if (Auth::attempt($credentials, true)) {
-            $request->session()->regenerate();
-
-            return redirect()->intended('user.dashboard');
-        }
-
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
     }
 }

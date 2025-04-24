@@ -1,4 +1,4 @@
-<div class="max-w-xl mx-auto mt-10 bg-white rounded-md shadow-md overflow-hidden">
+<div class="max-w-xl mx-auto mt-5 mb-5 bg-white rounded-md shadow-md overflow-hidden">
     <div class="p-6">
         <h2 class="text-xl font-semibold mb-4">User Registration</h2>
 
@@ -91,6 +91,7 @@
     </div>
 </div>
 
+@push('scripts')
 <script>
     document.getElementById('registrationForm').addEventListener('submit', function(e) {
         e.preventDefault();
@@ -139,3 +140,4 @@
         this.submit();
     });
 </script>
+@endpush

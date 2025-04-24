@@ -23,13 +23,8 @@
     @endif
 </head>
 
-<x-ui.header />
-
 <body class="min-h-screen bg-gray-100">
-    <div class="container mx-auto px-4 py-8">
-        @include('auth.login.user-login-form')
-    </div>
+    {{ $slot }}
 </body>
 
-<x-ui.footer />
-
+</html>

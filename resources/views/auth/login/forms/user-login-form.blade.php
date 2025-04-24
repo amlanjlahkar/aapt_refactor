@@ -1,4 +1,4 @@
-<div id="user-login-form" class="max-w-md mx-auto mt-10 bg-white rounded-md shadow-md overflow-hidden p-6">
+<div class="max-w-md mx-auto mt-5 mb-5 bg-white rounded-md shadow-md overflow-hidden p-6">
     <h2 class="text-xl font-semibold mb-4">Enter user credentials</h2>
 
     @if ($errors->any())
