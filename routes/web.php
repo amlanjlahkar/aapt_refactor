@@ -15,4 +15,7 @@ Route::prefix('user')->group(function () {
     Route::post('/login', [UserController::class, 'loginUser'])->name('user.login.submit');
     Route::get('/register', [UserController::class, 'showRegistrationForm'])->name('user.register');
     Route::post('/register', [UserController::class, 'registerUser'])->name('user.register.submit');
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('user.dashboard');
 });
