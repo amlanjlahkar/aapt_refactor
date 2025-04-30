@@ -29,7 +29,7 @@
         @endif
     </head>
 
-    <body class="min-h-screen bg-gray-100">
+    <body class="flex min-h-screen flex-col bg-gray-100">
         {{ $slot }}
     </body>
 </html>

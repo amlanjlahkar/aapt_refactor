@@ -1,8 +1,8 @@
 <x-ui.layout title="Login">
     <x-ui.header />
-    <main>
+    <main class="grow">
         <div
-            class="mx-auto mt-10 max-w-md overflow-hidden rounded-lg bg-white p-6 shadow-md"
+            class="m-10 mx-auto max-w-md overflow-hidden rounded-md bg-white p-6 shadow-md"
         >
             <h2 class="mb-6 text-center text-xl font-semibold">
                 Select Login Type

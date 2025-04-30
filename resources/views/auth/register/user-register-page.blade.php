@@ -1,6 +1,6 @@
 <x-ui.layout title="User Register">
     <x-ui.header />
-    <main>
+    <main class="grow">
         <div class="container mx-auto px-4 py-4">
             @include('auth.register.forms.user-register-form')
         </div>

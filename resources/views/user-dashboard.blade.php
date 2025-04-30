@@ -1,7 +1,7 @@
 <x-ui.layout title="User Dashboard">
     <x-ui.header />
     <main
-        class="bg-cover bg-center"
+        class="grow bg-cover bg-center"
         style="
             background-image: url('{{ asset('images/supreme_court.jpg') }}');
         "
