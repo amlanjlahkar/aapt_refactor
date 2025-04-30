@@ -8,6 +8,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
@@ -48,12 +49,14 @@ class RegisterController extends Controller
                 'password' => Hash::make($request->password),
             ]);
 
-            return redirect()->route('mail_verify_notice')
-                ->with('success', 'User registered successfully!');
+            auth()->login($user);
+            $user->sendEmailVerificationNotification();
+
+            return redirect()->route('verification.notice')->with('email', $user->email);
         } catch (\Exception $e) {
-            return redirect()->back()
-                ->with('error', 'Failed to register user. Please try again.')
-                ->withInput();
+            Log::error('User registration failed: '.$e->getMessage());
+
+            return redirect()->back();
         }
     }
 }
