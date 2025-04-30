@@ -5,7 +5,9 @@
 <div class="flex min-h-screen flex-row">
     {{-- side panel --}}
     <div class="flex-1/5">
-        <div class="m-5 flex min-h-screen flex-col rounded bg-gray-700 shadow-lg">
+        <div
+            class="m-5 flex min-h-screen flex-col rounded bg-gray-700 shadow-lg"
+        >
             <div class="flex flex-col">
                 <div class="flex flex-row items-center gap-3 p-6 pb-0">
                     <x-fas-gavel class="h-5 w-5 text-blue-400" />
@@ -49,13 +51,16 @@
     <div class="flex-4/5">
         <div class="m-5 rounded bg-gray-100 shadow-lg">
             <div
-                class="flex flex-row items-center justify-between rounded-tl rounded-tr border-b-1 border-gray-400 bg-gray-300 pt-5 pr-7 pb-5 pl-7">
+                class="flex flex-row items-center justify-between rounded-tl rounded-tr border-b-1 border-gray-400 bg-gray-300 pt-5 pr-7 pb-5 pl-7"
+            >
                 <h2 class="text-3xl font-semibold text-gray-800">
                     {{ $header ? $header : 'Assam APT Dashboard' }}
                 </h2>
                 <p class="text-xl text-gray-800">
                     Logged in as:
-                    <span class="font-semibold text-cyan-800">{{ session('user') }}</span>
+                    <span class="font-semibold text-cyan-800">
+                        {{ session('user') }}
+                    </span>
                 </p>
             </div>
             {{ $slot }}

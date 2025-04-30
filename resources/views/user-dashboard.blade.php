@@ -6,7 +6,7 @@
             background-image: url('{{ asset('images/supreme_court.jpg') }}');
         "
     >
-        <x-ui.dashboard.user.content header='Welcome to Assam APT Dashboard'>
+        <x-ui.dashboard.user.content header="Welcome to Assam APT Dashboard">
             <div class="p-7">
                 <div
                     class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4"
