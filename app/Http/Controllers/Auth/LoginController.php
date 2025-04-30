@@ -30,7 +30,11 @@ class LoginController extends Controller
         if (Auth::attempt($credentials, true)) {
             $request->session()->regenerate();
 
-            return redirect()->intended('user.dashboard');
+            $user = Auth::user();
+            $username = implode(' ', array_filter([$user->first_name, $user->middle_name, $user->last_name]));
+            $request->session()->put('user', $username);
+
+            return redirect()->route('user.dashboard');
         }
 
         return back()->withErrors([
