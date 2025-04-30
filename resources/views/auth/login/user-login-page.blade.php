@@ -1,4 +1,4 @@
-<x-ui.layout>
+<x-ui.layout title="User Login">
     <x-ui.header />
 
     <main>

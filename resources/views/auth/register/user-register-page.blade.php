@@ -1,4 +1,4 @@
-<x-ui.layout>
+<x-ui.layout title="User Register">
     <x-ui.header />
     <main>
         <div class="container mx-auto px-4 py-4">
