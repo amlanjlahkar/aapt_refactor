@@ -6,6 +6,6 @@
             @include('auth.login.forms.user-login-form')
         </div>
     </main>
-
+    @stack('scripts')
     <x-ui.footer />
 </x-ui.layout>

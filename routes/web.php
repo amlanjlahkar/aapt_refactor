@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'home')->name('home');
 Route::get('/login', [LoginController::class, 'showLoginPage'])->name('login');
+Route::get('/refresh-captcha', function () {
+    return captcha_img('flat');
+});
 
 // user routes
 Route::prefix('user')->group(function () {

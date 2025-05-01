@@ -25,9 +25,13 @@ class LoginController extends Controller
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
+            'captcha' => 'required|captcha',
         ]);
 
-        if (Auth::attempt($credentials, true)) {
+        if (Auth::attempt([
+            'email' => $credentials['email'],
+            'password' => $credentials['password'],
+        ], true)) {
             $request->session()->regenerate();
 
             $user = Auth::user();
