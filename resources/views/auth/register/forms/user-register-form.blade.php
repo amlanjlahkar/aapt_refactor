@@ -25,7 +25,7 @@
 
         <form
             method="POST"
-            action="{{ route('user.register.submit') }}"
+            action="{{ route('user.auth.register.attempt') }}"
             id="registrationForm"
         >
             @csrf
@@ -165,7 +165,7 @@
                 <p class="text-sm text-gray-600">
                     Already registered?
                     <a
-                        href="{{ route('user.login') }}"
+                        href="{{ route('user.auth.login.form') }}"
                         class="text-blue-500 hover:text-blue-600 hover:underline"
                     >
                         Login here

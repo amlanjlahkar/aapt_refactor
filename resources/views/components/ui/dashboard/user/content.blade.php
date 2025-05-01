@@ -41,7 +41,10 @@
                     <h2 class="text-xl font-semibold text-white">ACCOUNT</h2>
                 </div>
                 <div class="mt-6 flex flex-col gap-3.5 bg-gray-800 p-6">
-                    <p class="font-medium text-red-400">Logout</p>
+                    <form method="POST" action="{{ route('user.auth.logout') }}">
+                        @csrf
+                        <button class="font-medium text-red-400 cursor-pointer">Logout</button>
+                    </form>
                 </div>
             </div>
         </div>

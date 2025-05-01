@@ -10,7 +10,7 @@
 
             <div class="space-y-4">
                 <a
-                    href="{{ route('user.login') }}"
+                    href="{{ route('user.auth.login.form') }}"
                     class="block w-full rounded bg-blue-500 px-4 py-3 text-center font-bold text-white hover:bg-blue-600"
                 >
                     User Login
@@ -28,7 +28,7 @@
                 <p class="text-sm text-gray-600">
                     Not registered already?
                     <a
-                        href="{{ route('user.register') }}"
+                        href="{{ route('user.auth.register.form') }}"
                         class="text-blue-500 hover:text-blue-600 hover:underline"
                     >
                         Register here

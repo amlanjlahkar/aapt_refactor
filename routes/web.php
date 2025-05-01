@@ -12,22 +12,26 @@ Route::get('/refresh-captcha', function () {
     return captcha_img('flat');
 });
 
-// user routes
+/* User routes */
+Route::prefix('user/auth')->group(function () {
+    Route::get('/login', [LoginController::class, 'showUserLoginPage'])->name('user.auth.login.form');
+    Route::post('/login', [LoginController::class, 'loginUser'])->name('user.auth.login.attempt');
+    Route::post('/logout', [LoginController::class, 'logoutUser'])->name('user.auth.logout');
+    Route::get('/register', [RegisterController::class, 'showUserRegisterPage'])->name('user.auth.register.form');
+    Route::post('/register', [RegisterController::class, 'registerUser'])->name('user.auth.register.attempt');
+});
+
 Route::prefix('user')->group(function () {
-    Route::get('/login', [LoginController::class, 'showUserLoginPage'])->name('user.login');
-    Route::post('/login', [LoginController::class, 'loginUser'])->name('user.login.submit');
-    Route::get('/register', [RegisterController::class, 'showUserRegisterPage'])->name('user.register');
-    Route::post('/register', [RegisterController::class, 'registerUser'])->name('user.register.submit');
     Route::view('/dashboard', 'user-dashboard')->middleware(['auth', 'verified'])->name('user.dashboard');
 });
 
-// mail routes
+/* Mail verficaiton */
 Route::view('/email_verify_notice', 'mail/verify-notice')->middleware('auth')->name('verification.notice');
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
 
-    return redirect()->intended('/user/login');
+    return redirect('/user/login');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 Route::post('/email/verification-notification', function (Request $request) {

@@ -19,7 +19,7 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('user.login.attempt') }}">
+    <form method="POST" action="{{ route('user.auth.login.attempt') }}">
         @csrf
         <div class="mb-4">
             <label
@@ -85,7 +85,7 @@
             <p class="text-sm text-gray-600">
                 Not registered already?
                 <a
-                    href="{{ route('user.register.form') }}"
+                    href="{{ route('user.auth.register.form') }}"
                     class="text-blue-500 hover:text-blue-600 hover:underline"
                 >
                     Register here
