@@ -62,7 +62,7 @@
             />
         </div>
         <div class="mb-6">
-            <div class="flex flex-row justify-between items-center gap-3.5">
+            <div class="flex flex-row items-center justify-between gap-3.5">
                 <input
                     type="text"
                     id="captcha"
@@ -71,11 +71,17 @@
                     class="w-2/3 rounded-xs border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     required
                 />
-                <span id='captcha_img' class='w-1/3'>{!! captcha_img('flat') !!}</span>
-                <x-fas-arrow-rotate-right id='captcha-refresh-btn' class='w-5 text-gray-700 cursor-pointer' title='Refresh captcha' />
+                <span id="captcha_img" class="w-1/3">
+                    {!! captcha_img('flat') !!}
+                </span>
+                <x-fas-arrow-rotate-right
+                    id="captcha-refresh-btn"
+                    class="w-5 cursor-pointer text-gray-700"
+                    title="Refresh captcha"
+                />
             </div>
         </div>
-       <button
+        <button
             type="submit"
             class="w-full cursor-pointer rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-600"
         >
@@ -102,8 +108,10 @@
 
         refreshBtn.addEventListener('click', () => {
             fetch('/refresh-captcha')
-                .then(res => res.text())
-                .then(data => { captcha.innerHTML = data })
-        });
+                .then((res) => res.text())
+                .then((data) => {
+                    captcha.innerHTML = data
+                })
+        })
     </script>
 @endpush
