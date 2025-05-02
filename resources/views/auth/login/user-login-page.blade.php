@@ -1,5 +1,5 @@
-<x-ui.layout title="User Login">
-    <x-ui.header />
+<x-layout title="User Login">
+    @include('partials.header')
 
     <main class="grow">
         <div class="container mx-auto px-4 py-4">
@@ -7,5 +7,5 @@
         </div>
     </main>
     @stack('scripts')
-    <x-ui.footer />
-</x-ui.layout>
+    @include('partials.footer')
+</x-layout>

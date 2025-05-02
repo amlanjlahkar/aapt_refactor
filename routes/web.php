@@ -22,7 +22,7 @@ Route::prefix('user/auth')->group(function () {
 });
 
 Route::prefix('user')->group(function () {
-    Route::view('/dashboard', 'user-dashboard')->middleware(['auth', 'verified'])->name('user.dashboard');
+    Route::view('/dashboard', 'user/dashboard')->middleware(['auth', 'verified'])->name('user.dashboard');
 });
 
 /* Mail verficaiton */

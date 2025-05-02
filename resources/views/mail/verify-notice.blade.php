@@ -1,5 +1,5 @@
-<x-ui.layout title="Verify Mail">
-    <x-ui.header />
+<x-layout title="Verify Mail">
+    @include('partials.header')
     <main>
         <div
             class="mx-auto mt-5 mb-5 max-w-md rounded-md bg-white p-6 shadow-md"
@@ -31,5 +31,5 @@
             </div>
         </div>
     </main>
-    <x-ui.footer />
-</x-ui.layout>
+    @include('partials.footer')
+</x-layout>

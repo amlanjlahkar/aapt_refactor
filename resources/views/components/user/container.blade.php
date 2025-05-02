@@ -1,3 +1,8 @@
+{{--
+    The default view container for user.
+    It conatins a fixed side panel and the area(slot) where
+    main contents should go
+--}}
 @props([
     'header' => null,
 ])
@@ -6,7 +11,7 @@
     {{-- side panel --}}
     <div class="flex-1/5">
         <div
-            class="ml-12 mt-12 mb-12 flex min-h-screen flex-col rounded bg-gray-700 shadow-lg"
+            class="mt-12 mb-12 ml-12 flex min-h-screen flex-col rounded bg-gray-700 shadow-lg"
         >
             <div class="flex flex-col">
                 <div class="flex flex-row items-center gap-3 p-6 pb-0">

@@ -1,5 +1,5 @@
-<x-ui.layout title="Login">
-    <x-ui.header />
+<x-layout title="Login">
+    @include('partials.header')
     <main class="grow">
         <div
             class="m-10 mx-auto max-w-md overflow-hidden rounded-md bg-white p-6 shadow-md"
@@ -37,5 +37,5 @@
             </div>
         </div>
     </main>
-    <x-ui.footer />
-</x-ui.layout>
+    @include('partials.footer')
+</x-layout>

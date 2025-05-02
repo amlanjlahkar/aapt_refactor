@@ -1,10 +1,10 @@
-<x-ui.layout title="User Register">
-    <x-ui.header />
+<x-layout title="User Register">
+    @include('partials.header')
     <main class="grow">
         <div class="container mx-auto px-4 py-4">
             @include('auth.register.forms.user-register-form')
         </div>
     </main>
-    <x-ui.footer />
+    @include('partials.footer')
     @stack('scripts')
-</x-ui.layout>
+</x-layout>

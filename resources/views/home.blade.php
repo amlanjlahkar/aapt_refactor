@@ -1,5 +1,5 @@
-<x-ui.layout>
-    <x-ui.header />
+<x-layout>
+    @include('partials.header')
     <main class="grow"></main>
-    <x-ui.footer />
-</x-ui.layout>
+    @include('partials.footer')
+</x-layout>

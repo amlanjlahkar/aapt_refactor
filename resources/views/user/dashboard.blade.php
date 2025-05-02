@@ -1,12 +1,12 @@
-<x-ui.layout title="User Dashboard">
-    <x-ui.header />
+<x-layout title="User Dashboard">
+    @include('partials.header')
     <main
         class="grow bg-cover bg-center"
         style="
             background-image: url('{{ asset('images/supreme_court.jpg') }}');
         "
     >
-        <x-ui.dashboard.user.content header="Welcome to Assam APT Dashboard">
+        <x-user.container header="Welcome to Assam APT Dashboard">
             <div class="p-7">
                 <div
                     class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4"
@@ -82,7 +82,7 @@
                     </div>
                 </div>
             </div>
-        </x-ui.dashboard.user.content>
+        </x-user.container>
     </main>
-    <x-ui.footer />
-</x-ui.layout>
+    @include('partials.footer')
+</x-layout>
