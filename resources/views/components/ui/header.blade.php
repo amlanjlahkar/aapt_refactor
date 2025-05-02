@@ -1,7 +1,12 @@
 <header
-    class="sticky top-0 z-50 flex w-full flex-row flex-wrap justify-between border-b-1 border-gray-400 bg-gray-200 py-1 pr-4 pl-4 text-sm"
+    class="sticky top-0 z-50 flex w-full flex-row flex-wrap justify-between border-b-1 border-t-1 border-blue-200 bg-blue-50 py-2.5 pr-12 pl-12 text-sm"
 >
-    <div class="flex flex-row flex-wrap space-x-4">
+    <div class="flex flex-row flex-wrap space-x-4 items-center">
+        <img
+            src="{{ asset('images/india_flag.png') }}"
+            alt="National Flag"
+            class="h-4 object-contain"
+        />
         <p>Government of Assam</p>
         <a href="#" class="text-blue-700 hover:underline">Old Website Link</a>
         <a href="#" class="text-blue-700 hover:underline">Get Mobile App</a>
@@ -12,7 +17,7 @@
             Screen Reader Access
         </a>
     </div>
-    <div class="flex flex-row flex-wrap space-x-4">
+    <div class="flex flex-row flex-wrap space-x-4 items-center">
         <div class="flex flex-row items-center justify-center space-x-2.5">
             <button>A+</button>
             <button>A</button>
@@ -28,20 +33,20 @@
 </header>
 
 <a href="{{ route('home') }}" class="block">
-    <div class="flex h-40 w-full items-center pl-4">
+    <div class="flex h-40 w-full gap-2.5 items-center pl-12 pr-12">
         <img
-            src="{{ asset('images/aapt_logo.jpg') }}"
+            src="{{ asset('images/india_emblem.png') }}"
             alt="AAPT Logo"
             class="h-32 object-contain"
         />
         <div class="ml-4 flex flex-col">
-            <h2 class="text-2xl font-bold">
+            <h2 class="text-2xl font-medium font-noto-assamese">
                 অসম প্ৰশাসনিক আৰু পেঞ্চন ন্যায়াধিকৰণ
             </h2>
-            <h2 class="text-2xl font-bold">
+            <h2 class="text-2xl font-semibold">
                 Assam Administrative and Pension Tribunal
             </h2>
-            <h3 class="text-xl font-bold">Guwahati, Assam</h3>
+            <h3 class="text-xl font-semibold">Guwahati, Assam</h3>
         </div>
     </div>
 </a>

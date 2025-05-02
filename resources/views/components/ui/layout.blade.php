@@ -10,15 +10,6 @@
 
         <title>{{ $title ? $title . ' - AAPT' : 'AAPT' }}</title>
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap"
-            rel="stylesheet"
-        />
-
-        <!-- Styles / Scripts -->
         @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
             @vite(['resources/css/app.css', 'resources/js/app.js'])
         @else
@@ -29,7 +20,7 @@
         @endif
     </head>
 
-    <body class="flex min-h-screen flex-col bg-gray-100">
+    <body class="flex min-h-screen flex-col bg-gray-100 font-noto">
         {{ $slot }}
     </body>
 </html>
