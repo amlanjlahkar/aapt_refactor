@@ -75,7 +75,7 @@
                     {!! captcha_img('flat') !!}
                 </span>
                 <x-fas-arrow-rotate-right
-                    id="captcha-refresh-btn"
+                    id="captcha_refresh_btn"
                     class="w-5 cursor-pointer text-gray-700"
                     title="Refresh captcha"
                 />
@@ -104,7 +104,7 @@
 @push('scripts')
     <script>
         const captcha = document.getElementById('captcha_img')
-        const refreshBtn = document.getElementById('captcha-refresh-btn')
+        const refreshBtn = document.getElementById('captcha_refresh_btn')
 
         refreshBtn.addEventListener('click', () => {
             fetch('/refresh-captcha')

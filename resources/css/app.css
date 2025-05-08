@@ -11,8 +11,6 @@
         'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
         'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
         'Noto Color Emoji';
-    --font-noto:
-        'Noto Sans', sans-serif;
-    --font-noto-assamese:
-        'Noto Sans Bengali', sans-serif;
+    --font-noto: 'Noto Sans', sans-serif;
+    --font-noto-assamese: 'Noto Sans Bengali', sans-serif;
 }

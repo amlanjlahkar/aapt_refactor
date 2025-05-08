@@ -69,9 +69,9 @@
                 <h2 class="text-3xl font-semibold text-gray-800">
                     {{ $header ? $header : 'Assam APT Dashboard' }}
                 </h2>
-                <p class="text-xl text-gray-800">
+                <p class="text-gray-800">
                     Logged in as:
-                    <span class="font-semibold text-cyan-800">
+                    <span class="font-semibold text-black">
                         {{ session('user') }}
                     </span>
                 </p>
