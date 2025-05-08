@@ -1,5 +1,6 @@
 <x-layout title="Login">
     @include('partials.header')
+    @include('partials.navbar')
     <main class="grow">
         <div
             class="m-10 mx-auto max-w-md overflow-hidden rounded-md bg-white p-6 shadow-md"
