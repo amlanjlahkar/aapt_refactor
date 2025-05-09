@@ -8,7 +8,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
@@ -39,24 +38,18 @@ class RegisterController extends Controller
                 ->withInput();
         }
 
-        try {
-            $user = User::create([
-                'first_name' => $request->first_name,
-                'middle_name' => $request->middle_name,
-                'last_name' => $request->last_name,
-                'email' => $request->email,
-                'mobile_no' => $request->mobile_no,
-                'password' => Hash::make($request->password),
-            ]);
+        $user = User::create([
+            'first_name' => $request->first_name,
+            'middle_name' => $request->middle_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'mobile_no' => $request->mobile_no,
+            'password' => Hash::make($request->password),
+        ]);
 
-            auth()->login($user);
-            $user->sendEmailVerificationNotification();
+        auth()->login($user);
+        $user->sendEmailVerificationNotification();
 
-            return redirect()->route('verification.notice')->with('email', $user->email);
-        } catch (\Exception $e) {
-            Log::error('User registration failed: '.$e->getMessage());
-
-            return redirect()->back();
-        }
+        return to_route('verification.notice')->with('email', $user->email);
     }
 }

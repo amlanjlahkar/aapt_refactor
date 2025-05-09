@@ -1,6 +1,6 @@
 <x-layout title="Verify Mail">
     @include('partials.header')
-    <main>
+    <main class="grow">
         <div
             class="mx-auto mt-5 mb-5 max-w-md rounded-md bg-white p-6 shadow-md"
         >

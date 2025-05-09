@@ -33,6 +33,7 @@ return new class extends Migration
             $table->string('secure_pin', 8)->nullable();
             $table->integer('question')->default(0);
             $table->text('answer')->nullable();
+            $table->rememberToken();
             $table->timestamps();
         });
 

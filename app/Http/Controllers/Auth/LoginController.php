@@ -38,7 +38,7 @@ class LoginController extends Controller
             $username = implode(' ', array_filter([$user->first_name, $user->middle_name, $user->last_name]));
             $request->session()->put('user', $username);
 
-            return redirect()->route('user.dashboard');
+            return to_route('user.dashboard');
         }
 
         return back()->withErrors([
