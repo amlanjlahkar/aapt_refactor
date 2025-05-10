@@ -10,13 +10,11 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class PetitionerController extends Controller
-{
+class PetitionerController extends Controller {
     /**
      * Display a listing of the resource.
      */
-    public function index(): void
-    {
+    public function index(): void {
         //
     }
 
@@ -26,8 +24,7 @@ class PetitionerController extends Controller
      * @param  int  $case_file_id
      * @param  int  $step
      */
-    public function create($step, $case_file_id): View
-    {
+    public function create($step, $case_file_id): View {
         return view('user.efiling.original-application.petitioner-info', compact('step', 'case_file_id'));
     }
 
@@ -36,8 +33,7 @@ class PetitionerController extends Controller
      *
      * @param  int  $case_file_id
      */
-    public function store(Request $request, $case_file_id): RedirectResponse
-    {
+    public function store(Request $request, $case_file_id): RedirectResponse {
         $form_data = $request->all();
         $form_data['case_file_id'] = $case_file_id;
         $validated = Validator::make($form_data, [
@@ -54,7 +50,7 @@ class PetitionerController extends Controller
         $case_file->increment('step');
         $case_file->refresh();
 
-        return to_route('user.efiling.register.step'.$case_file->step.'.create',
+        return to_route('user.efiling.register.step' . $case_file->step . '.create',
             [
                 'step' => $case_file->step,
                 'case_file_id' => $case_file->id,
@@ -64,32 +60,28 @@ class PetitionerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Petitioner $petitioner): void
-    {
+    public function show(Petitioner $petitioner): void {
         //
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Petitioner $petitioner): void
-    {
+    public function edit(Petitioner $petitioner): void {
         //
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Petitioner $petitioner): void
-    {
+    public function update(Request $request, Petitioner $petitioner): void {
         //
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Petitioner $petitioner): void
-    {
+    public function destroy(Petitioner $petitioner): void {
         //
     }
 }

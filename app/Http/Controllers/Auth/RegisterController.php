@@ -10,15 +10,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class RegisterController extends Controller
-{
-    public function showUserRegisterPage(): View
-    {
+class RegisterController extends Controller {
+    public function showUserRegisterPage(): View {
         return view('auth.register.user-register-page');
     }
 
-    public function registerUser(Request $request): RedirectResponse
-    {
+    public function registerUser(Request $request): RedirectResponse {
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string|max:20',
             'middle_name' => 'nullable|string|max:20',

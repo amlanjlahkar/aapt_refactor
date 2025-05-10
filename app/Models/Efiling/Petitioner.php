@@ -4,8 +4,7 @@ namespace App\Models\Efiling;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Petitioner extends Model
-{
+class Petitioner extends Model {
     protected $fillable = [
         'case_file_id',
         'pet_type',
@@ -33,8 +32,7 @@ class Petitioner extends Model
     ];
 
     // Relationship: Petitioner belongs to a Case File
-    public function caseFile()
-    {
+    public function caseFile() {
         return $this->belongsTo(CaseFile::class);
     }
 }

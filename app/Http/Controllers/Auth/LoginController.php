@@ -8,20 +8,16 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class LoginController extends Controller
-{
-    public function showLoginPage(): View
-    {
+class LoginController extends Controller {
+    public function showLoginPage(): View {
         return view('auth.login.login-page');
     }
 
-    public function showUserLoginPage(): View
-    {
+    public function showUserLoginPage(): View {
         return view('auth.login.user-login-page');
     }
 
-    public function loginUser(Request $request): RedirectResponse
-    {
+    public function loginUser(Request $request): RedirectResponse {
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
@@ -46,8 +42,7 @@ class LoginController extends Controller
         ])->onlyInput('email');
     }
 
-    public function logoutUser(Request $request): RedirectResponse
-    {
+    public function logoutUser(Request $request): RedirectResponse {
         Auth::logout();
 
         $request->session()->invalidate();

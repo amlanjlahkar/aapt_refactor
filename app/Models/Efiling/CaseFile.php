@@ -5,8 +5,7 @@ namespace App\Models\Efiling;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class CaseFile extends Model
-{
+class CaseFile extends Model {
     protected $fillable = [
         'bench',
         'case_type',
@@ -22,27 +21,22 @@ class CaseFile extends Model
 
     protected $casts = [
         'filing_date' => 'date',
-        'legal_aid' => 'boolean'
+        'legal_aid' => 'boolean',
     ];
 
-    public function petitioners(): HasMany
-    {
+    public function petitioners(): HasMany {
         return $this->hasMany(Petitioner::class);
     }
 
-    public function respondents(): HasMany
-    {
+    public function respondents(): HasMany {
         return $this->hasMany(Respondent::class);
     }
 
-    public function documents(): HasMany
-    {
+    public function documents(): HasMany {
         return $this->hasMany(CaseDocument::class);
     }
 
-    public function payment(): HasMany
-    {
+    public function payment(): HasMany {
         return $this->hasMany(CasePayment::class);
     }
-
 }

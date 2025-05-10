@@ -7,13 +7,11 @@ use App\Models\Efiling\Respondent;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
-class RespondentController extends Controller
-{
+class RespondentController extends Controller {
     /**
      * Display a listing of the resource.
      */
-    public function index(): void
-    {
+    public function index(): void {
         //
     }
 
@@ -22,48 +20,42 @@ class RespondentController extends Controller
      *
      * @param  int  $case_file_id
      */
-    public function create($step, $case_file_id): View
-    {
+    public function create($step, $case_file_id): View {
         return view('user.efiling.original-application.respondent-info', compact('step', 'case_file_id'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): void
-    {
+    public function store(Request $request): void {
         //
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Respondent $respondent): void
-    {
+    public function show(Respondent $respondent): void {
         //
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Respondent $respondent): void
-    {
+    public function edit(Respondent $respondent): void {
         //
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Respondent $respondent): void
-    {
+    public function update(Request $request, Respondent $respondent): void {
         //
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Respondent $respondent): void
-    {
+    public function destroy(Respondent $respondent): void {
         //
     }
 }
