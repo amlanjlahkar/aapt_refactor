@@ -6,12 +6,12 @@
             background-image: url('{{ asset('images/supreme_court.jpg') }}');
         "
     >
-        <x-user.container header="Step {{ session('step') }}: Petitioner Information">
+        <x-user.container header="Step {{ $step }}: Petitioner Information">
             <form
                 id="petitioner_info"
                 class="grid grid-cols-2 gap-6 rounded-md p-6 pb-0"
                 method="POST"
-                action="#"
+                action="{{ route('user.efiling.register.step' . $step . '.attempt', compact('step', 'case_file_id')) }}"
             >
                 @csrf
                 <div class="col-span-2 flex w-1/3 flex-col gap-2.5">
@@ -197,7 +197,7 @@
                         type="text"
                         minlength="10"
                         maxlength="10"
-                        name="pet_phone"
+                        name="pet_mobile"
                         placeholder="Petitioner phone no."
                         class="rounded-sm border border-gray-300 bg-white px-4 py-2 text-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
                     />
@@ -254,20 +254,71 @@
     </main>
     @include('partials.footer-alt')
     <script>
-        const pet_type = document.getElementById('pet_type')
-        const pet_ind_div = document.getElementById('pet_individual_fields')
-        const pet_org_div = document.getElementById('pet_organization_fields')
-        pet_type.addEventListener('change', () => {
-            const selectedType = event.target.value
+        document.addEventListener('DOMContentLoaded', function () {
+            const pet_type = document.getElementById('pet_type')
+            const pet_ind_div = document.getElementById('pet_individual_fields')
+            const pet_org_div = document.getElementById(
+                'pet_organization_fields'
+            )
 
-            pet_ind_div.classList.add('hidden')
-            pet_org_div.classList.add('hidden')
+            // Get all form inputs
+            const individualInputs =
+                pet_ind_div.querySelectorAll('input, select')
+            const organizationInputs =
+                pet_org_div.querySelectorAll('input, select')
 
-            if (selectedType === 'individual') {
-                pet_ind_div.classList.remove('hidden')
-            } else if (selectedType === 'organization') {
-                pet_org_div.classList.remove('hidden')
+            // Function to toggle required attribute
+            function toggleRequiredAttributes(selectedType) {
+                // First, remove required from all fields
+                individualInputs.forEach((input) => {
+                    input.required = false
+                })
+
+                organizationInputs.forEach((input) => {
+                    input.required = false
+                })
+
+                // Then add required attribute back only to visible fields
+                if (selectedType === 'individual') {
+                    individualInputs.forEach((input) => {
+                        input.required = true
+                    })
+                } else if (selectedType === 'organization') {
+                    organizationInputs.forEach((input) => {
+                        input.required = true
+                    })
+                }
             }
+
+            // Toggle visibility and required attributes on change
+            pet_type.addEventListener('change', (event) => {
+                const selectedType = event.target.value
+
+                pet_ind_div.classList.add('hidden')
+                pet_org_div.classList.add('hidden')
+
+                if (selectedType === 'individual') {
+                    pet_ind_div.classList.remove('hidden')
+                } else if (selectedType === 'organization') {
+                    pet_org_div.classList.remove('hidden')
+                }
+
+                // Update required attributes
+                toggleRequiredAttributes(selectedType)
+            })
+
+            // Handle form submission
+            document
+                .getElementById('petitioner_info')
+                .addEventListener('submit', function (event) {
+                    const selectedType = pet_type.value
+
+                    // Make sure the required attributes are set correctly before submission
+                    toggleRequiredAttributes(selectedType)
+                })
+
+            // Initialize with empty state (no required fields)
+            toggleRequiredAttributes('')
         })
     </script>
 </x-layout>

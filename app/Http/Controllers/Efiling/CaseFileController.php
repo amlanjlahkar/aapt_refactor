@@ -30,10 +30,12 @@ class CaseFileController extends Controller
 
     /**
      * Show the form for creating a new resource.
+     *
+     * @param  int  $step
      */
-    public function create(): View
+    public function create($step): View
     {
-        return view('user.efiling.original-application.case-filing');
+        return view('user.efiling.original-application.case-filing', compact('step'));
     }
 
     /**
@@ -41,12 +43,12 @@ class CaseFileController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $formData = $request->all();
-        $formData['filing_no'] = $this->generateFilingNumber();
-        $formData['filing_date'] = now();
-        $formData['filing_number'] = 'Auto-'.now()->year;
+        $form_data = $request->all();
+        $form_data['filing_no'] = $this->generateFilingNumber();
+        $form_data['filing_date'] = now();
+        $form_data['filing_number'] = 'Auto-'.now()->year;
 
-        $validated = Validator::make($formData, [
+        $validated = Validator::make($form_data, [
             'filing_no' => 'required|string|max:15|unique:case_files',
             'filing_date' => 'required|date',
             'filing_number' => 'required|string',
@@ -59,12 +61,15 @@ class CaseFileController extends Controller
             'status' => 'sometimes|string',
         ])->validate();
 
-        $caseFile = CaseFile::create($validated);
-        $caseFile->refresh();
+        $case_file = CaseFile::create($validated);
+        $case_file->increment('step');
+        $case_file->refresh();
 
-        $step = $caseFile->step + 1;
-
-        return to_route('user.efiling.register.step'.$step)->with('step', $step);
+        return to_route('user.efiling.register.step'.$case_file->step.'.create',
+            [
+                'step' => $case_file->step,
+                'case_file_id' => $case_file->id,
+            ]);
     }
 
     /**

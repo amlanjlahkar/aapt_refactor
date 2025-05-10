@@ -6,12 +6,12 @@
             background-image: url('{{ asset('images/supreme_court.jpg') }}');
         "
     >
-        <x-user.container header="Step 3: Respondent Information">
+        <x-user.container header="Step {{ $step }}: Respondent Information">
             <form
                 id="respondent_info"
                 class="grid grid-cols-2 gap-6 rounded-md p-6 pb-0"
                 method="POST"
-                action="#"
+                action="{{ route('user.efiling.register.step' . $step . '.attempt', compact('step', 'case_file_id')) }}"
             >
                 @csrf
                 <div class="col-span-2 flex w-1/3 flex-col gap-2.5">
@@ -268,6 +268,74 @@
             } else if (selectedType === 'organization') {
                 res_org_div.classList.remove('hidden')
             }
+        })
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const res_type = document.getElementById('res_type')
+            const res_ind_div = document.getElementById('pet_individual_fields')
+            const res_org_div = document.getElementById(
+                'pet_organization_fields'
+            )
+
+            // Get all form inputs
+            const individualInputs =
+                res_ind_div.querySelectorAll('input, select')
+            const organizationInputs =
+                res_org_div.querySelectorAll('input, select')
+
+            // Function to toggle required attribute
+            function toggleRequiredAttributes(selectedType) {
+                // First, remove required from all fields
+                individualInputs.forEach((input) => {
+                    input.required = false
+                })
+
+                organizationInputs.forEach((input) => {
+                    input.required = false
+                })
+
+                // Then add required attribute back only to visible fields
+                if (selectedType === 'individual') {
+                    individualInputs.forEach((input) => {
+                        input.required = true
+                    })
+                } else if (selectedType === 'organization') {
+                    organizationInputs.forEach((input) => {
+                        input.required = true
+                    })
+                }
+            }
+
+            // Toggle visibility and required attributes on change
+            res_type.addEventListener('change', (event) => {
+                const selectedType = event.target.value
+
+                res_ind_div.classList.add('hidden')
+                res_org_div.classList.add('hidden')
+
+                if (selectedType === 'individual') {
+                    res_ind_div.classList.remove('hidden')
+                } else if (selectedType === 'organization') {
+                    res_org_div.classList.remove('hidden')
+                }
+
+                // Update required attributes
+                toggleRequiredAttributes(selectedType)
+            })
+
+            // Handle form submission
+            document
+                .getElementById('petitioner_info')
+                .addEventListener('submit', function (event) {
+                    const selectedType = res_type.value
+
+                    // Make sure the required attributes are set correctly before submission
+                    toggleRequiredAttributes(selectedType)
+                })
+
+            // Initialize with empty state (no required fields)
+            toggleRequiredAttributes('')
         })
     </script>
 </x-layout>

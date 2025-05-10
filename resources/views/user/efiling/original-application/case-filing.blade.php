@@ -6,12 +6,12 @@
             background-image: url('{{ asset('images/supreme_court.jpg') }}');
         "
     >
-        <x-user.container header="Step 1: Case Information">
+        <x-user.container header="Step {{ $step }}: Case Information">
             <form
                 id="case_info"
                 class="grid grid-cols-2 gap-6 rounded-md p-6 pb-0"
                 method="POST"
-                action="{{ route('user.efiling.register.step1.attempt') }}"
+                action="{{ route('user.efiling.register.step.' . $step . '.attempt', compact('step')) }}"
             >
                 @csrf
                 <div class="flex flex-col gap-2.5">
@@ -99,6 +99,7 @@
                     </select>
                 </div>
             </form>
+
             <div class="flex justify-end p-6">
                 <button
                     type="submit"

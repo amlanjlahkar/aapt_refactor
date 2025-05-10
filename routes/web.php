@@ -53,10 +53,10 @@ Route::prefix('user/efiling/register')->group(function () {
     ];
 
     foreach ($steps as $step => $info) {
-        Route::get("/step{$step}", [$info['controller'], 'create'])
-            ->name("user.efiling.register.step{$step}");
+        Route::get("/step{step}/{$info['view']}/{case_file_id?}", [$info['controller'], 'create'])
+            ->name("user.efiling.register.step{$step}.create");
 
-        Route::post("/step{$step}", [$info['controller'], 'store'])
+        Route::post("/step{step}/{$info['view']}/{case_file_id?}", [$info['controller'], 'store'])
             ->name("user.efiling.register.step{$step}.attempt");
     }
 });

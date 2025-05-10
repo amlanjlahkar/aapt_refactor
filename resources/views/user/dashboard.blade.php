@@ -75,7 +75,7 @@
                     >
                         <p class="font-medium text-gray-700">Edit Profile</p>
                     </div>
-                    <a href="{{ route('user.efiling.register.step1') }}">
+                    <a href="{{ route('user.efiling.register.step1.create', ['step' => 1]) }}">
                         <div
                             class="cursor-pointer rounded border-1 border-transparent bg-white p-4 text-center shadow-sm hover:border-gray-400 hover:bg-gray-300"
                         >

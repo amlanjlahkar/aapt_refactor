@@ -19,10 +19,12 @@ class RespondentController extends Controller
 
     /**
      * Show the form for creating a new resource.
+     *
+     * @param  int  $case_file_id
      */
-    public function create(): View
+    public function create($step, $case_file_id): View
     {
-        return view('user.efiling.original-application.respondent-info');
+        return view('user.efiling.original-application.respondent-info', compact('step', 'case_file_id'));
     }
 
     /**
