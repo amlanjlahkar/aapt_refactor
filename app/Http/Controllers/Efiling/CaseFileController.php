@@ -47,13 +47,13 @@ class CaseFileController extends Controller {
             'filing_no' => 'required|string|max:15|unique:case_files',
             'filing_date' => 'required|date',
             'filing_number' => 'required|string',
-            'case_type' => 'sometimes|string',
-            'bench' => 'sometimes|string',
+            'case_type' => 'nullable|string',
+            'bench' => 'nullable|string',
             'subject' => 'nullable|string',
             'legal_aid' => 'nullable|boolean',
-            'step' => 'sometimes|integer',
+            'step' => 'nullable|integer',
             'filed_by' => 'nullable|string',
-            'status' => 'sometimes|string',
+            'status' => 'nullable|string',
         ])->validate();
 
         $case_file = CaseFile::create($validated);

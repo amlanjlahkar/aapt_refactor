@@ -11,7 +11,7 @@
                 id="case_info"
                 class="grid grid-cols-2 gap-6 rounded-md p-6 pb-0"
                 method="POST"
-                action="{{ route('user.efiling.register.step.' . $step . '.attempt', compact('step')) }}"
+                action="{{ route('user.efiling.register.step' . $step . '.attempt', compact('step')) }}"
             >
                 @csrf
                 <div class="flex flex-col gap-2.5">
@@ -106,7 +106,7 @@
                     form="case_info"
                     class="w-1/5 cursor-pointer items-end rounded bg-blue-500 px-4 py-2 font-semibold text-white shadow-sm hover:bg-blue-600"
                 >
-                    Save & Proceed (1/5)
+                    Save & Proceed ({{ $step }}/5)
                 </button>
             </div>
             <div

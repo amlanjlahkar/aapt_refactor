@@ -17,7 +17,7 @@ return new class extends Migration {
 
             // Common Fields
             $table->string('pet_email');
-            $table->string('pet_mobile');
+            $table->string('pet_phone');
             $table->text('pet_address');
 
             // Individual Fields

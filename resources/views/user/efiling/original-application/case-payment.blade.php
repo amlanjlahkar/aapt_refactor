@@ -6,12 +6,13 @@
             background-image: url('{{ asset('images/supreme_court.jpg') }}');
         "
     >
-        <x-user.container header="Step 5: Payment Details">
+        <x-user.container header="Step {{ $step }}: Payment Details">
             <form
                 id="payment_info"
                 class="grid grid-cols-2 gap-6 rounded-md p-6 pb-0"
                 method="POST"
-                action="#"
+                action="{{ route('user.efiling.register.step' . $step . '.attempt', compact('step', 'case_file_id')) }}"
+                enctype="multipart/form-data"
             >
                 @csrf
                 <div class="flex flex-col gap-2.5">
@@ -35,7 +36,6 @@
                         Amount (₹)
                     </label>
                     <input
-                        required
                         type="number"
                         name="amount"
                         placeholder="Enter payment amount"
@@ -48,11 +48,8 @@
                         Reference No.
                     </label>
                     <input
-                        required
                         type="text"
                         name="ref_no"
-                        minlength="12"
-                        maxlength="12"
                         placeholder="Enter payment reference number"
                         class="rounded-sm border border-gray-300 bg-white px-4 py-2 text-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
                     />
@@ -63,7 +60,6 @@
                         Payment Date
                     </label>
                     <input
-                        required
                         type="date"
                         name="ref_date"
                         class="rounded-sm border border-gray-300 bg-white px-4 py-2 text-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
@@ -78,7 +74,7 @@
                         <span class="text-red-400">*</span>
                     </div>
                     <label
-                        for="fileInput"
+                        for="document_path"
                         class="flex cursor-pointer flex-col items-center justify-center rounded-sm border-2 border-dashed border-gray-300 bg-gray-50 p-6 hover:bg-gray-200"
                     >
                         <div
@@ -103,21 +99,22 @@
                             No file selected
                         </p>
                         <input
-                            id="fileInput"
+                            id="document_path"
+                            name="document_path"
                             type="file"
                             class="hidden"
-                            accept=".jpg,.jpeg,.png,.pdf"
+                            accept=".pdf"
                         />
                     </label>
                 </div>
             </form>
             <div class="flex justify-end p-6">
                 <button
-                    form="document_info"
+                    form="payment_info"
                     type="submit"
                     class="w-1/5 cursor-pointer items-end rounded bg-blue-500 px-4 py-2 font-semibold text-white shadow-sm hover:bg-blue-600"
                 >
-                    Save & Review (5/5)
+                    Save & Review ({{ $step }}/5)
                 </button>
             </div>
             <div
@@ -134,7 +131,8 @@
     @include('partials.footer-alt')
 
     <script>
-        const fileInput = document.getElementById('fileInput')
+        const form = document.getElementById('payment_info')
+        const fileInput = document.getElementById('document_path')
         const fileNameDisplay = document.getElementById('fileNameDisplay')
 
         fileInput.addEventListener('change', function () {
@@ -150,6 +148,13 @@
                 this.parentElement.classList.remove('font-medium')
                 this.parentElement.classList.remove('border-blue-500')
                 this.parentElement.classList.add('border-gray-300')
+            }
+        })
+
+        form.addEventListener('submit', function (e) {
+            if (fileInput.files.length < 1) {
+                e.preventDefault()
+                alert('Payment receipt must be uploaded!')
             }
         })
     </script>

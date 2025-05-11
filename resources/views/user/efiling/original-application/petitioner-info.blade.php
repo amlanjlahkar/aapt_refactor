@@ -197,7 +197,7 @@
                         type="text"
                         minlength="10"
                         maxlength="10"
-                        name="pet_mobile"
+                        name="pet_phone"
                         placeholder="Petitioner phone no."
                         class="rounded-sm border border-gray-300 bg-white px-4 py-2 text-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
                     />
@@ -238,7 +238,7 @@
                     type="submit"
                     class="w-1/5 cursor-pointer items-end rounded bg-blue-500 px-4 py-2 font-semibold text-white shadow-sm hover:bg-blue-600"
                 >
-                    Save & Proceed (2/5)
+                    Save & Proceed ({{ $step }}/5)
                 </button>
             </div>
             <div

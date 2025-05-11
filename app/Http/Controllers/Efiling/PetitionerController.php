@@ -31,20 +31,21 @@ class PetitionerController extends Controller {
     /**
      * Store a newly created resource in storage.
      *
+     * @param  mixed  $_unused
      * @param  int  $case_file_id
      */
-    public function store(Request $request, $case_file_id): RedirectResponse {
+    public function store(Request $request, $_unused, $case_file_id): RedirectResponse {
         $form_data = $request->all();
         $form_data['case_file_id'] = $case_file_id;
         $validated = Validator::make($form_data, [
             'case_file_id' => 'required|exists:case_files,id',
             'pet_type' => 'required|in:individual,organization',
             'pet_email' => 'required|string|email|max:50|unique:petitioners,pet_email',
-            'pet_mobile' => 'required|string|size:10|regex:/^[0-9]{10}$/|unique:petitioners,pet_mobile',
+            'pet_phone' => 'required|string|size:10|regex:/^[0-9]{10}$/|unique:petitioners,pet_phone',
             'pet_address' => 'required|string|max:250',
         ])->validate();
 
-        $petitioner = Petitioner::create($validated);
+        Petitioner::create($validated);
 
         $case_file = CaseFile::findOrFail($case_file_id);
         $case_file->increment('step');

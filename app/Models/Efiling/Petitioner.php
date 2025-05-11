@@ -3,6 +3,7 @@
 namespace App\Models\Efiling;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Petitioner extends Model {
     protected $fillable = [
@@ -11,7 +12,7 @@ class Petitioner extends Model {
 
         // Common fields
         'pet_email',
-        'pet_mobile',
+        'pet_phone',
         'pet_address',
 
         // Fields for individual petitioner
@@ -32,7 +33,7 @@ class Petitioner extends Model {
     ];
 
     // Relationship: Petitioner belongs to a Case File
-    public function caseFile() {
+    public function caseFile(): BelongsTo {
         return $this->belongsTo(CaseFile::class);
     }
 }

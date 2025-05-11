@@ -13,7 +13,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('case_file_id')->constrained()->onDelete('cascade');
             $table->enum('payment_mode', ['dd', 'ipo', 'bharat_kosh']);
-            $table->decimal('amount', 10, 2);
+            $table->decimal('amount', 10, 2)->nullable();
             $table->string('ref_no')->nullable();
             $table->date('ref_date')->nullable();
             $table->string('transaction_id')->nullable();

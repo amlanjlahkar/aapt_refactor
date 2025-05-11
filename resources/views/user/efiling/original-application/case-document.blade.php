@@ -6,12 +6,13 @@
             background-image: url('{{ asset('images/supreme_court.jpg') }}');
         "
     >
-        <x-user.container header="Step 4: Document Upload">
+        <x-user.container header="Step {{ $step }}: Document Upload">
             <form
                 id="document_info"
                 class="grid grid-cols-2 gap-6 rounded-md p-6 pb-0"
                 method="POST"
-                action="#"
+                action="{{ route('user.efiling.register.step' . $step . '.attempt', compact('step', 'case_file_id')) }}"
+                enctype="multipart/form-data"
             >
                 @csrf
                 <div class="col-span-2 flex w-1/3 flex-col gap-2.5">
@@ -36,7 +37,7 @@
                         <span class="text-red-400">*</span>
                     </div>
                     <label
-                        for="fileInput"
+                        for="document_path"
                         class="flex cursor-pointer flex-col items-center justify-center rounded-sm border-2 border-dashed border-gray-300 bg-gray-50 p-6 hover:bg-gray-200"
                     >
                         <div
@@ -61,10 +62,12 @@
                             No file selected
                         </p>
                         <input
-                            id="fileInput"
+                            id="document_path"
+                            name="document_path"
                             type="file"
                             class="hidden"
                             accept=".jpg,.jpeg,.png,.pdf"
+                            multiple
                         />
                     </label>
                 </div>
@@ -75,7 +78,7 @@
                     type="submit"
                     class="w-1/5 cursor-pointer items-end rounded bg-blue-500 px-4 py-2 font-semibold text-white shadow-sm hover:bg-blue-600"
                 >
-                    Save & Proceed (4/5)
+                    Save & Proceed ({{ $step }}/5)
                 </button>
             </div>
             <div
@@ -92,7 +95,7 @@
     @include('partials.footer-alt')
 
     <script>
-        const fileInput = document.getElementById('fileInput')
+        const fileInput = document.getElementById('document_path')
         const fileNameDisplay = document.getElementById('fileNameDisplay')
 
         fileInput.addEventListener('change', function () {

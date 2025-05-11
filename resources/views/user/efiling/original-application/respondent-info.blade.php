@@ -238,7 +238,7 @@
                     type="submit"
                     class="w-1/5 cursor-pointer items-end rounded bg-blue-500 px-4 py-2 font-semibold text-white shadow-sm hover:bg-blue-600"
                 >
-                    Save & Proceed (3/5)
+                    Save & Proceed ({{ $step }}/5)
                 </button>
             </div>
             <div
@@ -270,12 +270,11 @@
             }
         })
 
-
         document.addEventListener('DOMContentLoaded', function () {
             const res_type = document.getElementById('res_type')
-            const res_ind_div = document.getElementById('pet_individual_fields')
+            const res_ind_div = document.getElementById('res_individual_fields')
             const res_org_div = document.getElementById(
-                'pet_organization_fields'
+                'res_organization_fields'
             )
 
             // Get all form inputs
@@ -326,7 +325,7 @@
 
             // Handle form submission
             document
-                .getElementById('petitioner_info')
+                .getElementById('respondent_info')
                 .addEventListener('submit', function (event) {
                     const selectedType = res_type.value
 

@@ -17,7 +17,7 @@ return new class extends Migration {
 
             // Common Fields
             $table->string('res_email');
-            $table->string('res_mobile');
+            $table->string('res_phone');
             $table->text('res_address');
 
             // Individual Fields
