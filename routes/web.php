@@ -18,7 +18,7 @@ Route::get('/refresh-captcha', function () {
 });
 
 /* User routes */
-Route::view('user/dashboard', 'user/dashboard')->middleware(['auth', 'verified'])->name('user.dashboard');
+Route::view('user/dashboard', 'user/dashboard')->name('user.dashboard');
 Route::prefix('user/auth')->group(function () {
     Route::get('/login', [LoginController::class, 'showUserLoginPage'])->name('user.auth.login.form');
     Route::post('/login', [LoginController::class, 'loginUser'])->name('user.auth.login.attempt');
@@ -56,9 +56,30 @@ Route::prefix('user/efiling/register')->group(function () {
         Route::get("/step{step}/{$info['view']}/{case_file_id?}", [$info['controller'], 'create'])
             ->name("user.efiling.register.step{$step}.create");
 
+        Route::get("/{$info['view']}/edit/{case_file_id?}", [$info['controller'], 'edit'])
+            ->name("user.efiling.register.step{$step}.edit");
+
         Route::post("/step{step}/{$info['view']}/{case_file_id?}", [$info['controller'], 'store'])
             ->name("user.efiling.register.step{$step}.attempt");
     }
+
+    Route::get('/review', [CaseFileController::class, 'show'])->name('user.efiling.register.review');
+    Route::get('/{case_file_id}/generate_case_file_doc', [CaseFileController::class, 'generatePdf'])->name('user.efiling.register.genPdf');
+
+    Route::get('/case-files/{case_file_id}/edit', [CaseFileController::class, 'edit'])
+        ->name('case-files.edit');
+
+    Route::get('/petitioners/{case_file_id}/edit', [PetitionerController::class, 'edit'])
+        ->name('petitioners.edit');
+
+    Route::get('/respondents/{case_file_id}/edit', [RespondentController::class, 'edit'])
+        ->name('respondents.edit');
+
+    Route::get('/documents/{case_file_id}/edit', [CaseDocumentController::class, 'edit'])
+        ->name('documents.edit');
+
+    Route::get('/payments/{case_file_id}/edit', [CasePaymentController::class, 'edit'])
+        ->name('payments.edit');
 });
 
 /* Mail verficaiton */

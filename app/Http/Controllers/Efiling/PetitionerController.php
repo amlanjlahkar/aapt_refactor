@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Efiling\CaseFile;
 use App\Models\Efiling\Petitioner;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -67,9 +68,12 @@ class PetitionerController extends Controller {
 
     /**
      * Show the form for editing the specified resource.
+     * @param int $case_file_id
      */
-    public function edit(Petitioner $petitioner): void {
-        //
+    public function edit(Petitioner $petitioner, $case_file_id): JsonResponse {
+        $current_case_file = CaseFile::findOrFail($case_file_id);
+
+        return response()->json($current_case_file->petitioners->toArray());
     }
 
     /**

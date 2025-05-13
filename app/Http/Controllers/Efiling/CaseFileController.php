@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Efiling;
 use App\Http\Controllers\Controller;
 use App\Models\Efiling\CaseFile;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class CaseFileController extends Controller {
     private function generateFilingNumber(): string {
@@ -16,6 +18,14 @@ class CaseFileController extends Controller {
         } while (CaseFile::where('filing_no', $filingNo)->exists());
 
         return $filingNo;
+    }
+    /**
+     * @param mixed $case_file_id
+     */
+    public function generatePdf($case_file_id) {
+        $case_file = CaseFile::with(['petitioners', 'respondents', 'documents', 'payment'])->findOrFail($case_file_id);
+        $pdf = Pdf::loadView('user.efiling.original-application.summary-view', compact('case_file'));
+        return $pdf->download('test.pdf');
     }
 
     /**
@@ -70,15 +80,22 @@ class CaseFileController extends Controller {
     /**
      * Display the specified resource.
      */
-    public function show(CaseFile $caseFile): void {
-        //
+    public function show(Request $request) {
+        $case_file_id = $request->case_file_id;
+        $case_file = CaseFile::with(['petitioners', 'respondents', 'documents', 'payment'])->findOrFail($case_file_id);
+
+        return view('user.efiling.original-application.review', compact('case_file'));
     }
 
     /**
      * Show the form for editing the specified resource.
+     * @param mixed $_unused
+     * @param int $case_file_id
      */
-    public function edit(CaseFile $caseFile): void {
-        //
+    public function edit(CaseFile $caseFile, $case_file_id): JsonResponse {
+        $current_case_file = $caseFile->findOrFail($case_file_id);
+
+        return response()->json($current_case_file->getAttributes());
     }
 
     /**

@@ -20,11 +20,7 @@ class CasePayment extends Model {
         'amount' => 'decimal:2',
     ];
 
-
-
-    public function case()
-    {
+    public function case() {
         return $this->belongsTo(CaseFile::class, 'case_file_id');
     }
-
 }

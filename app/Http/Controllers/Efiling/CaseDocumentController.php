@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Efiling\CaseDocument;
 use App\Models\Efiling\CaseFile;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -37,7 +38,9 @@ class CaseDocumentController extends Controller {
     public function store(Request $request, $_unused, $case_file_id): RedirectResponse {
         $form_data = $request->except('document_path');
 
-        if ($request->filled('document_path')) {
+        $document = null;
+
+        if ($request->has('document_path')) {
             $document = $request->file('document_path');
             $form_data['document_path'] = $document;
             $form_data['document_type'] = $document->getClientMimeType();
@@ -54,7 +57,7 @@ class CaseDocumentController extends Controller {
         ])->validate();
 
         if ($document && $document->isValid()) {
-            $validated['document_path'] ??= $document->store();
+            $validated['document_path'] ??= $document->store('docs', 'public');
         }
 
         CaseDocument::create($validated);
@@ -79,9 +82,12 @@ class CaseDocumentController extends Controller {
 
     /**
      * Show the form for editing the specified resource.
+     * @param int $case_file_id
      */
-    public function edit(string $id): void {
-        //
+    public function edit(CaseDocument $caseDocument, $case_file_id): JsonResponse {
+        $current_case_file = CaseFile::findOrFail($case_file_id);
+
+        return response()->json($current_case_file->documents->toArray());
     }
 
     /**

@@ -7,6 +7,7 @@ use App\Models\Efiling\CaseFile;
 use App\Models\Efiling\CasePayment;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -34,7 +35,7 @@ class CasePaymentController extends Controller {
      * @param  mixed  $_unused
      * @param  int  $case_file_id
      */
-    public function store(Request $request, $_unused, $case_file_id): JsonResponse {
+    public function store(Request $request, $_unused, $case_file_id): RedirectResponse {
         $form_data = $request->except('document_path');
 
         $document = $request->file('document_path');
@@ -51,16 +52,14 @@ class CasePaymentController extends Controller {
             'document_path' => 'required|file|mimes:pdf|max:5120',
         ])->validate();
 
-        $validated['document_path'] = $document->store();
+        if ($document->isValid()) {
+            $validated['document_path'] = $document->store('payment_receipts', 'public');
+        }
 
         CasePayment::create($validated);
 
-        $case_file = CaseFile::with(['petitioners', 'respondents', 'documents', 'payment'])->find($case_file_id);
-
-        return response()->json([
-            'message' => 'Case file registered successfully!',
-            'case_file' => $case_file,
-        ]);
+        // return to_route('user.efiling.register.review', compact('case_file_id'));
+        return to_route('user.efiling.register.review', ['case_file_id' => 3]);
     }
 
     /**
@@ -72,9 +71,12 @@ class CasePaymentController extends Controller {
 
     /**
      * Show the form for editing the specified resource.
+     * @param int $case_file_id
      */
-    public function edit(CasePayment $casePayment): void {
-        //
+    public function edit(CasePayment $casePayment, $case_file_id): JsonResponse {
+        $current_case_file = CaseFile::findOrFail($case_file_id);
+
+        return response()->json($current_case_file->payment->toArray());
     }
 
     /**
