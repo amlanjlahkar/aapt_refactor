@@ -33,6 +33,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'create_date',
         'usertype',
         'schema_id',
+        'mobile_otp',
+        'otp_expiry',
+        'otp_sent_at',
+        'mobile_verified_at',
     ];
 
     /**
@@ -55,6 +59,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return [
             'email_verified_at' => 'datetime',
+            'mobile_verified_at' => 'datetime',
+            'otp_expiry' => 'datetime',
+            'otp_sent_at' => 'datetime',
             'password' => 'hashed',
             'create_date' => 'datetime',
             'question' => 'integer',
@@ -62,4 +69,5 @@ class User extends Authenticatable implements MustVerifyEmail
             'schema_id' => 'integer',
         ];
     }
+    
 }
