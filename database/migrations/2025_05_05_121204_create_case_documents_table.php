@@ -12,9 +12,9 @@ return new class extends Migration {
         Schema::create('case_documents', function (Blueprint $table) {
             $table->id();
             $table->foreignId('case_file_id')->constrained()->onDelete('cascade');
-            $table->string('document_type');
-            $table->string('document_path');
-            $table->string('original_name');
+            $table->string('document_type')->nullable();
+            $table->string('document_path')->nullable();
+            $table->string('original_name')->nullable();
             $table->timestamps();
         });
     }
