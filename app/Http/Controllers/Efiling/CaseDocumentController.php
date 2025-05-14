@@ -36,13 +36,13 @@ class CaseDocumentController extends Controller {
      * @param  int  $case_file_id
      */
     public function store(Request $request, $_unused, $case_file_id): RedirectResponse {
-        $form_data = $request->except('document_path');
+        $form_data = $request->except('document');
 
         $document = null;
 
-        if ($request->has('document_path')) {
-            $document = $request->file('document_path');
-            $form_data['document_path'] = $document;
+        if ($request->has('document')) {
+            $document = $request->file('document');
+            $form_data['document'] = $document;
             $form_data['document_type'] = $document->getClientMimeType();
             $form_data['original_name'] = $document->getClientOriginalName();
         }
@@ -51,7 +51,7 @@ class CaseDocumentController extends Controller {
 
         $validated = Validator::make($form_data, [
             'case_file_id' => 'required|exists:case_files,id',
-            'document_path' => 'nullable|file|mimes:pdf,jpg,png|max:5120',
+            'document' => 'nullable|file|mimes:pdf,jpg,png|max:5120',
             'document_type' => 'nullable|string',
             'original_name' => 'nullable|string',
         ])->validate();

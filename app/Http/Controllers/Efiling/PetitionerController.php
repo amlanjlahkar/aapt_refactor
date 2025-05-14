@@ -40,10 +40,22 @@ class PetitionerController extends Controller {
         $form_data['case_file_id'] = $case_file_id;
         $validated = Validator::make($form_data, [
             'case_file_id' => 'required|exists:case_files,id',
-            'pet_type' => 'required|in:individual,organization',
+            'pet_type' => 'required|in:Individual,Organization',
             'pet_email' => 'required|string|email|max:50|unique:petitioners,pet_email',
             'pet_phone' => 'required|string|size:10|regex:/^[0-9]{10}$/|unique:petitioners,pet_phone',
             'pet_address' => 'required|string|max:250',
+
+            // Validate individual fields
+            'pet_name' => 'required_if:pet_type,Individual|string',
+            'pet_age' => 'required_if:pet_type,Individual|integer',
+            'pet_state' => 'required_if:pet_type,Individual|string',
+            'pet_district' => 'required_if:pet_type,Individual|string',
+
+            // Validate organizational fields
+            'pet_ministry' => 'required_if:pet_type,Organization|string',
+            'pet_department' => 'required_if:pet_type,Organization|string',
+            /* 'pet_contact_person' => 'required_if:pet_type,Organization|string', */
+            'pet_designation' => 'required_if:pet_type,Organization|string',
         ])->validate();
 
         Petitioner::create($validated);
@@ -68,7 +80,8 @@ class PetitionerController extends Controller {
 
     /**
      * Show the form for editing the specified resource.
-     * @param int $case_file_id
+     *
+     * @param  int  $case_file_id
      */
     public function edit(Petitioner $petitioner, $case_file_id): JsonResponse {
         $current_case_file = CaseFile::findOrFail($case_file_id);

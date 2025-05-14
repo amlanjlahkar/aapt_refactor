@@ -13,7 +13,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('case_file_id')->constrained()->onDelete('cascade');
 
-            $table->enum('pet_type', ['individual', 'organization']);
+            $table->enum('pet_type', ['Individual', 'Organization']);
 
             // Common Fields
             $table->string('pet_email');
@@ -26,7 +26,7 @@ return new class extends Migration {
             $table->string('pet_state')->nullable();
             $table->string('pet_district')->nullable();
 
-            // Organisation Fields
+            // Organization Fields
             $table->string('pet_ministry')->nullable();
             $table->string('pet_department')->nullable();
             $table->string('pet_contact_person')->nullable();

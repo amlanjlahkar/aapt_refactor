@@ -42,8 +42,8 @@
                             : {{ $case_file->filing_date }}
                         </p>
                         <p class="p-2">
-                            <span class="font-medium">Filing ID</span>
-                            : {{ $case_file->filing_no }}
+                            <span class="font-medium">Reference No.</span>
+                            : {{ $case_file->ref_number }}
                         </p>
                         <p class="p-2">
                             <span class="font-medium">Legal Aid Required</span>
@@ -89,7 +89,7 @@
                                 class="col-span-2 mt-2 mb-2 w-full text-gray-300"
                             />
 
-                            @if ($pet->pet_type == 'individual')
+                            @if ($pet->pet_type == 'Individual')
                                 <p class="p-2">
                                     <span class="font-medium">
                                         Petitioner's Name
@@ -114,7 +114,7 @@
                                     </span>
                                     : {{ $pet->pet_district }}
                                 </p>
-                            @elseif ($pet->pet_type == 'organization')
+                            @elseif ($pet->pet_type == 'Organization')
                                 <p class="p-2">
                                     <span class="font-medium">
                                         Petitioner's Ministry
@@ -181,7 +181,7 @@
                                 class="col-span-2 mt-2 mb-2 w-full text-gray-300"
                             />
 
-                            @if ($res->res_type == 'individual')
+                            @if ($res->res_type == 'Individual')
                                 <p class="p-2">
                                     <span class="font-medium">
                                         Respondent's Name
@@ -206,7 +206,7 @@
                                     </span>
                                     : {{ $res->res_district }}
                                 </p>
-                            @elseif ($res->res_type == 'organization')
+                            @elseif ($res->res_type == 'Organization')
                                 <p class="p-2">
                                     <span class="font-medium">
                                         Respondent's Ministry

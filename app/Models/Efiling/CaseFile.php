@@ -7,16 +7,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class CaseFile extends Model {
     protected $fillable = [
-        'bench',
         'case_type',
-        'filed_by',
-        'filing_date',
-        'filing_no',
-        'filing_number',
-        'legal_aid',
-        'status',
-        'step',
+        'bench',
         'subject',
+        'legal_aid',
+        'filed_by',
+        'ref_number',
+        'filing_number',
+        'filing_date',
+        'step',
+        'status',
     ];
 
     protected $casts = [

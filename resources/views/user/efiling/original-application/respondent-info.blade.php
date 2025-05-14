@@ -27,8 +27,18 @@
                         <option value="" disabled selected>
                             Select respondent type
                         </option>
-                        <option value="individual">Individual</option>
-                        <option value="organization">Organization</option>
+                        <option
+                            value="Individual"
+                            {{ old('res_type') == 'Individual' ? 'selected' : '' }}
+                        >
+                            Individual
+                        </option>
+                        <option
+                            value="Organization"
+                            {{ old('res_type') == 'Organization' ? 'selected' : '' }}
+                        >
+                            Organization
+                        </option>
                     </select>
                 </div>
 
@@ -46,6 +56,7 @@
                             name="res_name"
                             type="text"
                             placeholder="Respondent name"
+                            value="{{ old('res_name') }}"
                             class="rounded-sm border border-gray-300 bg-white px-4 py-2 text-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
                         />
                     </div>
@@ -62,6 +73,7 @@
                             maxlength="3"
                             name="res_age"
                             placeholder="Respondent age"
+                            value="{{ old('res_age') }}"
                             class="rounded-sm border border-gray-300 bg-white px-4 py-2 text-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
                         />
                     </div>
@@ -78,8 +90,7 @@
                             <option value="" disabled selected>
                                 Select state
                             </option>
-                            <option value="assam">Assam</option>
-                            <option value="null">Option 2</option>
+                            <option value="Assam" selected>Assam</option>
                         </select>
                     </div>
 
@@ -96,8 +107,24 @@
                             <option value="" disabled selected>
                                 Select district
                             </option>
-                            <option value="null">Option 1</option>
-                            <option value="null">Option 2</option>
+                            <option
+                                value="Barpeta"
+                                {{ old('res_district') == 'Barpeta' ? 'selected' : '' }}
+                            >
+                                Barpeta
+                            </option>
+                            <option
+                                value="Kamrup(Metro)"
+                                {{ old('res_district') == 'Kamrup(Metro)' ? 'selected' : '' }}
+                            >
+                                Kamrup(Metro)
+                            </option>
+                            <option
+                                value="Nalbari"
+                                {{ old('res_district') == 'Nalabari' ? 'selected' : '' }}
+                            >
+                                Nalbari
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -199,6 +226,7 @@
                         maxlength="10"
                         name="res_phone"
                         placeholder="Respondent phone no."
+                        value="{{ old('res_phone') }}"
                         class="rounded-sm border border-gray-300 bg-white px-4 py-2 text-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
                     />
                 </div>
@@ -213,6 +241,7 @@
                         type="email"
                         name="res_email"
                         placeholder="Respondent email address"
+                        value="{{ old('res_email') }}"
                         class="rounded-sm border border-gray-300 bg-white px-4 py-2 text-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
                     />
                 </div>
@@ -228,6 +257,7 @@
                         rows="4"
                         cols="10"
                         placeholder="Respondent address"
+                        value="{{ old('res_address') }}"
                         class="w-full resize rounded-sm border border-gray-400 p-4"
                     ></textarea>
                 </div>
@@ -263,9 +293,9 @@
             res_ind_div.classList.add('hidden')
             res_org_div.classList.add('hidden')
 
-            if (selectedType === 'individual') {
+            if (selectedType === 'Individual') {
                 res_ind_div.classList.remove('hidden')
-            } else if (selectedType === 'organization') {
+            } else if (selectedType === 'Organization') {
                 res_org_div.classList.remove('hidden')
             }
         })
@@ -295,11 +325,11 @@
                 })
 
                 // Then add required attribute back only to visible fields
-                if (selectedType === 'individual') {
+                if (selectedType === 'Individual') {
                     individualInputs.forEach((input) => {
                         input.required = true
                     })
-                } else if (selectedType === 'organization') {
+                } else if (selectedType === 'Organization') {
                     organizationInputs.forEach((input) => {
                         input.required = true
                     })
@@ -313,9 +343,9 @@
                 res_ind_div.classList.add('hidden')
                 res_org_div.classList.add('hidden')
 
-                if (selectedType === 'individual') {
+                if (selectedType === 'Individual') {
                     res_ind_div.classList.remove('hidden')
-                } else if (selectedType === 'organization') {
+                } else if (selectedType === 'Organization') {
                     res_org_div.classList.remove('hidden')
                 }
 

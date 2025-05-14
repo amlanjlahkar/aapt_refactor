@@ -36,30 +36,31 @@ class CasePaymentController extends Controller {
      * @param  int  $case_file_id
      */
     public function store(Request $request, $_unused, $case_file_id): RedirectResponse {
-        $form_data = $request->except('document_path');
+        $form_data = $request->except('payment_receipt');
 
-        $document = $request->file('document_path');
+        $document = $request->file('payment_receipt');
 
         $form_data['case_file_id'] = $case_file_id;
-        $form_data['document_path'] = $document;
+        $form_data['payment_receipt'] = $document;
 
         $validated = Validator::make($form_data, [
             'case_file_id' => 'required|exists:case_files,id',
-            'payment_mode' => 'required|in:dd,ipo,bharat_kosh',
+            'payment_mode' => 'required|in:Demand Draft,Indian Post,Bharat Kosh',
             'amount' => 'nullable|numeric',
             'ref_no' => 'nullable|string',
-            'red_date' => 'nullable|date',
-            'document_path' => 'required|file|mimes:pdf|max:5120',
+            'ref_date' => 'nullable|date',
+            'transaction_id' => 'nullable|string',
+            'payment_receipt' => 'required|file|mimes:pdf|max:5120',
         ])->validate();
 
         if ($document->isValid()) {
-            $validated['document_path'] = $document->store('payment_receipts', 'public');
+            $validated['payment_receipt'] = $document->store('efiling/payment_receipts', 'public');
         }
 
         CasePayment::create($validated);
 
-        // return to_route('user.efiling.register.review', compact('case_file_id'));
-        return to_route('user.efiling.register.review', ['case_file_id' => 3]);
+        return to_route('user.efiling.register.review', compact('case_file_id'));
+        // return to_route('user.efiling.register.review', ['case_file_id' => 3]);
     }
 
     /**

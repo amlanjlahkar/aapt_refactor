@@ -12,7 +12,7 @@ class CasePayment extends Model {
         'ref_no',
         'ref_date',
         'transaction_id',
-        'document_path',
+        'payment_receipt',
     ];
 
     protected $casts = [

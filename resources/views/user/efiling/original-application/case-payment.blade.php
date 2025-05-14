@@ -25,9 +25,24 @@
                         name="payment_mode"
                         class="rounded-sm border border-gray-300 bg-white px-4 py-2 text-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
                     >
-                        <option value="dd">Demand Draft</option>
-                        <option value="ipo">IPO</option>
-                        <option value="bharat_kosh">Bharat Kosh</option>
+                        <option
+                            value="Demand Draft"
+                            {{ old('payment_mode') == 'Demand Draft' ? 'selected' : '' }}
+                        >
+                            Demand Draft
+                        </option>
+                        <option
+                            value="Indian Post"
+                            {{ old('payment_mode') == 'Indian Post' ? 'selected' : '' }}
+                        >
+                            Indian Post
+                        </option>
+                        <option
+                            value="Bharat Kosh"
+                            {{ old('payment_mode') == 'Bharat Kosh' ? 'selected' : '' }}
+                        >
+                            Bharat Kosh
+                        </option>
                     </select>
                 </div>
 
@@ -39,6 +54,7 @@
                         type="number"
                         name="amount"
                         placeholder="Enter payment amount"
+                        value="{{ old('amount') }}"
                         class="rounded-sm border border-gray-300 bg-white px-4 py-2 text-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
                     />
                 </div>
@@ -51,6 +67,7 @@
                         type="text"
                         name="ref_no"
                         placeholder="Enter payment reference number"
+                        value="{{ old('ref_no') }}"
                         class="rounded-sm border border-gray-300 bg-white px-4 py-2 text-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
                     />
                 </div>
@@ -62,6 +79,7 @@
                     <input
                         type="date"
                         name="ref_date"
+                        value="{{ old('ref_date') }}"
                         class="rounded-sm border border-gray-300 bg-white px-4 py-2 text-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
                     />
                 </div>
@@ -74,7 +92,7 @@
                         <span class="text-red-400">*</span>
                     </div>
                     <label
-                        for="document_path"
+                        for="payment_receipt"
                         class="flex cursor-pointer flex-col items-center justify-center rounded-sm border-2 border-dashed border-gray-300 bg-gray-50 p-6 hover:bg-gray-200"
                     >
                         <div
@@ -89,7 +107,7 @@
                                 </span>
                             </p>
                             <p class="text-xs text-gray-500">
-                                (only PDF file is supported)
+                                (only PDF file is supported, max 5MB)
                             </p>
                         </div>
                         <p
@@ -99,8 +117,8 @@
                             No file selected
                         </p>
                         <input
-                            id="document_path"
-                            name="document_path"
+                            id="payment_receipt"
+                            name="payment_receipt"
                             type="file"
                             class="hidden"
                             accept=".pdf"
@@ -132,7 +150,7 @@
 
     <script>
         const form = document.getElementById('payment_info')
-        const fileInput = document.getElementById('document_path')
+        const fileInput = document.getElementById('payment_receipt')
         const fileNameDisplay = document.getElementById('fileNameDisplay')
 
         fileInput.addEventListener('change', function () {

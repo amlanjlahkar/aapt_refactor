@@ -11,20 +11,16 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('case_files', function (Blueprint $table) {
             $table->id();
-            $table->string('filing_no', 15)->unique();
-            $table->date('filing_date');
-            $table->string('filing_number');
-
-            // New Fields
-            $table->string('case_type')->default('original_application');
-            $table->string('bench')->default('guwahati');
+            $table->string('case_type')->default('Original Application');
+            $table->string('bench')->default('Guwahati');
             $table->string('subject')->nullable();
-            $table->boolean('legal_aid')->nullable();
-
-            // Filed By
+            $table->boolean('legal_aid');
             $table->string('filed_by')->nullable();
+            $table->string('ref_number', 15)->unique();
+            $table->string('filing_number');
+            $table->date('filing_date');
             $table->integer('step')->default(1);
-            $table->string('status')->default('draft');
+            $table->string('status')->default('Draft');
             $table->timestamps();
         });
     }

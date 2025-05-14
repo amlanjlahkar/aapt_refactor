@@ -15,29 +15,14 @@
                 enctype="multipart/form-data"
             >
                 @csrf
-                <div class="col-span-2 flex w-1/3 flex-col gap-2.5">
-                    <label class="text-xl font-semibold" for="file_id">
-                        Filed By
-                    </label>
-                    <select
-                        required
-                        name="file_id"
-                        class="rounded-sm border border-gray-300 bg-white px-4 py-2 text-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                    >
-                        <option value="">Option 1</option>
-                        <option value="">Option 2</option>
-                    </select>
-                </div>
-
                 <div class="col-span-2 flex flex-col gap-2.5">
                     <div
                         class="mb-2 flex flex-row gap-1.5 text-xl font-semibold"
                     >
-                        <p>Upload Documents</p>
-                        <span class="text-red-400">*</span>
+                        {{-- <p>Upload Documents</p> --}}
                     </div>
                     <label
-                        for="document_path"
+                        for="payment_receipt"
                         class="flex cursor-pointer flex-col items-center justify-center rounded-sm border-2 border-dashed border-gray-300 bg-gray-50 p-6 hover:bg-gray-200"
                     >
                         <div
@@ -52,7 +37,7 @@
                                 </span>
                             </p>
                             <p class="text-xs text-gray-500">
-                                (only PNG, JPG or PDF file is supported)
+                                (only PNG, JPG or PDF file is supported, max 5MB)
                             </p>
                         </div>
                         <p
@@ -62,8 +47,8 @@
                             No file selected
                         </p>
                         <input
-                            id="document_path"
-                            name="document_path"
+                            id="payment_receipt"
+                            name="payment_receipt"
                             type="file"
                             class="hidden"
                             accept=".jpg,.jpeg,.png,.pdf"
@@ -81,21 +66,23 @@
                     Save & Proceed ({{ $step }}/5)
                 </button>
             </div>
-            <div
+            {{--
+                <div
                 class="item-center w-full rounded-br rounded-bl bg-gray-700 p-2"
-            >
+                >
                 <p class="text-center text-sm font-medium text-gray-300 italic">
-                    Note: Labels marked with asterisk("
-                    <span class="text-red-400">*</span>
-                    ") are required fields
+                Note: Labels marked with asterisk("
+                <span class="text-red-400">*</span>
+                ") are required fields
                 </p>
-            </div>
+                </div>
+            --}}
         </x-user.container>
     </main>
     @include('partials.footer-alt')
 
     <script>
-        const fileInput = document.getElementById('document_path')
+        const fileInput = document.getElementById('payment_receipt')
         const fileNameDisplay = document.getElementById('fileNameDisplay')
 
         fileInput.addEventListener('change', function () {

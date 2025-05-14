@@ -12,20 +12,21 @@ use Illuminate\Support\Facades\Validator;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class CaseFileController extends Controller {
-    private function generateFilingNumber(): string {
+    private function generateRefNumber(): string {
         do {
-            $filingNo = 'AAPT' . strtoupper(\Str::random(11));
-        } while (CaseFile::where('filing_no', $filingNo)->exists());
+            $refNo = 'AAPT' . strtoupper(\Str::random(11));
+        } while (CaseFile::where('ref_number', $refNo)->exists());
 
-        return $filingNo;
+        return $refNo;
     }
     /**
-     * @param mixed $case_file_id
+     * @param int $case_file_id
      */
-    public function generatePdf($case_file_id) {
-        $case_file = CaseFile::with(['petitioners', 'respondents', 'documents', 'payment'])->findOrFail($case_file_id);
-        $pdf = Pdf::loadView('user.efiling.original-application.summary-view', compact('case_file'));
-        return $pdf->download('test.pdf');
+    public function generatePdf($case_file_id = 1) {
+        $case_file = CaseFile::with(['petitioners', 'respondents', 'documents', 'payment'])->findOrFail(1);
+        /* $pdf = Pdf::loadView('user.efiling.original-application.summary-view', compact('case_file')); */
+        /* return $pdf->download('test.pdf'); */
+        return view('user.efiling.original-application.summary-view', compact('case_file'));
     }
 
     /**
@@ -49,20 +50,20 @@ class CaseFileController extends Controller {
      */
     public function store(Request $request): RedirectResponse {
         $form_data = $request->all();
-        $form_data['filing_no'] = $this->generateFilingNumber();
-        $form_data['filing_date'] = now();
+        $form_data['ref_number'] = $this->generateRefNumber();
         $form_data['filing_number'] = 'Auto-' . now()->year;
+        $form_data['filing_date'] = now();
 
         $validated = Validator::make($form_data, [
-            'filing_no' => 'required|string|max:15|unique:case_files',
-            'filing_date' => 'required|date',
+            'ref_number' => 'required|string|max:15|unique:case_files',
             'filing_number' => 'required|string',
+            'filing_date' => 'required|date',
             'case_type' => 'nullable|string',
-            'bench' => 'nullable|string',
-            'subject' => 'nullable|string',
-            'legal_aid' => 'nullable|boolean',
+            'bench' => 'required|string',
+            'subject' => 'required|string',
+            'legal_aid' => 'required|boolean',
+            'filed_by' => 'nullable|string', // currently unhandled
             'step' => 'nullable|integer',
-            'filed_by' => 'nullable|string',
             'status' => 'nullable|string',
         ])->validate();
 
@@ -80,7 +81,7 @@ class CaseFileController extends Controller {
     /**
      * Display the specified resource.
      */
-    public function show(Request $request) {
+    public function show(Request $request): View {
         $case_file_id = $request->case_file_id;
         $case_file = CaseFile::with(['petitioners', 'respondents', 'documents', 'payment'])->findOrFail($case_file_id);
 

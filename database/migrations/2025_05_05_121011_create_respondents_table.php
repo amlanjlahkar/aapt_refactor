@@ -13,7 +13,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('case_file_id')->constrained()->onDelete('cascade');
 
-            $table->enum('res_type', ['individual', 'organization']);
+            $table->enum('res_type', ['Individual', 'Organization']);
 
             // Common Fields
             $table->string('res_email');

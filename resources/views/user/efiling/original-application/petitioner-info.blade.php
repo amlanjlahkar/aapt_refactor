@@ -17,6 +17,7 @@
                 <div class="col-span-2 flex w-1/3 flex-col gap-2.5">
                     <label class="text-xl font-semibold" for="pet_type">
                         Petitioner Type
+                        <span class="text-red-400">*</span>
                     </label>
                     <select
                         required
@@ -27,8 +28,18 @@
                         <option value="" disabled selected>
                             Select petitioner type
                         </option>
-                        <option value="individual">Individual</option>
-                        <option value="organization">Organization</option>
+                        <option
+                            value="Individual"
+                            {{ old('pet_type') == 'Individual' ? 'selected' : '' }}
+                        >
+                            Individual
+                        </option>
+                        <option
+                            value="Organization"
+                            {{ old('pet_type') == 'Organization' ? 'selected' : '' }}
+                        >
+                            Organization
+                        </option>
                     </select>
                 </div>
 
@@ -46,6 +57,7 @@
                             name="pet_name"
                             type="text"
                             placeholder="Petitioner name"
+                            value="{{ old('pet_name') }}"
                             class="rounded-sm border border-gray-300 bg-white px-4 py-2 text-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
                         />
                     </div>
@@ -62,6 +74,7 @@
                             maxlength="3"
                             name="pet_age"
                             placeholder="Petitioner age"
+                            value="{{ old('pet_age') }}"
                             class="rounded-sm border border-gray-300 bg-white px-4 py-2 text-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
                         />
                     </div>
@@ -78,8 +91,7 @@
                             <option value="" disabled selected>
                                 Select state
                             </option>
-                            <option value="assam">Assam</option>
-                            <option value="null">Option 2</option>
+                            <option value="Assam" selected>Assam</option>
                         </select>
                     </div>
 
@@ -96,8 +108,24 @@
                             <option value="" disabled selected>
                                 Select district
                             </option>
-                            <option value="null">Option 1</option>
-                            <option value="null">Option 2</option>
+                            <option
+                                value="Barpeta"
+                                {{ old('pet_district') == 'Barpeta' ? 'selected' : '' }}
+                            >
+                                Barpeta
+                            </option>
+                            <option
+                                value="Kamrup(Metro)"
+                                {{ old('pet_district') == 'Kamrup(Metro)' ? 'selected' : '' }}
+                            >
+                                Kamrup(Metro)
+                            </option>
+                            <option
+                                value="Nalbari"
+                                {{ old('pet_district') == 'Nalabari' ? 'selected' : '' }}
+                            >
+                                Nalbari
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -199,6 +227,7 @@
                         maxlength="10"
                         name="pet_phone"
                         placeholder="Petitioner phone no."
+                        value="{{ old('pet_phone') }}"
                         class="rounded-sm border border-gray-300 bg-white px-4 py-2 text-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
                     />
                 </div>
@@ -213,6 +242,7 @@
                         type="email"
                         name="pet_email"
                         placeholder="Petitioner email address"
+                        value="{{ old('pet_email') }}"
                         class="rounded-sm border border-gray-300 bg-white px-4 py-2 text-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
                     />
                 </div>
@@ -279,11 +309,11 @@
                 })
 
                 // Then add required attribute back only to visible fields
-                if (selectedType === 'individual') {
+                if (selectedType === 'Individual') {
                     individualInputs.forEach((input) => {
                         input.required = true
                     })
-                } else if (selectedType === 'organization') {
+                } else if (selectedType === 'Organization') {
                     organizationInputs.forEach((input) => {
                         input.required = true
                     })
@@ -297,9 +327,9 @@
                 pet_ind_div.classList.add('hidden')
                 pet_org_div.classList.add('hidden')
 
-                if (selectedType === 'individual') {
+                if (selectedType === 'Individual') {
                     pet_ind_div.classList.remove('hidden')
-                } else if (selectedType === 'organization') {
+                } else if (selectedType === 'Organization') {
                     pet_org_div.classList.remove('hidden')
                 }
 

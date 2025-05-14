@@ -27,8 +27,9 @@
                             Select case type
                         </option>
                         <option
-                            value="original_application"
-                            {{ old('case_type') == 'original_application' ? 'selected' : '' }}
+                            value="Original Application"
+                            selected
+                            {{-- {{ old('case_type') == 'Original Application' ? 'selected' : '' }} --}}
                         >
                             Original Application
                         </option>
@@ -38,6 +39,7 @@
                 <div class="flex flex-col gap-2.5">
                     <label class="text-xl font-semibold" for="bench">
                         Select Bench
+                        <span class="text-red-400">*</span>
                     </label>
                     <select
                         required
@@ -46,8 +48,8 @@
                     >
                         <option value="" disabled selected>Select bench</option>
                         <option
-                            value="guwahati"
-                            {{ old('bench') == 'guwahati' ? 'selected' : '' }}
+                            value="Guwahati"
+                            {{ old('bench') == 'Guwahati' ? 'selected' : '' }}
                         >
                             Guwahati
                         </option>
@@ -57,6 +59,7 @@
                 <div class="flex min-w-1/4 flex-col gap-2.5">
                     <label class="text-xl font-semibold" for="legal_aid">
                         Legal Aid
+                        <span class="text-red-400">*</span>
                     </label>
                     <select
                         required
@@ -94,8 +97,8 @@
                         <option value="" disabled selected>
                             Select case subject
                         </option>
-                        <option value="null">Option 1</option>
-                        <option value="null">Option 2</option>
+                        <option value="null">Subject 1</option>
+                        <option value="null">Subject 2</option>
                     </select>
                 </div>
             </form>

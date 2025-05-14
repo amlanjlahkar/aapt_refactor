@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class CaseDocument extends Model {
     protected $fillable = [
         'case_file_id',
+        'document',
         'document_type',
-        'document_path',
         'original_name',
     ];
 
