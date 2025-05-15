@@ -339,12 +339,18 @@
             </div>
 
             <div class="flex justify-end p-6">
-                <a
-                    href="{{ route('user.efiling.register.genPdf', ['case_file_id' => $case_file->id]) }}"
-                    class="rounded bg-blue-500 px-6 py-2 font-semibold text-white shadow-sm hover:bg-blue-600"
+                <form
+                    action="{{ route('user.efiling.register.genPdf', ['case_file_id' => $case_file->id]) }}"
+                    method="POST"
                 >
-                    Confirm & Submit
-                </a>
+                    @csrf
+                    <button
+                        class="cursor-pointer rounded bg-blue-500 px-6 py-2 font-semibold text-white shadow-sm hover:bg-blue-600"
+                        type="submit"
+                    >
+                        Confirm & Submit
+                    </button>
+                </form>
             </div>
         </x-user.container>
     </main>

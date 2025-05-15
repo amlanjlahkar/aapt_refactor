@@ -64,7 +64,7 @@ Route::prefix('user/efiling/register')->group(function () {
     }
 
     Route::get('/review', [CaseFileController::class, 'show'])->name('user.efiling.register.review');
-    Route::get('/{case_file_id}/generate_case_file_doc', [CaseFileController::class, 'generatePdf'])->name('user.efiling.register.genPdf');
+    Route::post('/{case_file_id}/generate_case_file_doc', [CaseFileController::class, 'generatePdf'])->name('user.efiling.register.genPdf');
     Route::get('/summary/{case_file_id?}', [CaseFileController::class, 'generatePdf']); // only for testing
 
     Route::get('/case-files/{case_file_id}/edit', [CaseFileController::class, 'edit'])

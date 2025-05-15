@@ -9,7 +9,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Spatie\Browsershot\Browsershot;
+use Spatie\LaravelPdf\Facades\Pdf;
+use Spatie\LaravelPdf\PdfBuilder;
 
 class CaseFileController extends Controller {
     private function generateRefNumber(): string {
@@ -19,14 +21,23 @@ class CaseFileController extends Controller {
 
         return $refNo;
     }
+
     /**
-     * @param int $case_file_id
+     * Generate e-filing receipt
+     *
+     * @param  int  $case_file_id
      */
-    public function generatePdf($case_file_id = 1) {
-        $case_file = CaseFile::with(['petitioners', 'respondents', 'documents', 'payment'])->findOrFail(1);
-        /* $pdf = Pdf::loadView('user.efiling.original-application.summary-view', compact('case_file')); */
-        /* return $pdf->download('test.pdf'); */
-        return view('user.efiling.original-application.summary-view', compact('case_file'));
+    public function generatePdf($case_file_id = 1): PdfBuilder {
+        $case_file = CaseFile::with(['petitioners', 'respondents', 'documents', 'payment'])->findOrFail($case_file_id);
+        $pdf = Pdf::view('user.efiling.original-application.summary-view', compact('case_file'))
+            ->withBrowsershot(function (Browsershot $b) {
+                $b->timeout(300)
+                    // must be removed/adjusted once in prod
+                    ->setNodeBinary('/Users/amlan/.local/state/fnm_multishells/42270_1747302996728/bin/node')
+                    ->setNpmBinary('/Users/amlan/.local/state/fnm_multishells/42591_1747303042315/bin/npm');
+            });
+
+        return $pdf->name('efiling_receipt');
     }
 
     /**
@@ -90,8 +101,9 @@ class CaseFileController extends Controller {
 
     /**
      * Show the form for editing the specified resource.
-     * @param mixed $_unused
-     * @param int $case_file_id
+     *
+     * @param  mixed  $_unused
+     * @param  int  $case_file_id
      */
     public function edit(CaseFile $caseFile, $case_file_id): JsonResponse {
         $current_case_file = $caseFile->findOrFail($case_file_id);

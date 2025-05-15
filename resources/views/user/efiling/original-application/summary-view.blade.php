@@ -1,5 +1,5 @@
 <x-layout>
-    <head>
+    <header>
         <div class="m-20 mb-0 flex items-center justify-between gap-3">
             <div class="flex flex-row items-center gap-5">
                 <img
@@ -18,7 +18,7 @@
                 </div>
             </div>
         </div>
-    </head>
+    </header>
     <main>
         <div class="m-20 mt-10 flex flex-col gap-10">
             <h2 class="text-2xl font-semibold">
