@@ -27,6 +27,13 @@ Route::prefix('user/auth')->group(function () {
     Route::post('/register', [RegisterController::class, 'registerUser'])->name('user.auth.register.attempt');
 });
 
+/* Admin routes */
+Route::prefix('admin/auth')->group(function () {
+    Route::get('/login', [LoginController::class, 'showAdminLoginPage'])->name('admin.auth.login.form');
+    Route::post('/login', [LoginController::class, 'loginAdmin'])->name('admin.auth.login.attempt');
+    Route::post('/logout', [LoginController::class, 'logoutAdmin'])->name('admin.auth.logout');   
+});
+
 // Filing routes for original application
 Route::prefix('user/efiling/register')->group(function () {
     $steps = [

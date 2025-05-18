@@ -18,7 +18,7 @@
                 </a>
 
                 <a
-                    href="#"
+                    href="{{ route('admin.auth.login.form') }}"
                     class="focus:shadow-outline block w-full rounded bg-gray-500 px-4 py-3 text-center font-bold text-white transition duration-150 hover:bg-gray-600 focus:outline-none"
                 >
                     Admin Login
