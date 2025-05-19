@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginAdminRequest;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -13,8 +14,12 @@ class LoginController extends Controller {
         return view('auth.login.login-page');
     }
 
+<<<<<<< HEAD
 
     //User login
+=======
+    // User {{{1
+>>>>>>> 80c7f37 (feat: Initial admin logic)
     public function showUserLoginPage(): View {
         return view('auth.login.user-login-page');
     }
@@ -52,12 +57,19 @@ class LoginController extends Controller {
 
         return redirect('/login');
     }
+<<<<<<< HEAD
 
     //Admin login
+=======
+    // 1}}}
+
+    // Admin {{{1
+>>>>>>> 80c7f37 (feat: Initial admin logic)
     public function showAdminLoginPage(): View {
         return view('auth.login.admin-login-page');
     }
 
+<<<<<<< HEAD
     public function adminLoginAttempt(Request $request): RedirectResponse {
         $credentials = $request->validate([
             'email' => 'required|email',
@@ -93,4 +105,26 @@ class LoginController extends Controller {
     }
     
 
+=======
+    public function loginAdmin(LoginAdminRequest $request): RedirectResponse {
+        $credentials = $request->validated();
+
+        if (Auth::guard('admin')->attempt([
+            'email' => $credentials['email'],
+            'password' => $credentials['password'],
+            'status' => 'active',
+        ], true)) {
+            $request->session()->regenerate();
+
+            $admin = Auth::guard('admin')->user();
+            $request->session()->put('admin', $admin->name);
+            return to_route('admin.dashboard');
+        }
+
+        return back()->withErrors([
+            'login' => 'The provided credentials do not match our records or the account has been deactivated',
+        ])->onlyInput('email');
+    }
+    // 1}}}
+>>>>>>> 80c7f37 (feat: Initial admin logic)
 }

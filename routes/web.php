@@ -17,7 +17,7 @@ Route::get('/refresh-captcha', function () {
     return captcha_img('flat');
 });
 
-/* User routes */
+// User routes {{{1
 Route::view('user/dashboard', 'user/dashboard')->name('user.dashboard');
 Route::prefix('user/auth')->group(function () {
     Route::get('/login', [LoginController::class, 'showUserLoginPage'])->name('user.auth.login.form');
@@ -89,8 +89,19 @@ Route::prefix('user/efiling/register')->group(function () {
     Route::get('/payments/{case_file_id}/edit', [CasePaymentController::class, 'edit'])
         ->name('payments.edit');
 });
+// 1}}}
 
-/* Mail verficaiton */
+// Admin routes {{{1
+Route::view('admin/dashboard', 'admin/dashboard')->middleware('auth:admin')->name('admin.dashboard');
+
+Route::prefix('admin/auth')->group(function () {
+    Route::get('/login', [LoginController::class, 'showAdminLoginPage'])->name('admin.auth.login.form');
+    Route::post('/login', [LoginController::class, 'loginAdmin'])->name('admin.auth.login.attempt');
+    Route::post('/logout', [LoginController::class, 'logoutAdmin'])->name('admin.auth.logout');
+});
+// 1}}}
+
+// Mail verficaiton {{{1
 Route::view('/email_verify_notice', 'mail/verify-notice')->middleware('auth')->name('verification.notice');
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
@@ -104,3 +115,4 @@ Route::post('/email/verification-notification', function (Request $request) {
 
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+// 1}}}

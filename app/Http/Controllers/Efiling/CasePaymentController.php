@@ -72,7 +72,8 @@ class CasePaymentController extends Controller {
 
     /**
      * Show the form for editing the specified resource.
-     * @param int $case_file_id
+     *
+     * @param  int  $case_file_id
      */
     public function edit(CasePayment $casePayment, $case_file_id): JsonResponse {
         $current_case_file = CaseFile::findOrFail($case_file_id);

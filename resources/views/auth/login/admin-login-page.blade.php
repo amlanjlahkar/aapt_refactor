@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 <x-layout title="Admin Login">
+=======
+<x-layout title="User Login">
+>>>>>>> 80c7f37 (feat: Initial admin logic)
     @include('partials.header')
     @include('partials.navbar')
     <main class="grow">

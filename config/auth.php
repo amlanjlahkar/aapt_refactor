@@ -40,12 +40,18 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+<<<<<<< HEAD
 
+=======
+>>>>>>> 80c7f37 (feat: Initial admin logic)
         'admin' => [
             'driver' => 'session',
             'provider' => 'admins',
         ],
+<<<<<<< HEAD
 
+=======
+>>>>>>> 80c7f37 (feat: Initial admin logic)
     ],
 
     /*
@@ -68,19 +74,25 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
+            'model' => App\Models\User::class,
         ],
 
+<<<<<<< HEAD
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
 
+=======
+>>>>>>> 80c7f37 (feat: Initial admin logic)
         'admins' => [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
         ],
+<<<<<<< HEAD
 
+=======
+>>>>>>> 80c7f37 (feat: Initial admin logic)
     ],
 
     /*
