@@ -25,5 +25,5 @@ class LoginAdminRequest extends FormRequest {
         ];
     }
 
-    public function withValidator(): void { }
+    public function withValidator(): void {}
 }

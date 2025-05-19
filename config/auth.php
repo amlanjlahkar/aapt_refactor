@@ -40,18 +40,11 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-<<<<<<< HEAD
 
-=======
->>>>>>> 80c7f37 (feat: Initial admin logic)
         'admin' => [
             'driver' => 'session',
             'provider' => 'admins',
         ],
-<<<<<<< HEAD
-
-=======
->>>>>>> 80c7f37 (feat: Initial admin logic)
     ],
 
     /*
@@ -77,22 +70,10 @@ return [
             'model' => App\Models\User::class,
         ],
 
-<<<<<<< HEAD
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
-
-=======
->>>>>>> 80c7f37 (feat: Initial admin logic)
         'admins' => [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
         ],
-<<<<<<< HEAD
-
-=======
->>>>>>> 80c7f37 (feat: Initial admin logic)
     ],
 
     /*
@@ -135,7 +116,5 @@ return [
     */
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
-    
-
 
 ];

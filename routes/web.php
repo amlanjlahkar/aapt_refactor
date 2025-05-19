@@ -31,7 +31,7 @@ Route::prefix('user/auth')->group(function () {
 Route::prefix('admin/auth')->group(function () {
     Route::get('/login', [LoginController::class, 'showAdminLoginPage'])->name('admin.auth.login.form');
     Route::post('/login', [LoginController::class, 'loginAdmin'])->name('admin.auth.login.attempt');
-    Route::post('/logout', [LoginController::class, 'logoutAdmin'])->name('admin.auth.logout');   
+    Route::post('/logout', [LoginController::class, 'logoutAdmin'])->name('admin.auth.logout');
 });
 
 // Filing routes for original application
