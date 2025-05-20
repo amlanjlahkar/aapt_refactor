@@ -12,13 +12,13 @@ class RolesAndPermissionsSeeder extends Seeder {
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         // Create permissions if they don't exist
-        $view = Permission::firstOrCreate(['name' => 'view']);
-        $edit = Permission::firstOrCreate(['name' => 'edit']);
-        $delete = Permission::firstOrCreate(['name' => 'delete']);
+        $view = Permission::firstOrCreate(['name' => 'view', 'guard_name' => 'department']);
+        $edit = Permission::firstOrCreate(['name' => 'edit', 'guard_name' => 'department']);
+        $delete = Permission::firstOrCreate(['name' => 'delete', 'guard_name' => 'department']);
 
         // Create roles if they don't exist
-        $role1 = Role::firstOrCreate(['name' => 'role1']);
-        $role2 = Role::firstOrCreate(['name' => 'role2']);
+        $role1 = Role::firstOrCreate(['name' => 'role1', 'guard_name' => 'department']);
+        $role2 = Role::firstOrCreate(['name' => 'role2', 'guard_name' => 'department']);
 
         // Assign permissions to roles
         $role1->syncPermissions([$view, $edit, $delete]); // sync avoids duplicates
