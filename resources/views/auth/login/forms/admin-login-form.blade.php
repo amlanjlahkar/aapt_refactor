@@ -1,7 +1,10 @@
 <div
     class="mx-auto mt-5 mb-5 max-w-md overflow-hidden rounded-md bg-white p-6 shadow-md"
 >
-    <h2 class="mb-4 text-xl font-semibold">Enter admin credentials</h2>
+    <div class="mb-4 flex flex-row items-center justify-start gap-2">
+        <x-fas-user class="h-4.5 w-4.5" />
+        <h2 class="text-xl font-semibold">Enter Admin Credentials</h2>
+    </div>
 
     @if ($errors->any())
         <div
@@ -26,7 +29,7 @@
                 for="email"
                 class="mb-2 block text-sm font-bold text-gray-700"
             >
-                Admin Email Address
+                Email Address
             </label>
             <input
                 type="email"

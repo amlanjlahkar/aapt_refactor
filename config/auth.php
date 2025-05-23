@@ -46,9 +46,9 @@ return [
             'provider' => 'admins',
         ],
 
-        'department' => [
-            'driver' => 'session',
-            'provider' => 'department_users',
+        'dept_user' => [
+            'driver' => 'sessions',
+            'provider' => 'dept_users',
         ],
     ],
 
@@ -80,9 +80,9 @@ return [
             'model' => App\Models\Admin::class,
         ],
 
-        'department_users' => [
+        'dept_users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Internal\DepartmentUser::class,
+            'model' => App\Models\Internal\Department\DepartmentUser::class,
         ],
     ],
 

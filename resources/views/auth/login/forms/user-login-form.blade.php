@@ -1,7 +1,10 @@
 <div
     class="mx-auto mt-5 mb-5 max-w-md overflow-hidden rounded-md bg-white p-6 shadow-md"
 >
-    <h2 class="mb-4 text-xl font-semibold">Enter user credentials</h2>
+    <div class="mb-4 flex flex-row items-center justify-start gap-2">
+        <x-fas-user class="h-4.5 w-4.5" />
+        <h2 class="text-xl font-semibold">Enter User Credentials</h2>
+    </div>
 
     @if ($errors->any())
         <div
@@ -32,7 +35,7 @@
                 type="email"
                 id="email"
                 name="email"
-                placeholder="Enter your email"
+                placeholder="Enter your user email"
                 value="{{ old('email') }}"
                 class="w-full rounded-xs border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 required

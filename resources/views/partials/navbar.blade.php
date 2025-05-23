@@ -1,5 +1,7 @@
-<div class="flex w-full items-center justify-center border-b-1 border-gray-300">
-    <nav class="flex space-x-8 font-medium text-blue-900">
+<div
+    class="flex w-full items-center justify-center border-t border-b border-blue-300 bg-blue-200"
+>
+    <nav class="flex space-x-8 font-medium text-blue-800">
         <div
             class="border-b-2 border-transparent p-4 transition-all duration-200 hover:border-b-blue-900"
         >

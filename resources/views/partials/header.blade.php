@@ -1,7 +1,7 @@
 <header
-    class="top-0 z-50 flex w-full flex-row flex-wrap justify-between border-t-1 border-b-1 border-blue-200 bg-blue-50 py-2 pr-12 pl-12 text-sm"
+    class="top-0 z-50 flex w-full flex-row flex-wrap justify-between border-t border-b border-blue-200 bg-blue-50 py-2 pr-12 pl-12 text-sm"
 >
-    <div class="flex flex-row flex-wrap items-center space-x-4">
+    <div class="flex flex-row flex-wrap items-center gap-4">
         <img
             src="{{ asset('images/india_flag.png') }}"
             alt="National Flag"
@@ -20,7 +20,7 @@
             Screen Reader Access
         </a>
     </div>
-    <div class="flex flex-row flex-wrap items-center space-x-4">
+    <div class="flex flex-row flex-wrap items-center gap-4">
         <div class="flex flex-row items-center justify-center space-x-2.5">
             <button>A+</button>
             <button>A</button>
@@ -31,17 +31,22 @@
         </select>
         <a href="{{ route('login') }}">
             <div
-                class="flex items-center space-x-1.5 rounded-sm bg-gray-800 p-2 text-gray-300 shadow-sm"
+                class="flex items-center gap-1.5 rounded-sm bg-gray-800 px-3 py-2 font-medium text-gray-300 shadow-sm"
             >
-                <x-fas-arrow-right-to-bracket class="h-4 w-4" />
-                <p>Login</p>
+                @if (! Request::is('user*', 'admin*'))
+                    <x-fas-arrow-right-to-bracket class="h-3.5 w-3.5" />
+                    <p class="text-sm">Login</p>
+                @else
+                    <x-fas-arrow-right-from-bracket class="h-3.5 w-3.5" />
+                    <p class="text-sm">Logout</p>
+                @endif
             </div>
         </a>
     </div>
 </header>
 
 <div
-    class="flex h-40 w-full items-center justify-between gap-3 border-b-2 border-gray-800 pr-12 pl-12"
+    class="flex h-40 w-full items-center justify-between gap-3 border-b border-gray-700 pr-12 pl-12"
 >
     <a href="{{ route('home') }}" class="block">
         <div class="mx-0 flex flex-row items-center">

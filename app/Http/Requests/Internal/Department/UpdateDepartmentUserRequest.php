@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Internal\Department;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreAdminRequest extends FormRequest {
+class UpdateDepartmentUserRequest extends FormRequest {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool {
-        return true;
+        return false;
     }
 
     /**
@@ -19,9 +19,7 @@ class StoreAdminRequest extends FormRequest {
      */
     public function rules(): array {
         return [
-            'name' => ['required', 'string', 'max:60'],
-            'email' => ['required', 'string', 'email', 'max:50', 'unique:admins,email'],
-            'password' => ['required', 'min:8', 'confirmed'],
+            //
         ];
     }
 }

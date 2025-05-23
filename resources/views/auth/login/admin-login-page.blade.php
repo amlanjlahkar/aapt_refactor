@@ -6,6 +6,6 @@
             @include('auth.login.forms.admin-login-form')
         </div>
     </main>
-    @stack('scripts')
     @include('partials.footer')
+    @stack('scripts')
 </x-layout>

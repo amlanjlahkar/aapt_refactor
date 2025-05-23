@@ -62,7 +62,7 @@
 
     {{-- contetnt area --}}
     <div class="flex-4/5">
-        <div class="m-12 mr-12 rounded-md bg-gray-100 shadow-lg">
+        <div class="m-12 rounded-md bg-gray-100 shadow-lg">
             <div
                 class="flex flex-row items-center justify-between rounded-tl rounded-tr border-b-1 border-gray-400 bg-gray-300 pt-5 pr-7 pb-5 pl-7"
             >
@@ -89,7 +89,9 @@
                 </div>
             @endif
 
-            {{ $slot }}
+            <div class="p-7">
+                {{ $slot }}
+            </div>
         </div>
     </div>
 </div>

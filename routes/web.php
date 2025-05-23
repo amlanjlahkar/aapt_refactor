@@ -7,6 +7,9 @@ use App\Http\Controllers\Efiling\CaseFileController;
 use App\Http\Controllers\Efiling\CasePaymentController;
 use App\Http\Controllers\Efiling\PetitionerController;
 use App\Http\Controllers\Efiling\RespondentController;
+use App\Http\Controllers\Internal\Department\DepartmentUserController;
+use App\Http\Controllers\Internal\Department\DepartmentUserRoleController;
+use App\Http\Middleware\PreventBackHistory;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,20 +25,13 @@ Route::view('user/dashboard', 'user/dashboard')->name('user.dashboard');
 Route::prefix('user/auth')->group(function () {
     Route::get('/login', [LoginController::class, 'showUserLoginPage'])->name('user.auth.login.form');
     Route::post('/login', [LoginController::class, 'loginUser'])->name('user.auth.login.attempt');
-    Route::post('/logout', [LoginController::class, 'logoutUser'])->name('user.auth.logout');
+    Route::post('/logout', [LoginController::class, 'logoutUser'])->middleware(['auth', PreventBackHistory::class])->name('user.auth.logout');
     Route::get('/register', [RegisterController::class, 'showUserRegisterPage'])->name('user.auth.register.form');
     Route::post('/register', [RegisterController::class, 'registerUser'])->name('user.auth.register.attempt');
 });
 
-/* Admin routes */
-Route::prefix('admin/auth')->group(function () {
-    Route::get('/login', [LoginController::class, 'showAdminLoginPage'])->name('admin.auth.login.form');
-    Route::post('/login', [LoginController::class, 'loginAdmin'])->name('admin.auth.login.attempt');
-    Route::post('/logout', [LoginController::class, 'logoutAdmin'])->name('admin.auth.logout');
-});
-
 // Filing routes for original application
-Route::prefix('user/efiling/register')->group(function () {
+Route::prefix('user/efiling/register')->middleware(['auth', PreventBackHistory::class])->group(function () {
     $steps = [
         1 => [
             'view' => 'case-file',
@@ -97,7 +93,17 @@ Route::view('admin/dashboard', 'admin/dashboard')->middleware('auth:admin')->nam
 Route::prefix('admin/auth')->group(function () {
     Route::get('/login', [LoginController::class, 'showAdminLoginPage'])->name('admin.auth.login.form');
     Route::post('/login', [LoginController::class, 'loginAdmin'])->name('admin.auth.login.attempt');
-    Route::post('/logout', [LoginController::class, 'logoutAdmin'])->name('admin.auth.logout');
+    Route::post('/logout', [LoginController::class, 'logoutAdmin'])->middleware(['auth:admin', PreventBackHistory::class])->name('admin.auth.logout');
+});
+
+Route::prefix('admin/internal/dept')->middleware(['auth:admin', PreventBackHistory::class])->group(function () {
+    Route::view('/', 'admin/internal/department/show')->name('admin.internal.dept.show');
+    Route::get('/users', [DepartmentUserController::class, 'index'])->name('admin.internal.dept.users.index');
+    Route::get('/users/create', [DepartmentUserController::class, 'create'])->name('admin.internal.dept.users.create');
+    Route::post('/users/store', [DepartmentUserController::class, 'store'])->name('admin.internal.dept.users.store');
+    Route::get('/roles', [DepartmentUserRoleController::class, 'index'])->name('admin.internal.dept.roles.index');
+    Route::get('/roles/create', [DepartmentUserRoleController::class, 'create'])->name('admin.internal.dept.roles.create');
+    Route::post('/roles/store', [DepartmentUserRoleController::class, 'store'])->name('admin.internal.dept.roles.store');
 });
 // 1}}}
 
