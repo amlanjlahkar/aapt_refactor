@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-class DepartmentUserController extends Controller
-{
+class DepartmentUserController extends Controller {
     //
 }

@@ -6,8 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Permission\Traits\HasRoles;
 
-class DepartmentUser extends Model
-{
+class DepartmentUser extends Model {
     use HasFactory, HasRoles;
 
     protected $guard_name = 'department';
@@ -22,5 +21,4 @@ class DepartmentUser extends Model
     protected $hidden = [
         'password',
     ];
-    
 }
