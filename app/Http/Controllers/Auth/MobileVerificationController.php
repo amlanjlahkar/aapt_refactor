@@ -12,7 +12,7 @@ class MobileVerificationController extends Controller
 {
     public function showForm()
     {
-        $user = Auth::user();
+        $user = Auth::user()->fresh();
 
         if ($user->mobile_verified_at) {
             return redirect()->route('user.dashboard');
@@ -20,16 +20,18 @@ class MobileVerificationController extends Controller
 
         if (!session()->has('otp_sent') || !$user->mobile_otp || !$user->otp_expiry || Carbon::now()->gt($user->otp_expiry)) {
             try {
-                $this->sendOtp($user);
+                $this->sendOtp($user); 
                 session(['otp_sent' => true]);
             } catch (\Exception $e) {
-                // You can optionally log this error in production
+                report($e); 
+                return back()->withErrors(['otp' => 'Failed to send OTP']);
             }
         }
 
         $maskedMobile = '+91******' . substr($user->mobile_no, -4);
         return view('otp.mobile_verify', ['maskedMobile' => $maskedMobile]);
     }
+
 
     public function resend(Request $request)
     {
@@ -69,7 +71,7 @@ class MobileVerificationController extends Controller
             $request->input('otp_digit_6'),
         ]);
 
-        $user = Auth::user();
+        $user = Auth::user()->fresh();
 
         if ($user->mobile_verified_at) {
             return redirect()->route('user.dashboard')->with('status', 'Mobile number verified successfully!');
@@ -98,26 +100,30 @@ class MobileVerificationController extends Controller
 
     private function sendOtp($user)
     {
-        $rawMobile = $user->mobile_no;
+        $mobile = $user->mobile_no;
 
-        $mobile = preg_replace('/^\+?91/', '', $rawMobile);
-        $mobile = preg_replace('/[^0-9]/', '', $mobile);
-        if (strlen($mobile) === 10) {
-            $mobile = '+91' . $mobile;
-        }
+        // Add +91 prefix (assuming DB stores 10-digit number only)
+        $mobileWithCode = '+91' . $mobile;
 
-        if (!preg_match('/^\+91[6-9]\d{9}$/', $mobile)) {
+        // Validate mobile format after adding country code
+        if (!preg_match('/^\+91[6-9]\d{9}$/', $mobileWithCode)) {
             throw new \Exception('Invalid mobile number format');
         }
 
+        // Prevent frequent resends
         if ($user->otp_sent_at && $user->otp_sent_at->addMinutes(2)->isFuture()) {
             return;
         }
 
         $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 
-        $apiKey = env('TWOFACTOR_API_KEY', 'TEST');
-        $url = sprintf('https://2factor.in/API/V1/%s/SMS/%s/%s/OTP_VFY', $apiKey, urlencode($mobile), $otp);
+        $apiKey = env('TWOFACTOR_API_KEY', 'TEST'); // Replace 'TEST' with your actual API key in .env
+        $url = sprintf(
+            'https://2factor.in/API/V1/%s/SMS/%s/%s/OTP_VFY',
+            $apiKey,
+            urlencode($mobileWithCode),
+            $otp
+        );
 
         $response = Http::timeout(20)->get($url);
         $responseBody = $response->json();
@@ -132,4 +138,5 @@ class MobileVerificationController extends Controller
             'otp_sent_at' => now(),
         ]);
     }
+
 }

@@ -45,23 +45,32 @@ class RegisterController extends Controller
                 'middle_name' => $request->middle_name,
                 'last_name' => $request->last_name,
                 'email' => $request->email,
-                'mobile_no' => '+91' . $request->mobile_no,
+                'mobile_no' => $request->mobile_no,
                 'password' => Hash::make($request->password),
             ]);
 
             auth()->login($user);
-            // $user->sendEmailVerificationNotification();
+            $user->sendEmailVerificationNotification();
 
+            return redirect()->route('verification.notice');
             // return redirect()->route('verification.notice')->with('email', $user->email);
-            return redirect()->route('verify.mobile')->with('mobile', $user->mobile_no);
+            // return redirect()->route('verify.mobile')->with('mobile', $user->mobile_no);
 
 
 
-        } 
+        }
         catch (\Exception $e) {
             Log::error('User registration failed: '.$e->getMessage());
-
-            return redirect()->back();
+            dd('Registration failed:', $e->getMessage()); // Temporary for debugging
         }
+
+        // catch (\Exception $e) {
+        //     Log::error('User registration failed: '.$e->getMessage());
+
+        //     return redirect()->back();
+        // }
+
+        
+
     }
 }

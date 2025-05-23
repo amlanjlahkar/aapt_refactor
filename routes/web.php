@@ -23,7 +23,7 @@ Route::prefix('user/auth')->group(function () {
 });
 
 Route::prefix('user')->group(function () {
-    Route::view('/dashboard', 'user/dashboard')->middleware(['auth'])->name('user.dashboard'); //removed the verified to bypass the email verification
+    Route::view('/dashboard', 'user/dashboard')->middleware(['auth','verified'])->name('user.dashboard'); 
 });
 
 /* Mail verficaiton */
@@ -32,7 +32,7 @@ Route::view('/email_verify_notice', 'mail/verify-notice')->middleware('auth')->n
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
 
-    return redirect('/user/login');
+    return redirect('/verify-mobile'); 
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 Route::post('/email/verification-notification', function (Request $request) {
@@ -43,7 +43,7 @@ Route::post('/email/verification-notification', function (Request $request) {
 
 
 //mobile verification
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     // Mobile Verification Form
     Route::get('/verify-mobile', [MobileVerificationController::class, 'showForm'])
          ->name('verify.mobile');
