@@ -1,8 +1,8 @@
 <div
-    class="mx-auto mt-5 mb-5 max-w-xl overflow-hidden rounded-md bg-white shadow-md"
+    class="mx-auto mt-5 mb-5 w-fit overflow-hidden rounded border border-gray-300 bg-white"
 >
-    <div class="p-6">
-        <h2 class="mb-4 text-xl font-semibold">User Registration</h2>
+    <div class="p-6 pt-8">
+        <h2 class="mb-8 text-2xl font-semibold">User Registration</h2>
 
         <div
             id="clientErrors"

@@ -3,26 +3,26 @@
     @include('partials.navbar')
     <main class="grow">
         <div
-            class="m-10 mx-auto max-w-md overflow-hidden rounded bg-white p-6 shadow-md"
+            class="m-10 mx-auto max-w-xl overflow-hidden rounded bg-white p-6 border border-gray-300"
         >
             <div class="mb-6 flex flex-row items-center justify-center gap-2">
                 <x-fas-user class="h-5 w-5" />
-                <h2 class="text-center text-xl font-semibold">
+                <h2 class="text-center text-2xl font-semibold">
                     Select Login Type
                 </h2>
             </div>
 
-            <div class="space-y-4">
+            <div class="space-y-5">
                 <a
                     href="{{ route('user.auth.login.form') }}"
-                    class="block w-full rounded-sm border border-gray-300 bg-gray-100 px-4 py-3 text-center font-medium shadow-sm hover:border-gray-400 hover:bg-gray-200"
+                    class="block w-full rounded-sm border border-gray-300 bg-gray-100 px-4 py-3 text-center font-medium hover:border-gray-400 hover:bg-gray-200"
                 >
                     User Login
                 </a>
 
                 <a
                     href="{{ route('admin.auth.login.form') }}"
-                    class="block w-full rounded-sm border border-gray-300 bg-gray-100 px-4 py-3 text-center font-medium shadow-sm hover:border-gray-400 hover:bg-gray-200"
+                    class="block w-full rounded-sm border border-gray-300 bg-gray-100 px-4 py-3 text-center font-medium hover:border-gray-400 hover:bg-gray-200"
                 >
                     Admin Login
                 </a>

@@ -1,9 +1,9 @@
 <div
-    class="mx-auto mt-5 mb-5 max-w-md overflow-hidden rounded-md bg-white p-6 shadow-md"
+    class="mx-auto mt-5 mb-5 max-w-xl overflow-hidden rounded bg-white p-6 border border-gray-300"
 >
-    <div class="mb-4 flex flex-row items-center justify-start gap-2">
-        <x-fas-user class="h-4.5 w-4.5" />
-        <h2 class="text-xl font-semibold">Enter User Credentials</h2>
+    <div class="mb-6 flex flex-row items-center justify-start gap-2">
+        <x-fas-user class="h-5 w-5" />
+        <h2 class="text-2xl font-semibold">Enter User Credentials</h2>
     </div>
 
     @if ($errors->any())

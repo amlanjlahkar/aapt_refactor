@@ -47,6 +47,6 @@ class RegisterController extends Controller {
         auth()->login($user);
         $user->sendEmailVerificationNotification();
 
-        return to_route('verification.notice')->with('email', $user->email);
+        return to_route('verification.notice', ['email' => $user->email]);
     }
 }

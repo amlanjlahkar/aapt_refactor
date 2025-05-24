@@ -46,7 +46,7 @@
 </header>
 
 <div
-    class="flex h-40 w-full items-center justify-between gap-3 border-b border-gray-700 pr-12 pl-12"
+    class="flex h-40 w-full items-center justify-between gap-3 border-b border-gray-300 pr-12 pl-12"
 >
     <a href="{{ route('home') }}" class="block">
         <div class="mx-0 flex flex-row items-center">

@@ -21,7 +21,7 @@ Route::get('/refresh-captcha', function () {
 });
 
 // User routes {{{1
-Route::view('user/dashboard', 'user/dashboard')->name('user.dashboard');
+Route::view('user/dashboard', 'user.dashboard')->middleware(['auth'])->name('user.dashboard');
 Route::prefix('user/auth')->group(function () {
     Route::get('/login', [LoginController::class, 'showUserLoginPage'])->name('user.auth.login.form');
     Route::post('/login', [LoginController::class, 'loginUser'])->name('user.auth.login.attempt');
@@ -88,7 +88,7 @@ Route::prefix('user/efiling/register')->middleware(['auth', PreventBackHistory::
 // 1}}}
 
 // Admin routes {{{1
-Route::view('admin/dashboard', 'admin/dashboard')->middleware('auth:admin')->name('admin.dashboard');
+Route::view('admin/dashboard', 'admin.dashboard')->middleware('auth:admin')->name('admin.dashboard');
 
 Route::prefix('admin/auth')->group(function () {
     Route::get('/login', [LoginController::class, 'showAdminLoginPage'])->name('admin.auth.login.form');
@@ -97,7 +97,7 @@ Route::prefix('admin/auth')->group(function () {
 });
 
 Route::prefix('admin/internal/dept')->middleware(['auth:admin', PreventBackHistory::class])->group(function () {
-    Route::view('/', 'admin/internal/department/show')->name('admin.internal.dept.show');
+    Route::view('/', 'admin.internal.department.show')->name('admin.internal.dept.show');
     Route::get('/users', [DepartmentUserController::class, 'index'])->name('admin.internal.dept.users.index');
     Route::get('/users/create', [DepartmentUserController::class, 'create'])->name('admin.internal.dept.users.create');
     Route::post('/users/store', [DepartmentUserController::class, 'store'])->name('admin.internal.dept.users.store');
@@ -108,10 +108,10 @@ Route::prefix('admin/internal/dept')->middleware(['auth:admin', PreventBackHisto
 // 1}}}
 
 // Mail verficaiton {{{1
-Route::view('/email_verify_notice', 'mail/verify-notice')->middleware('auth')->name('verification.notice');
+Route::view('/email_verify_notice', 'mail.verify-notice')->middleware('auth')->name('verification.notice');
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
+    $request->fulfill(); // mark email as verified
 
     return redirect('/user/auth/login');
 })->middleware(['auth', 'signed'])->name('verification.verify');
@@ -119,6 +119,6 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
 
-    return back()->with('message', 'Verification link sent!');
+    return back()->with('success', 'Verification email has been sent successfully!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 // 1}}}
