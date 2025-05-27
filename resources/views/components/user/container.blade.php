@@ -89,7 +89,7 @@
                 </div>
             @endif
 
-            <div class="p-7">
+            <div class="{{ Request::is('user/efiling*') ? 'p-0' : 'p-7' }}">
                 {{ $slot }}
             </div>
         </div>

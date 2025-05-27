@@ -54,7 +54,7 @@ class PetitionerController extends Controller {
             // Validate organizational fields
             'pet_ministry' => 'required_if:pet_type,Organization|string',
             'pet_department' => 'required_if:pet_type,Organization|string',
-            /* 'pet_contact_person' => 'required_if:pet_type,Organization|string', */
+            'pet_contact_person' => 'required_if:pet_type,Organization|string',
             'pet_designation' => 'required_if:pet_type,Organization|string',
         ])->validate();
 

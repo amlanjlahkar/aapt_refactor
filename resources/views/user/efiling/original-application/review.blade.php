@@ -318,7 +318,7 @@
                                         Payment Receipt :
                                     </span>
                                     <a
-                                        href="{{ asset('storage/' . $pay->document_path) }}"
+                                        href="{{ asset('storage/' . $pay->payment_receipt) }}"
                                         target="_blank"
                                         class="underline"
                                     >
@@ -340,7 +340,7 @@
 
             <div class="flex justify-end p-6">
                 <form
-                    action="{{ route('user.efiling.register.genPdf', ['case_file_id' => $case_file->id]) }}"
+                    action="{{ route('user.efiling.submit', ['case_file_id' => $case_file->id]) }}"
                     method="POST"
                 >
                     @csrf

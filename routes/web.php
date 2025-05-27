@@ -9,6 +9,7 @@ use App\Http\Controllers\Efiling\PetitionerController;
 use App\Http\Controllers\Efiling\RespondentController;
 use App\Http\Controllers\Internal\Department\DepartmentUserController;
 use App\Http\Controllers\Internal\Department\DepartmentUserRoleController;
+use App\Http\Controllers\UserDashboardController;
 use App\Http\Middleware\PreventBackHistory;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -21,7 +22,7 @@ Route::get('/refresh-captcha', function () {
 });
 
 // User routes {{{1
-Route::view('user/dashboard', 'user.dashboard')->middleware(['auth'])->name('user.dashboard');
+Route::get('user/dashboard', [UserDashboardController::class, 'index'])->middleware(['auth'])->name('user.dashboard');
 Route::prefix('user/auth')->group(function () {
     Route::get('/login', [LoginController::class, 'showUserLoginPage'])->name('user.auth.login.form');
     Route::post('/login', [LoginController::class, 'loginUser'])->name('user.auth.login.attempt');
@@ -31,6 +32,12 @@ Route::prefix('user/auth')->group(function () {
 });
 
 // Filing routes for original application
+Route::prefix('user/cases')->middleware(['auth'])->group(function () {
+    Route::get('/draft', [UserDashboardController::class, 'indexDraftCases'])->name('user.cases.draft');
+    Route::get('/draft/continue/{case_file_id}', [UserDashboardController::class, 'continueDraftCase'])->name('user.cases.draft.continue');
+});
+Route::post('user/efiling/{case_file_id}/submit', [CaseFileController::class, 'showSubmitNotice'])->middleware(['auth'])->name('user.efiling.submit');
+Route::post('user/efiling/{case_file_id}/case_pdf', [CaseFileController::class, 'generatePdf'])->name('user.efiling.generate_case_pdf');
 Route::prefix('user/efiling/register')->middleware(['auth', PreventBackHistory::class])->group(function () {
     $steps = [
         1 => [
@@ -67,7 +74,6 @@ Route::prefix('user/efiling/register')->middleware(['auth', PreventBackHistory::
     }
 
     Route::get('/review', [CaseFileController::class, 'show'])->name('user.efiling.register.review');
-    Route::post('/{case_file_id}/generate_case_file_doc', [CaseFileController::class, 'generatePdf'])->name('user.efiling.register.genPdf');
     Route::get('/summary/{case_file_id?}', [CaseFileController::class, 'generatePdf']); // only for testing
 
     Route::get('/case-files/{case_file_id}/edit', [CaseFileController::class, 'edit'])

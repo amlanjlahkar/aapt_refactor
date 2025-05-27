@@ -12,8 +12,8 @@
                     <h3 class="mb-2 text-lg font-semibold text-gray-200">
                         Total No. of Draft Cases
                     </h3>
-                    <p class="mb-4 text-3xl font-bold text-blue-300">24</p>
-                    <a href="#" class="text-sm text-white hover:underline">
+                    <p class="mb-4 text-3xl font-bold text-blue-300">{{ $case['draft_count'] }}</p>
+                    <a href="{{ route('user.cases.draft') }}" class="text-sm text-white hover:underline">
                         View Details
                     </a>
                 </div>
@@ -22,7 +22,7 @@
                     <h3 class="mb-2 text-lg font-semibold text-gray-100">
                         Total No. of Pending Cases
                     </h3>
-                    <p class="mb-4 text-3xl font-bold text-yellow-400">156</p>
+                    <p class="mb-4 text-3xl font-bold text-yellow-400">{{ $case['pending_count'] }}</p>
                     <a href="#" class="text-sm text-white hover:underline">
                         View Details
                     </a>
@@ -32,7 +32,7 @@
                     <h3 class="mb-2 text-lg font-semibold text-gray-200">
                         Total No. of Defective Cases
                     </h3>
-                    <p class="mb-4 text-3xl font-bold text-red-300">12</p>
+                    <p class="mb-4 text-3xl font-bold text-red-300">{{ $case['defective_count'] }}</p>
                     <a href="#" class="text-sm text-white hover:underline">
                         View Details
                     </a>
@@ -42,7 +42,7 @@
                     <h3 class="mb-2 text-lg font-semibold text-gray-200">
                         Today's Filed Cases
                     </h3>
-                    <p class="mb-4 text-3xl font-bold text-green-300">8</p>
+                    <p class="mb-4 text-3xl font-bold text-green-300">{{ $case['today_count'] }}</p>
                     <a href="#" class="text-sm text-white hover:underline">
                         View Details
                     </a>

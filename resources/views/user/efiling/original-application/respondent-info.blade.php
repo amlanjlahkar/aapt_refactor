@@ -146,9 +146,9 @@
                             <option value="" disabled selected>
                                 Select ministry
                             </option>
-                            <option value="">Option 1</option>
-                            <option value="">Option 2</option>
-                            <option value="">Option 3</option>
+                            <option value="Option 1">Option 1</option>
+                            <option value="Option 2">Option 2</option>
+                            <option value="Option 3">Option 3</option>
                         </select>
                     </div>
 
@@ -168,9 +168,9 @@
                             <option value="" disabled selected>
                                 Select department
                             </option>
-                            <option value="">Option 1</option>
-                            <option value="">Option 2</option>
-                            <option value="">Option 3</option>
+                            <option value="Option 1">Option 1</option>
+                            <option value="Option 2">Option 2</option>
+                            <option value="Option 3">Option 3</option>
                         </select>
                     </div>
 
@@ -207,9 +207,9 @@
                             <option value="" disabled selected>
                                 Select designation
                             </option>
-                            <option value="">Option 1</option>
-                            <option value="">Option 2</option>
-                            <option value="">Option 3</option>
+                            <option value="Option 1">Option 1</option>
+                            <option value="Option 2">Option 2</option>
+                            <option value="Option 3">Option 3</option>
                         </select>
                     </div>
                 </div>
@@ -284,22 +284,6 @@
     </main>
     @include('partials.footer-alt')
     <script>
-        const res_type = document.getElementById('res_type')
-        const res_ind_div = document.getElementById('res_individual_fields')
-        const res_org_div = document.getElementById('res_organization_fields')
-        res_type.addEventListener('change', () => {
-            const selectedType = event.target.value
-
-            res_ind_div.classList.add('hidden')
-            res_org_div.classList.add('hidden')
-
-            if (selectedType === 'Individual') {
-                res_ind_div.classList.remove('hidden')
-            } else if (selectedType === 'Organization') {
-                res_org_div.classList.remove('hidden')
-            }
-        })
-
         document.addEventListener('DOMContentLoaded', function () {
             const res_type = document.getElementById('res_type')
             const res_ind_div = document.getElementById('res_individual_fields')
@@ -313,44 +297,79 @@
             const organizationInputs =
                 res_org_div.querySelectorAll('input, select')
 
-            // Function to toggle required attribute
-            function toggleRequiredAttributes(selectedType) {
-                // First, remove required from all fields
+            // Function to toggle required attribute and disabled state
+            function toggleFieldsState(selectedType) {
+                // Reset all fields first
                 individualInputs.forEach((input) => {
                     input.required = false
+                    input.disabled = true
+                    input.name =
+                        input.name.replace('_disabled', '') + '_disabled' // Disable by changing name
                 })
 
                 organizationInputs.forEach((input) => {
                     input.required = false
+                    input.disabled = true
+                    input.name =
+                        input.name.replace('_disabled', '') + '_disabled' // Disable by changing name
                 })
 
-                // Then add required attribute back only to visible fields
+                // Enable and require only the relevant fields
                 if (selectedType === 'Individual') {
                     individualInputs.forEach((input) => {
                         input.required = true
+                        input.disabled = false
+                        input.name = input.name.replace('_disabled', '') // Restore original name
                     })
                 } else if (selectedType === 'Organization') {
                     organizationInputs.forEach((input) => {
                         input.required = true
+                        input.disabled = false
+                        input.name = input.name.replace('_disabled', '') // Restore original name
                     })
                 }
             }
 
-            // Toggle visibility and required attributes on change
+            // Alternative approach: Remove fields from form data before submission
+            function handleFormSubmission(selectedType) {
+                // Create hidden input to store the actual field values we want to submit
+                const fieldsToSubmit =
+                    selectedType === 'Individual'
+                        ? individualInputs
+                        : organizationInputs
+                const fieldsToExclude =
+                    selectedType === 'Individual'
+                        ? organizationInputs
+                        : individualInputs
+
+                // Disable fields we don't want to submit
+                fieldsToExclude.forEach((input) => {
+                    input.disabled = true
+                })
+
+                // Ensure fields we want to submit are enabled
+                fieldsToSubmit.forEach((input) => {
+                    input.disabled = false
+                })
+            }
+
+            // Toggle visibility and field states on change
             res_type.addEventListener('change', (event) => {
                 const selectedType = event.target.value
 
+                // Hide all field groups
                 res_ind_div.classList.add('hidden')
                 res_org_div.classList.add('hidden')
 
+                // Show relevant field group
                 if (selectedType === 'Individual') {
                     res_ind_div.classList.remove('hidden')
                 } else if (selectedType === 'Organization') {
                     res_org_div.classList.remove('hidden')
                 }
 
-                // Update required attributes
-                toggleRequiredAttributes(selectedType)
+                // Update field states
+                toggleFieldsState(selectedType)
             })
 
             // Handle form submission
@@ -359,12 +378,24 @@
                 .addEventListener('submit', function (event) {
                     const selectedType = res_type.value
 
-                    // Make sure the required attributes are set correctly before submission
-                    toggleRequiredAttributes(selectedType)
+                    // Final check before submission
+                    handleFormSubmission(selectedType)
                 })
 
-            // Initialize with empty state (no required fields)
-            toggleRequiredAttributes('')
+            // Initialize with empty state
+            toggleFieldsState('')
+
+            // Handle case where form has old values (validation errors)
+            const currentResType = res_type.value
+            if (currentResType) {
+                // Show the appropriate fields based on old value
+                if (currentResType === 'Individual') {
+                    res_ind_div.classList.remove('hidden')
+                } else if (currentResType === 'Organization') {
+                    res_org_div.classList.remove('hidden')
+                }
+                toggleFieldsState(currentResType)
+            }
         })
     </script>
 </x-layout>

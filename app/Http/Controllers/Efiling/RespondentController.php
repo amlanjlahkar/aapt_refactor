@@ -38,6 +38,7 @@ class RespondentController extends Controller {
     public function store(Request $request, $_unused, $case_file_id): RedirectResponse {
         $form_data = $request->all();
         $form_data['case_file_id'] = $case_file_id;
+
         $validated = Validator::make($form_data, [
             'case_file_id' => 'required|exists:case_files,id',
             'res_type' => 'required|in:Individual,Organization',
@@ -54,7 +55,7 @@ class RespondentController extends Controller {
             // Validate organizational fields
             'res_ministry' => 'required_if:res_type,Organization|string',
             'res_department' => 'required_if:res_type,Organization|string',
-            /* 'res_contact_person' => 'required_if:res_type,Organization|string', */
+            'res_contact_person' => 'required_if:res_type,Organization|string',
             'res_designation' => 'required_if:res_type,Organization|string',
 
         ])->validate();

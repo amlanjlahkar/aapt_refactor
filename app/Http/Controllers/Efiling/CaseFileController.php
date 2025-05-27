@@ -37,7 +37,16 @@ class CaseFileController extends Controller {
                     ->setNpmBinary('/Users/amlan/.local/state/fnm_multishells/42591_1747303042315/bin/npm');
             });
 
-        return $pdf->name('efiling_receipt');
+        return $pdf->name('generated_case_file');
+    }
+
+    /**
+     * @param  int  $case_file_id
+     */
+    public function showSubmitNotice($case_file_id): View {
+        CaseFile::where('id', $case_file_id)->update(['status' => 'Pending']);
+
+        return view('user.efiling.submit-notice', compact('case_file_id'));
     }
 
     /**

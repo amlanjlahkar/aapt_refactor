@@ -2,11 +2,11 @@
     <header>
         <div class="m-20 mb-0 flex items-center justify-between gap-3">
             <div class="flex flex-row items-center gap-5">
-                <img
-                    src="{{ asset('images/india_emblem.png') }}"
-                    alt="India Emblem"
-                    class="h-28 object-contain"
-                />
+                <!-- <img -->
+                <!--     src="{{ asset('images/india_emblem.png') }}" -->
+                <!--     alt="India Emblem" -->
+                <!--     class="h-28 object-contain" -->
+                <!-- /> -->
                 <div class="flex flex-col gap-1.5">
                     <h2 class="font-noto-assamese text-2xl font-semibold">
                         অসম প্ৰশাসনিক আৰু পেঞ্চন ন্যায়াধিকৰণ
@@ -402,7 +402,7 @@
                 @endforeach
             </table>
             <div>
-                <p class="pr-52 pl-52 text-center text-gray-500 italic">
+                <p class="text-sm text-gray-500 italic">
                     Note: This is a system-generated receipt and does not
                     require any signature. Please retain this document for your
                     records. If you have any questions or require further
