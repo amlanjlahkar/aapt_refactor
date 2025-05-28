@@ -12,7 +12,9 @@ class UserDashboardController extends Controller {
             'draft_count' => CaseFile::where('status', 'Draft')->count(),
             'pending_count' => CaseFile::where('status', 'Pending')->count(),
             'defective_count' => CaseFile::where('status', 'Defective')->count(),
-            'today_count' => CaseFile::whereDate('created_at', now()->toDateString())->count(),
+            'today_count' => CaseFile::whereDate('updated_at', now()->toDateString())
+                ->where('step', '5')
+                ->count(),
         ];
 
         return view('user.dashboard', compact('case'));
