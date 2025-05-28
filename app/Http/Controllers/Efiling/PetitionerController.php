@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Efiling;
 use App\Http\Controllers\Controller;
 use App\Models\Efiling\CaseFile;
 use App\Models\Efiling\Petitioner;
+use App\Models\Internal\Department\DepartmentMaster;
+use App\Models\Internal\Designation\DesignationMaster;
+use App\Models\Internal\Ministry\MinistryMaster;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -26,7 +29,11 @@ class PetitionerController extends Controller {
      * @param  int  $step
      */
     public function create($step, $case_file_id): View {
-        return view('user.efiling.original-application.petitioner-info', compact('step', 'case_file_id'));
+        $ministries = MinistryMaster::pluck('short_form', 'ministry_name');
+        $departments = DepartmentMaster::pluck('dept_name');
+        $designations = DesignationMaster::pluck('designation_name', 'short_form');
+
+        return view('user.efiling.original-application.petitioner-info', compact('step', 'case_file_id', 'ministries', 'departments', 'designations'));
     }
 
     /**

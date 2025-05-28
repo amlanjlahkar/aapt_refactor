@@ -14,6 +14,24 @@
                 action="{{ route('user.efiling.register.step' . $step . '.attempt', compact('step')) }}"
             >
                 @csrf
+                <div class="col-span-2 w-1/4 flex flex-col gap-2.5">
+                    <label class="text-xl font-semibold" for="case_type">
+                        Filed By
+                    </label>
+                    <select
+                        required
+                        name="filed_by"
+                        class="rounded-sm border border-gray-300 bg-white px-4 py-2 text-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                    >
+                        <option value="" disabled selected>
+                            Select type
+                        </option>
+                        <option value="Advocate">Advocate</option>
+                        <option value="Applicant in Person">Applicant in Person</option>
+                        <option value="Intervener">Intervener</option>
+                    </select>
+                </div>
+
                 <div class="flex flex-col gap-2.5">
                     <label class="text-xl font-semibold" for="case_type">
                         Case Type
@@ -97,8 +115,9 @@
                         <option value="" disabled selected>
                             Select case subject
                         </option>
-                        <option value="null">Subject 1</option>
-                        <option value="null">Subject 2</option>
+                        @foreach ($subjects as $s)
+                            <option value="{{ $s }}">{{ $s }}</option>
+                        @endforeach
                     </select>
                 </div>
             </form>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Efiling;
 
 use App\Http\Controllers\Controller;
 use App\Models\Efiling\CaseFile;
+use App\Models\Internal\Subject\SubjectMaster;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -62,7 +63,9 @@ class CaseFileController extends Controller {
      * @param  int  $step
      */
     public function create($step): View {
-        return view('user.efiling.original-application.case-filing', compact('step'));
+        $subjects = SubjectMaster::pluck('subject_name');
+
+        return view('user.efiling.original-application.case-filing', compact('step', 'subjects'));
     }
 
     /**
@@ -82,7 +85,7 @@ class CaseFileController extends Controller {
             'bench' => 'required|string',
             'subject' => 'required|string',
             'legal_aid' => 'required|boolean',
-            'filed_by' => 'nullable|string', // currently unhandled
+            'filed_by' => 'required|in:Advocate,Applicant in Person,Intervener',
             'step' => 'nullable|integer',
             'status' => 'nullable|string',
         ])->validate();

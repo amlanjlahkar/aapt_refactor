@@ -147,9 +147,9 @@
                             <option value="" disabled selected>
                                 Select ministry
                             </option>
-                            <option value="Option 1">Option 1</option>
-                            <option value="Option 2">Option 2</option>
-                            <option value="Option 3">Option 3</option>
+                            @foreach ($ministries as $name => $short_form)
+                                <option value="{{ $name }}">{{ $name . ' (' . $short_form . ')' }}</option>
+                            @endforeach
                         </select>
                     </div>
 
@@ -169,9 +169,9 @@
                             <option value="" disabled selected>
                                 Select department
                             </option>
-                            <option value="Option 1">Option 1</option>
-                            <option value="Option 2">Option 2</option>
-                            <option value="Option 3">Option 3</option>
+                            @foreach ($departments as $d)
+                                <option value="{{ $d }}">{{ $d }}</option>
+                            @endforeach
                         </select>
                     </div>
 
@@ -208,9 +208,9 @@
                             <option value="" disabled selected>
                                 Select designation
                             </option>
-                            <option value="Option 1">Option 1</option>
-                            <option value="Option 2">Option 2</option>
-                            <option value="Option 3">Option 3</option>
+                            @foreach ($designations as $d)
+                                <option value="{{ $d }}">{{ $d }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>

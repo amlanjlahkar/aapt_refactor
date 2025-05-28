@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->string('bench')->default('Guwahati');
             $table->string('subject')->nullable();
             $table->boolean('legal_aid');
-            $table->string('filed_by')->nullable();
+            $table->enum('filed_by', ['Advocate', 'Applicant in Person', 'Intervener']);
             $table->string('ref_number', 15)->unique();
             $table->string('filing_number');
             $table->date('filing_date');
