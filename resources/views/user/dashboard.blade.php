@@ -23,7 +23,7 @@
                         Total No. of Pending Cases
                     </h3>
                     <p class="mb-4 text-3xl font-bold text-yellow-400">{{ $case['pending_count'] }}</p>
-                    <a href="#" class="text-sm text-white hover:underline">
+                    <a href="{{ route('user.cases.pending') }}" class="text-sm text-white hover:underline">
                         View Details
                     </a>
                 </div>

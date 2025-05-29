@@ -38,6 +38,7 @@ class CaseFileController extends Controller {
                     ->setNpmBinary('/Users/amlan/.local/state/fnm_multishells/42591_1747303042315/bin/npm');
             });
 
+        // use a more detailed name including date and time
         return $pdf->name('generated_case_file');
     }
 

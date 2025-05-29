@@ -35,6 +35,7 @@ Route::prefix('user/auth')->group(function () {
 Route::prefix('user/cases')->middleware(['auth'])->group(function () {
     Route::get('/draft', [UserDashboardController::class, 'indexDraftCases'])->name('user.cases.draft');
     Route::get('/draft/continue/{case_file_id}', [UserDashboardController::class, 'continueDraftCase'])->name('user.cases.draft.continue');
+    Route::get('/pending', [UserDashboardController::class, 'indexPendingCases'])->name('user.cases.pending');
 });
 Route::post('user/efiling/{case_file_id}/submit', [CaseFileController::class, 'showSubmitNotice'])->middleware(['auth'])->name('user.efiling.submit');
 Route::post('user/efiling/{case_file_id}/case_pdf', [CaseFileController::class, 'generatePdf'])->name('user.efiling.generate_case_pdf');

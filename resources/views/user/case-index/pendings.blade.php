@@ -1,4 +1,4 @@
-<x-layout title="Draft Cases">
+<x-layout title="Pending Cases">
     @include('partials.header')
     <main
         class="grow bg-cover bg-center"
@@ -6,12 +6,12 @@
             background-image: url('{{ asset('images/supreme_court.jpg') }}');
         "
     >
-        <x-user.container header="Draft Cases">
+        <x-user.container header="Pending Cases">
             @if (count($cases) === 0)
                 <div
-                    class="mx-auto rounded border border-blue-300 bg-blue-100 px-3 py-4 font-medium text-blue-500"
+                    class="mx-auto rounded border border-yellow-300 bg-yellow-100 px-3 py-4 font-medium text-yellow-500"
                 >
-                    <p>No Draft Cases!</p>
+                    <p>No Pending Cases!</p>
                 </div>
             @else
                 <table class="min-w-full border border-gray-300">
@@ -24,12 +24,11 @@
                                 Reference No.
                             </th>
                             <th class="border border-gray-300 px-4 py-3">
-                                Created At
+                                Filed At
                             </th>
                             <th class="border border-gray-300 px-4 py-3">
-                                Last Updated At
+                                Actions
                             </th>
-                            <th class="border border-gray-300 px-4 py-3">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -42,20 +41,24 @@
                                     {{ $case->ref_number }}
                                 </td>
                                 <td class="border border-gray-300 px-4 py-3">
-                                    {{ $case->created_at }}
-                                </td>
-                                <td class="border border-gray-300 px-4 py-3">
                                     {{ $case->updated_at }}
                                 </td>
                                 <td class="border border-gray-300 px-2 py-3">
                                     <div class="grid grid-cols-3 gap-3 px-2">
-                                        <a
-                                            href="{{ route('user.cases.draft.continue', ['case_file_id' => $case->id]) }}"
-                                            class="flex items-center justify-center gap-1.5 rounded-sm bg-blue-600 px-3.5 py-1.5 text-sm font-medium text-blue-50 shadow-md hover:bg-blue-700"
+                                        <form
+                                            method="POST"
+                                            action="{{ route('user.efiling.generate_case_pdf', ['case_file_id' => $case->id]) }}"
                                         >
-                                            <x-fas-arrow-right class="h-3.5 w-3.5" />
-                                            Continue
-                                        </a>
+                                        @csrf
+                                            <button
+                                                class="cursor-pointer flex items-center justify-center gap-1.5 rounded-sm bg-yellow-600 px-3.5 py-1.5 text-sm font-medium text-yellow-50 shadow-md hover:bg-yellow-700"
+                                            >
+                                                <x-fas-eye
+                                                    class="h-3.5 w-3.5"
+                                                />
+                                                View Filled Form
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>

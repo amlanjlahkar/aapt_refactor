@@ -20,6 +20,7 @@ class UserDashboardController extends Controller {
         return view('user.dashboard', compact('case'));
     }
 
+    // Drafts {{{1
     public function indexDraftCases(): View {
         $cases = CaseFile::where('status', 'Draft')->orderBy('created_at', 'desc')->paginate(10);
 
@@ -35,4 +36,13 @@ class UserDashboardController extends Controller {
                 'case_file_id' => $case_file->id,
             ]);
     }
+
+    // 1}}}
+    // Pending {{{1
+    public function indexPendingCases(): View {
+        $cases = CaseFile::where('status', 'Pending')->orderBy('created_at', 'desc')->paginate(10);
+
+        return view('user.case-index.pendings', compact('cases'));
+    }
+    // 1}}}
 }
