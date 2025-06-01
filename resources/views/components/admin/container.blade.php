@@ -10,7 +10,7 @@
 
 <div class="flex min-h-screen flex-row">
     {{-- side panel --}}
-    <div class="flex-1/5">
+    <div class="w-64">
         <div
             class="mt-12 mb-12 ml-12 flex min-h-screen flex-col rounded bg-gray-700 shadow-lg"
         >
@@ -117,7 +117,7 @@
     </div>
 
     {{-- contetnt area --}}
-    <div class="flex-4/5">
+    <div class="flex-1 overflow-x-auto">
         <div class="m-12 rounded-md bg-gray-100 shadow-lg">
             <div
                 class="flex flex-row items-center justify-between rounded-tl rounded-tr border-b-1 border-gray-400 bg-gray-300 pt-5 pr-7 pb-5 pl-7"

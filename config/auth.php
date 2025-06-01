@@ -47,7 +47,7 @@ return [
         ],
 
         'dept_user' => [
-            'driver' => 'sessions',
+            'driver' => 'session',
             'provider' => 'dept_users',
         ],
     ],

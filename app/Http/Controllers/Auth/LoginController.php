@@ -62,18 +62,37 @@ class LoginController extends Controller {
     public function loginAdmin(LoginAdminRequest $request): RedirectResponse {
         $credentials = $request->validated();
 
+        // if (Auth::guard('admin')->attempt([
+        //     'email' => $credentials['email'],
+        //     'password' => $credentials['password'],
+        //     'status' => 'active',
+        // ], true)) {
+        //     $request->session()->regenerate();
+
+        //     $admin = Auth::guard('admin')->user();
+        //     $request->session()->put('admin', $admin->name);
+
+        //     return to_route('admin.dashboard');
+        // }
+
         if (Auth::guard('admin')->attempt([
             'email' => $credentials['email'],
             'password' => $credentials['password'],
             'status' => 'active',
-        ], true)) {
+        ])) {
             $request->session()->regenerate();
 
             $admin = Auth::guard('admin')->user();
             $request->session()->put('admin', $admin->name);
 
+            // Check if user has the scrutiny-admin role
+            if ($admin->hasRole('scrutiny-admin')) {
+                return to_route('scrutiny.dashboard'); // Change this to scrutiny dashboard route
+            }
+
             return to_route('admin.dashboard');
         }
+
 
         return back()->withErrors([
             'login' => 'The provided credentials do not match our records or the account has been deactivated',

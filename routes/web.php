@@ -7,6 +7,7 @@ use App\Http\Controllers\Efiling\CaseFileController;
 use App\Http\Controllers\Efiling\CasePaymentController;
 use App\Http\Controllers\Efiling\PetitionerController;
 use App\Http\Controllers\Efiling\RespondentController;
+use App\Http\Controllers\Internal\ScrutinyController;
 use App\Http\Controllers\Internal\Department\DepartmentUserController;
 use App\Http\Controllers\Internal\Department\DepartmentUserRoleController;
 use App\Http\Controllers\UserDashboardController;
@@ -128,4 +129,14 @@ Route::post('/email/verification-notification', function (Request $request) {
 
     return back()->with('success', 'Verification email has been sent successfully!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+// 1}}}
+
+
+
+// Scrutiny routes {{{1
+Route::prefix('scrutiny')->middleware('auth:admin')->group(function () {
+    Route::get('/', [ScrutinyController::class, 'index'])->name('scrutiny.dashboard');
+    Route::get('/create/{caseFileId}', [ScrutinyController::class, 'create'])->name('scrutiny.create');
+    Route::post('/store', [ScrutinyController::class, 'store'])->name('scrutiny.store');
+});
 // 1}}}
