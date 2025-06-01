@@ -42,8 +42,8 @@
                             : {{ $case_file->filing_date }}
                         </p>
                         <p class="p-2">
-                            <span class="font-medium">Reference No.</span>
-                            : {{ $case_file->ref_number }}
+                            <span class="font-medium">Filing No.</span>
+                            : {{ $case_file->filing_number }}
                         </p>
                         <p class="p-2">
                             <span class="font-medium">Legal Aid Required</span>
@@ -291,21 +291,21 @@
                                 <span class="font-medium">
                                     Amount Paid (in ₹)
                                 </span>
-                                : {{ $pay->amount }}
+                                : {{ $pay->amount ? $pay->amount : 'Not provided' }}
                             </p>
                             <p class="p-2">
                                 <span class="font-medium">
                                     Payment Reference No.
                                 </span>
-                                : {{ $pay->ref_no }}
+                                : {{ $pay->ref_no ? $pay->ref_no : 'Not provided' }}
                             </p>
                             <p class="p-2">
                                 <span class="font-medium">Date of Payment</span>
-                                : {{ $pay->ref_date }}
+                                : {{ $pay->ref_date ? $pay->ref_date : 'Not provided' }}
                             </p>
                             <p class="p-2">
                                 <span class="font-medium">Transaction ID</span>
-                                : {{ $pay->transaction_id }}
+                                : {{ $pay->transaction_id ? $pay->transaction_id : 'Not provided' }}
                             </p>
 
                             <hr

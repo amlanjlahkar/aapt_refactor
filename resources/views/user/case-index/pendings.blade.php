@@ -21,7 +21,7 @@
                                 Case ID
                             </th>
                             <th class="border border-gray-300 px-4 py-3">
-                                Reference No.
+                                Filing No.
                             </th>
                             <th class="border border-gray-300 px-4 py-3">
                                 Filed At
@@ -38,7 +38,7 @@
                                     {{ $case->id }}
                                 </td>
                                 <td class="border border-gray-300 px-4 py-3">
-                                    {{ $case->ref_number }}
+                                    {{ $case->filing_number }}
                                 </td>
                                 <td class="border border-gray-300 px-4 py-3">
                                     {{ $case->updated_at }}

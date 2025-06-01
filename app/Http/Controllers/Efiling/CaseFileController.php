@@ -15,12 +15,12 @@ use Spatie\LaravelPdf\Facades\Pdf;
 use Spatie\LaravelPdf\PdfBuilder;
 
 class CaseFileController extends Controller {
-    private function generateRefNumber(): string {
+    private function generateFilingNumber(): string {
         do {
-            $refNo = 'AAPT' . strtoupper(\Str::random(11));
-        } while (CaseFile::where('ref_number', $refNo)->exists());
+            $filingNum = 'AAPT' . strtoupper(\Str::random(11));
+        } while (CaseFile::where('filing_number', $filingNum)->exists());
 
-        return $refNo;
+        return $filingNum;
     }
 
     /**
@@ -74,15 +74,13 @@ class CaseFileController extends Controller {
      */
     public function store(Request $request): RedirectResponse {
         $form_data = $request->all();
-        $form_data['ref_number'] = $this->generateRefNumber();
-        $form_data['filing_number'] = 'Auto-' . now()->year;
+        $form_data['filing_number'] = $this->generateFilingNumber();
         $form_data['filing_date'] = now();
 
         $validated = Validator::make($form_data, [
-            'ref_number' => 'required|string|max:15|unique:case_files',
-            'filing_number' => 'required|string',
+            'filing_number' => 'required|string|max:15|unique:case_files',
             'filing_date' => 'required|date',
-            'case_type' => 'nullable|string',
+            'case_type' => 'required|string',
             'bench' => 'required|string',
             'subject' => 'required|string',
             'legal_aid' => 'required|boolean',

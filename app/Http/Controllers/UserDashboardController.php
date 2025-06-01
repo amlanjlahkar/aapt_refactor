@@ -14,6 +14,7 @@ class UserDashboardController extends Controller {
             'defective_count' => CaseFile::where('status', 'Defective')->count(),
             'today_count' => CaseFile::whereDate('updated_at', now()->toDateString())
                 ->where('step', '5')
+                ->where('status', 'Pending')
                 ->count(),
         ];
 

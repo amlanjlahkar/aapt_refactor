@@ -122,7 +122,7 @@
                             </option>
                             <option
                                 value="Nalbari"
-                                {{ old('pet_district') == 'Nalabari' ? 'selected' : '' }}
+                                {{ old('pet_district') == 'Nalbari' ? 'selected' : '' }}
                             >
                                 Nalbari
                             </option>

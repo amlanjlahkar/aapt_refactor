@@ -22,9 +22,9 @@
     <main>
         <div class="m-20 mt-10 flex flex-col gap-10">
             <h2 class="text-2xl font-semibold">
-                Reference No.
+                Filing No.
                 <span class="text-red-600">
-                    @up($case_file->ref_number)
+                    @up($case_file->filing_number)
                 </span>
             </h2>
 
@@ -361,25 +361,25 @@
                                 <span class="font-medium">
                                     Amount Paid (in ₹)
                                 </span>
-                                : {{ $pay->amount }}
+                                : {{ $pay->amount ? $pay->amount : 'NOT PROVIDED' }}
                             </td>
                             <td class="border p-2">
                                 <span class="font-medium">
                                     Payment Reference No.
                                 </span>
                                 :
-                                @up($pay->ref_no)
+                                @up($pay->ref_no ? $pay->ref_no : 'NOT PROVIDED')
                             </td>
                         </tr>
                         <tr class="border">
                             <td class="border p-2">
                                 <span class="font-medium">Date of Payment</span>
-                                : {{ $pay->ref_date }}
+                                : {{ $pay->ref_date ? $pay->ref_date : 'NOT PROVIDED' }}
                             </td>
                             <td class="border p-2">
                                 <span class="font-medium">Transaction ID</span>
                                 :
-                                @up($pay->transaction_id)
+                                @up($pay->transaction_id ? $pay->transaction_id : 'NOT PROVIDED')
                             </td>
                         </tr>
                         <tr class="border">
