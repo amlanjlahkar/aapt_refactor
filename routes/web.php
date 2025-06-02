@@ -32,6 +32,7 @@ Route::prefix('user/auth')->group(function () {
 });
 
 // Filing routes for original application
+Route::get('user/check_case_status', [UserDashboardController::class, 'checkCaseStatus'])->middleware(['auth'])->name('user.check_case_status');
 Route::prefix('user/cases')->middleware(['auth'])->group(function () {
     Route::get('/draft', [UserDashboardController::class, 'indexDraftCases'])->name('user.cases.draft');
     Route::get('/draft/continue/{case_file_id}', [UserDashboardController::class, 'continueDraftCase'])->name('user.cases.draft.continue');
