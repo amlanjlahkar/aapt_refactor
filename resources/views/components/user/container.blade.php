@@ -51,8 +51,8 @@
                         Total Cases Filed
                     </x-nav-item>
                     <x-nav-item
-                        route="user.check_case_status"
-                        url_pattern="user/check_case_status"
+                        route="user.cases.check_case_status"
+                        url_pattern="user/cases/check_case_status"
                     >
                         Case Status
                     </x-nav-item>

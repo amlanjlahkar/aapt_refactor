@@ -7,7 +7,7 @@
         "
     >
         <x-user.container header="Check Case Status">
-            <livewire:user.case-status />
+            <livewire:case-index.check-case-status />
         </x-user.container>
     </main>
     @include('partials.footer-alt')

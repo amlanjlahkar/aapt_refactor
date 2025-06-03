@@ -66,7 +66,7 @@
             <div
                 class="mt-7 grid grid-cols-1 gap-6 md:grid-cols-1 lg:grid-cols-3"
             >
-                <a href="{{ route('user.check_case_status') }}">
+                <a href="{{ route('user.cases.check_case_status') }}">
                     <div
                         class="cursor-pointer rounded border-1 border-transparent bg-white p-4 text-center shadow-sm hover:border-gray-400 hover:bg-gray-300"
                     >

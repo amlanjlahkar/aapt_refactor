@@ -22,7 +22,7 @@ class UserDashboardController extends Controller {
     }
 
     public function checkCaseStatus(): View {
-        return view('user.case-status');
+        return view('user.case-index.check-case-status');
     }
 
     // Status wise index {{{1

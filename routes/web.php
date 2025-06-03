@@ -34,9 +34,9 @@ Route::prefix('user/auth')->group(function () {
 
 // Dashboard {{{2
 Route::get('user/dashboard', [UserDashboardController::class, 'index'])->middleware(['auth'])->name('user.dashboard');
-Route::get('user/check_case_status', [UserDashboardController::class, 'checkCaseStatus'])->middleware(['auth'])->name('user.check_case_status');
 // Case Indexing {{{3
 Route::prefix('user/cases')->middleware(['auth'])->group(function () {
+    Route::get('/check_case_status', [UserDashboardController::class, 'checkCaseStatus'])->middleware(['auth'])->name('user.cases.check_case_status');
     Route::get('/draft', [UserDashboardController::class, 'indexDraftCases'])->name('user.cases.draft');
     Route::get('/draft/continue/{case_file_id}', [UserDashboardController::class, 'continueDraftCase'])->name('user.cases.draft.continue');
     Route::get('/pending', [UserDashboardController::class, 'indexPendingCases'])->name('user.cases.pending');
