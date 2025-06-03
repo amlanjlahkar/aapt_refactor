@@ -21,23 +21,41 @@
                     </h2>
                 </div>
                 <div class="mt-6 flex flex-col gap-3.5 bg-gray-800 p-6">
-                    <p class="font-medium text-gray-300">
+                    <x-nav-item
+                        route="user.efiling.register.step1.create"
+                        :params="['step' => 1]"
+                        url_pattern="user/efiling/*"
+                    >
                         Original Application
-                    </p>
-                    <p class="font-medium text-gray-300">Misc Application</p>
-                    <p class="font-medium text-gray-300">Contempt Petition</p>
-                    <p class="font-medium text-gray-300">Review Application</p>
-                    <p class="font-medium text-gray-300">PT Filing</p>
-                    <p class="font-medium text-gray-300">Document Filing</p>
-                </div>
-            </div>
-            <div class="flex flex-col">
-                <div class="flex flex-row items-center gap-3 p-6 pb-0">
-                    <x-fas-file-contract class="h-5 w-5 text-blue-400" />
-                    <h2 class="text-xl font-semibold text-white">REPORTS</h2>
-                </div>
-                <div class="mt-6 flex flex-col gap-3.5 bg-gray-800 p-6">
-                    <p class="font-medium text-gray-300">Document Report</p>
+                    </x-nav-item>
+                    <x-nav-item
+                        route="user.cases.draft"
+                        url_pattern="user/cases/draft"
+                    >
+                        Draft Cases
+                    </x-nav-item>
+                    <x-nav-item
+                        route="user.cases.pending"
+                        url_pattern="user/cases/pending"
+                    >
+                        Pending Cases
+                    </x-nav-item>
+                    <x-nav-item
+                        :active="false"
+                    >
+                        Defective Cases
+                    </x-nav-item>
+                    <x-nav-item
+                        :active="false"
+                    >
+                        Total Cases Filed
+                    </x-nav-item>
+                    <x-nav-item
+                        route="user.check_case_status"
+                        url_pattern="user/check_case_status"
+                    >
+                        Case Status
+                    </x-nav-item>
                 </div>
             </div>
             <div class="flex flex-col">
