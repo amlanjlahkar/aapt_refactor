@@ -4,14 +4,14 @@ namespace App\Livewire\User;
 
 use App\Models\Efiling\CaseFile;
 use Illuminate\Contracts\View\View;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 
 class CaseStatus extends Component {
-    public $search;
+    #[Url]
+    public $search = '';
 
     public $case;
-
-    protected $queryString = 'search';
 
     public function check(): void {
         $this->case = CaseFile::where('filing_number', $this->search)->first();
@@ -20,7 +20,7 @@ class CaseStatus extends Component {
             session()->flash('error', 'No case foud for specified filing number <' . $this->search . '> (make sure it\'s valid!)');
         }
 
-        $this->reset('search');
+        // $this->reset('search');
     }
 
     public function render(): View {

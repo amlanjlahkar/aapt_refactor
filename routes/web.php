@@ -22,7 +22,7 @@ Route::get('/refresh-captcha', function () {
 });
 
 // User routes {{{1
-Route::get('user/dashboard', [UserDashboardController::class, 'index'])->middleware(['auth'])->name('user.dashboard');
+// Authentication {{{2
 Route::prefix('user/auth')->group(function () {
     Route::get('/login', [LoginController::class, 'showUserLoginPage'])->name('user.auth.login.form');
     Route::post('/login', [LoginController::class, 'loginUser'])->name('user.auth.login.attempt');
@@ -30,14 +30,21 @@ Route::prefix('user/auth')->group(function () {
     Route::get('/register', [RegisterController::class, 'showUserRegisterPage'])->name('user.auth.register.form');
     Route::post('/register', [RegisterController::class, 'registerUser'])->name('user.auth.register.attempt');
 });
+// 2}}}
 
-// Filing routes for original application
+// Dashboard {{{2
+Route::get('user/dashboard', [UserDashboardController::class, 'index'])->middleware(['auth'])->name('user.dashboard');
 Route::get('user/check_case_status', [UserDashboardController::class, 'checkCaseStatus'])->middleware(['auth'])->name('user.check_case_status');
+// Case Indexing {{{3
 Route::prefix('user/cases')->middleware(['auth'])->group(function () {
     Route::get('/draft', [UserDashboardController::class, 'indexDraftCases'])->name('user.cases.draft');
     Route::get('/draft/continue/{case_file_id}', [UserDashboardController::class, 'continueDraftCase'])->name('user.cases.draft.continue');
     Route::get('/pending', [UserDashboardController::class, 'indexPendingCases'])->name('user.cases.pending');
 });
+// 3}}}
+// 2}}}
+
+// Filing routes for original application {{{2
 Route::post('user/efiling/{case_file_id}/submit', [CaseFileController::class, 'showSubmitNotice'])->middleware(['auth'])->name('user.efiling.submit');
 Route::post('user/efiling/{case_file_id}/case_pdf', [CaseFileController::class, 'generatePdf'])->name('user.efiling.generate_case_pdf');
 Route::prefix('user/efiling/register')->middleware(['auth', PreventBackHistory::class])->group(function () {
@@ -93,6 +100,7 @@ Route::prefix('user/efiling/register')->middleware(['auth', PreventBackHistory::
     Route::get('/payments/{case_file_id}/edit', [CasePaymentController::class, 'edit'])
         ->name('payments.edit');
 });
+// 2}}}
 // 1}}}
 
 // Admin routes {{{1

@@ -79,7 +79,7 @@
 
             @if ($errors->any())
                 <div
-                    class="m-6 mb-0 rounded-sm border border-red-300 bg-red-100 px-6 py-3 text-red-700"
+                    class="m-6 mb-0 rounded-sm border border-red-300 bg-red-100 px-6 py-3 text-red-600"
                 >
                     <ul class="list-inside list-disc">
                         @foreach ($errors->all() as $error)
