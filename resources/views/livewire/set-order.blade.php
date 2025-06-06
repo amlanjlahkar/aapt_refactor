@@ -1,6 +1,9 @@
 <div class="flex items-center justify-between gap-5">
     {{-- Sort By {{{1 --}}
-    <h2 class="text-2xl font-semibold">Total Case Count : <span class="text-red-500">{{ $case_count }}</span></h2>
+    <h2 class="text-2xl font-semibold">
+        Total Case Count :
+        <span class="text-red-500">{{ $case_count }}</span>
+    </h2>
 
     <div class="flex gap-6">
         <div
@@ -20,16 +23,17 @@
                 <button
                     type="button"
                     @click="toggle()"
-                    class="cursor-pointer rounded-sm border border-gray-300 bg-gray-100 px-4 py-2 text-gray-700 shadow-sm shadow-gray-200 hover:border-gray-300 hover:bg-gray-200 focus:ring-1 focus:ring-blue-600 focus:outline-none"
+                    class="flex gap-2 cursor-pointer rounded-sm border border-gray-300 bg-gray-100 px-4 py-2 text-gray-700 shadow-sm shadow-gray-200 hover:border-gray-300 hover:bg-gray-200 focus:ring-1 focus:ring-blue-600 focus:outline-none"
                 >
                     {{ $columns[$currentColumn] }}
+                    <x-fas-sort-down class="w-2.5 h-5 text-gray-600" />
                 </button>
             </div>
 
             <div
                 x-show="open"
                 @click.prevent.outside="close()"
-                style="display: none; min-width: 200px;"
+                style="display: none; min-width: 200px"
                 class="absolute right-0 z-10 mt-2 rounded-sm border border-gray-300 bg-gray-100 shadow-sm shadow-gray-200"
             >
                 @foreach ($columns as $col => $label)
@@ -63,9 +67,10 @@
                 <button
                     type="button"
                     @click="toggle()"
-                    class="cursor-pointer rounded-sm border border-gray-300 bg-gray-100 px-4 py-2 text-gray-700 shadow-sm shadow-gray-200 hover:border-gray-300 hover:bg-gray-200 focus:ring-1 focus:ring-blue-600 focus:outline-none"
+                    class="flex cursor-pointer gap-2 rounded-sm border border-gray-300 bg-gray-100 px-4 py-2 text-gray-700 shadow-sm shadow-gray-200 hover:border-gray-300 hover:bg-gray-200 focus:ring-1 focus:ring-blue-600 focus:outline-none"
                 >
                     {{ $sortOrders[$currentOrder] }}
+                    <x-fas-sort-down class="w-2.5 h-5 text-gray-600" />
                 </button>
             </div>
 
