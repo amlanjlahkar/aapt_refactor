@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\CaseIndex;
+namespace App\Livewire;
 
 use App\Models\Efiling\CaseFile;
 use Illuminate\Contracts\View\View;
@@ -24,6 +24,6 @@ class CheckCaseStatus extends Component {
     }
 
     public function render(): View {
-        return view('livewire.case-index.check-case-status');
+        return view('livewire.check-case-status');
     }
 }

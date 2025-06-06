@@ -16,7 +16,7 @@
                         {{ $case['draft_count'] }}
                     </p>
                     <a
-                        href="{{ route('user.cases.draft') }}"
+                        href="{{ route('user.cases.get_cases', [ 'case_status' => 'Draft' ]) }}"
                         class="text-sm text-white hover:underline"
                     >
                         View Details
@@ -31,7 +31,7 @@
                         {{ $case['pending_count'] }}
                     </p>
                     <a
-                        href="{{ route('user.cases.pending') }}"
+                        href="{{ route('user.cases.get_cases', [ 'case_status' => 'Pending' ]) }}"
                         class="text-sm text-white hover:underline"
                     >
                         View Details

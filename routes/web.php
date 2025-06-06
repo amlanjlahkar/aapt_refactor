@@ -21,6 +21,8 @@ Route::get('/refresh-captcha', function () {
     return captcha_img('flat');
 });
 
+Route::view('/drafts', 'test');
+
 // User routes {{{1
 // Authentication {{{2
 Route::prefix('user/auth')->group(function () {
@@ -33,13 +35,12 @@ Route::prefix('user/auth')->group(function () {
 // 2}}}
 
 // Dashboard {{{2
-Route::get('user/dashboard', [UserDashboardController::class, 'index'])->middleware(['auth'])->name('user.dashboard');
+Route::get('user/dashboard', [UserDashboardController::class, 'getCaseCounts'])->middleware(['auth'])->name('user.dashboard');
 // Case Indexing {{{3
 Route::prefix('user/cases')->middleware(['auth'])->group(function () {
     Route::get('/check_case_status', [UserDashboardController::class, 'checkCaseStatus'])->middleware(['auth'])->name('user.cases.check_case_status');
-    Route::get('/draft', [UserDashboardController::class, 'indexDraftCases'])->name('user.cases.draft');
-    Route::get('/draft/continue/{case_file_id}', [UserDashboardController::class, 'continueDraftCase'])->name('user.cases.draft.continue');
-    Route::get('/pending', [UserDashboardController::class, 'indexPendingCases'])->name('user.cases.pending');
+    Route::get('/get_cases/{case_status}', [UserDashboardController::class, 'indexCases'])->name('user.cases.get_cases');
+    Route::get('/get_cases/drafts/continue/{case_file_id}', [UserDashboardController::class, 'continueDraftCase'])->name('user.cases.draft.continue');
 });
 // 3}}}
 // 2}}}

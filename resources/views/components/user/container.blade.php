@@ -29,14 +29,16 @@
                         Original Application
                     </x-nav-item>
                     <x-nav-item
-                        route="user.cases.draft"
-                        url_pattern="user/cases/draft"
+                        route="user.cases.get_cases"
+                        :params="['case_status' => 'Draft']"
+                        url_pattern="*/get_cases/Draft"
                     >
                         Draft Cases
                     </x-nav-item>
                     <x-nav-item
-                        route="user.cases.pending"
-                        url_pattern="user/cases/pending"
+                        route="user.cases.get_cases"
+                        :params="['case_status' => 'Pending']"
+                        url_pattern="*/get_cases/Pending"
                     >
                         Pending Cases
                     </x-nav-item>
