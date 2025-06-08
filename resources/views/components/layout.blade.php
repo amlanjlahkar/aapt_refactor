@@ -10,7 +10,7 @@
         
         <title>{{ $title ? $title . ' - AAPT' : 'AAPT' }}</title>
 
-        <script src="https://cdn.tailwindcss.com"></script>
+        <!-- <script src="https://cdn.tailwindcss.com"></script> -->
 
 
         @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))

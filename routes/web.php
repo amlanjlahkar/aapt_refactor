@@ -138,5 +138,6 @@ Route::prefix('scrutiny')->middleware('auth:admin')->group(function () {
     Route::get('/', [ScrutinyController::class, 'index'])->name('scrutiny.dashboard');
     Route::get('/create/{caseFileId}', [ScrutinyController::class, 'create'])->name('scrutiny.create');
     Route::post('/store', [ScrutinyController::class, 'store'])->name('scrutiny.store');
+    // Route::get('/cases/{caseFileId}', [ScrutinyController::class, 'show'])->name('cases.show');
 });
 // 1}}}

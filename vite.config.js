@@ -10,4 +10,7 @@ export default defineConfig({
         }),
         tailwindcss(),
     ],
+    css: {
+        postcss: false, // Disable PostCSS
+    },
 });
