@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Objection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Scrutiny extends Model
 {
     use HasFactory;
+    protected $table = 'scrutiny';
 
     protected $fillable = [
         'case_file_id',

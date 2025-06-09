@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Internal;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Validation\Rule;
 use App\Models\Scrutiny;
 use App\Models\Efiling\CaseFile;
 use Illuminate\Http\Request;
@@ -55,28 +56,98 @@ class ScrutinyController extends Controller
 
 
 
+    
     public function store(Request $request)
     {
+        $user = auth()->user(); // Add this line before validation
+
         $request->validate([
             'case_file_id' => 'required|exists:case_files,id',
-            'filing_number' => 'required|unique:scrutiny,filing_number',
+            'filing_number' => ['required',
+                                    Rule::unique('scrutiny')->where(function ($query) use ($request) {
+                                        return $query->where('case_file_id', $request->case_file_id)
+                                                    ->where('level', $request->level);
+                                    }),
+                                ],
             'objection_status' => 'required|in:defect,defect_free',
             'scrutiny_status' => 'required|in:Pending,Forwarded,Rejected,Completed',
             'scrutiny_date' => 'required|date',
+            'remarks' => 'nullable|string|max:500',
+            'responses' => 'nullable|array',             // Add validation for checklist responses
+            'remarks_checklist' => 'nullable|array',     // Remarks per checklist item
         ]);
 
-        $scrutiny = Scrutiny::create($request->all());
+        $user = auth()->user();
+        $case = CaseFile::findOrFail($request->case_file_id);
 
-        // Update case status based on objection_status
-        $case = CaseFile::find($request->case_file_id);
-        if ($request->objection_status === 'defect_free') {
-            $case->case_status = 'pending'; // Eligible for registration
-        } else {
-            $case->case_status = 'defect'; // Needs correction
+        $scrutiny = new Scrutiny($request->all());
+        $scrutiny->user_id = $user->id;
+        $scrutiny->level = $user->scrutiny_level ?? 1;
+
+        $scrutiny->scrutiny_status = match (true) {
+            $scrutiny->level < 3 && $request->objection_status === 'defect_free' => 'Forwarded',
+            $scrutiny->level == 3 && $request->objection_status === 'defect_free' => 'Completed',
+            default => 'Rejected',
+        };
+
+        // Assign other_objection explicitly if present
+        $scrutiny->other_objection = $request->input('other_objection');
+
+        // Store remarks in appropriate field depending on level
+        if ($scrutiny->level == 1) {
+            $scrutiny->remarks_registry = $request->remarks;
+        } elseif ($scrutiny->level == 2) {
+            $scrutiny->remarks_section_officer = $request->remarks;
+        } elseif ($scrutiny->level == 3) {
+            $scrutiny->remarks_dept_head = $request->remarks;
+        }
+
+        $scrutiny->save();
+
+        // Update case status based on objection_status and level
+        if ($request->objection_status === 'defect') {
+            $case->case_status = 'defect';
+        } elseif ($request->objection_status === 'defect_free' && $scrutiny->level === 3) {
+            $case->case_status = 'defect_free';
         }
         $case->save();
 
-        return redirect()->route('scrutiny.index')->with('success', 'Scrutiny record added successfully');
+        // Handle objections if objection_status is 'defect' and responses present
+        if ($request->objection_status === 'defect' && is_array($request->responses)) {
+            $responses = $request->input('responses');
+            $remarksChecklist = $request->input('remarks_checklist', []);
+
+            foreach ($responses as $defectNo => $response) {
+                if (strtoupper($response) === 'NO') {
+                    // Create or update objection for this defect code
+                    Objection::updateOrCreate(
+                        [
+                            'case_file_id' => $request->case_file_id,
+                            'filing_number' => $request->filing_number,
+                            'objection_code' => $defectNo,
+                        ],
+                        [
+                            'status' => 'Pending',
+                            'remarks' => $remarksChecklist[$defectNo] ?? null,
+                            'user_id' => $user->id,
+                        ]
+                    );
+                } else {
+                    // Delete objection if defect resolved or not applicable
+                    Objection::where('case_file_id', $request->case_file_id)
+                        ->where('filing_number', $request->filing_number)
+                        ->where('objection_code', $defectNo)
+                        ->delete();
+                }
+            }
+        } elseif ($request->objection_status === 'defect_free') {
+            // If defect_free, delete all objections for this case & filing_number
+            Objection::where('case_file_id', $request->case_file_id)
+                ->where('filing_number', $request->filing_number)
+                ->delete();
+        }
+
+        return redirect()->route('scrutiny.index')->with('success', 'Scrutiny submitted successfully.');
     }
 
     // public function show($caseFileId)
