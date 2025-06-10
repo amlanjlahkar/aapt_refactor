@@ -32,4 +32,25 @@ class Scrutiny extends Model
     {
         return $this->belongsTo(CaseFile::class);
     }
+
+    public function getLevelNameAttribute()
+    {
+        return match ($this->level) {
+            1 => 'Registry Reviewer',
+            2 => 'Section Officer',
+            3 => 'Department Head',
+            default => 'Unknown',
+        };
+    }
+
+    public static function levelNames()
+    {
+        return [
+            1 => 'Registry Reviewer',
+            2 => 'Section Officer',
+            3 => 'Department Head',
+        ];
+    }
+
+
 }

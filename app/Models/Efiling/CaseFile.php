@@ -39,4 +39,16 @@ class CaseFile extends Model {
     public function payment(): HasMany {
         return $this->hasMany(CasePayment::class);
     }
+
+    public function scrutinies()
+    {
+        return $this->hasMany(\App\Models\Scrutiny::class, 'case_file_id');
+    }
+
+    public function latestScrutiny()
+    {
+        return $this->hasOne(\App\Models\Scrutiny::class)->latestOfMany();
+    }
+
+
 }

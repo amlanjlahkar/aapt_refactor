@@ -1,5 +1,13 @@
 @php
-    $userLevel = auth()->user()->level ?? 1; // Default to 1 if not defined
+    $userLevel = auth()->user()->level ?? 1;
+    $existingScrutiny = $latestScrutiny ?? null;
+
+    $statuses = match($userLevel) {
+        1 => ['Pending', 'Forwarded', 'Rejected'],
+        2 => ['Pending', 'Forwarded', 'Rejected'],
+        3 => ['Completed', 'Rejected'],
+        default => ['Pending']
+    };
 @endphp
 
 <x-layout title="Scrutinize Case Form | Admin">
@@ -67,6 +75,7 @@
                 <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
                     <h2 class="text-lg font-semibold text-gray-800 mb-4">Additional Information</h2>
 
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Scrutiny Date -->
                         <div>
@@ -75,7 +84,7 @@
                                 type="date" 
                                 id="scrutiny_date" 
                                 name="scrutiny_date" 
-                                value="{{ old('scrutiny_date', date('Y-m-d')) }}"
+                                value="{{ old('scrutiny_date', $existingScrutiny->scrutiny_date ?? date('Y-m-d')) }}"
                                 class="form-input w-full rounded-md border-gray-300 shadow-sm"
                                 required
                             >
@@ -91,23 +100,23 @@
                                 required
                             >
                                 <option value="">Select</option>
-                                <option value="defect_free" {{ old('objection_status') == 'defect_free' ? 'selected' : '' }}>Defect Free</option>
-                                <option value="defect" {{ old('objection_status') == 'defect' ? 'selected' : '' }}>Defect</option>
+                                <option value="defect_free" {{ old('objection_status', $existingScrutiny->objection_status ?? '') == 'defect_free' ? 'selected' : '' }}>Defect Free</option>
+                                <option value="defect" {{ old('objection_status', $existingScrutiny->objection_status ?? '') == 'defect' ? 'selected' : '' }}>Defect</option>
                             </select>
                         </div>
                     </div>
 
-                    <!-- Remarks Based on User Level -->
+                    <!-- Remarks -->
                     <div class="mt-6">
                         @if($userLevel == 1)
                             <label class="block text-sm font-medium text-gray-700 mb-1">Registry Reviewer Remarks</label>
-                            <textarea name="remarks_registry" class="form-textarea w-full rounded-md border-gray-300 shadow-sm" rows="4">{{ old('remarks_registry') }}</textarea>
+                            <textarea name="remarks_registry" class="form-textarea w-full rounded-md border-gray-300 shadow-sm" rows="4">{{ old('remarks_registry', $existingScrutiny->remarks_registry ?? '') }}</textarea>
                         @elseif($userLevel == 2)
                             <label class="block text-sm font-medium text-gray-700 mb-1">Section Officer Remarks</label>
-                            <textarea name="remarks_section_officer" class="form-textarea w-full rounded-md border-gray-300 shadow-sm" rows="4">{{ old('remarks_section_officer') }}</textarea>
+                            <textarea name="remarks_section_officer" class="form-textarea w-full rounded-md border-gray-300 shadow-sm" rows="4">{{ old('remarks_section_officer', $existingScrutiny->remarks_section_officer ?? '') }}</textarea>
                         @elseif($userLevel == 3)
                             <label class="block text-sm font-medium text-gray-700 mb-1">Department Head Remarks</label>
-                            <textarea name="remarks_dept_head" class="form-textarea w-full rounded-md border-gray-300 shadow-sm" rows="4">{{ old('remarks_dept_head') }}</textarea>
+                            <textarea name="remarks_dept_head" class="form-textarea w-full rounded-md border-gray-300 shadow-sm" rows="4">{{ old('remarks_dept_head', $existingScrutiny->remarks_dept_head ?? '') }}</textarea>
                         @endif
                     </div>
 
@@ -121,22 +130,23 @@
                             required
                         >
                             <option value="">Select Status</option>
-                            <option value="Pending">Pending</option>
-                            <option value="Forwarded">Forwarded</option>
-                            <option value="Rejected">Rejected</option>
-                            <option value="Completed">Completed</option>
+                            @foreach($statuses as $status)
+                                <option value="{{ $status }}" {{ old('scrutiny_status', $existingScrutiny->scrutiny_status ?? '') == $status ? 'selected' : '' }}>
+                                    {{ $status }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
                 </section>
 
-                <!-- Submit Button -->
-                <div class="flex justify-end mb-8">
-                    <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition duration-200">
-                        Submit Scrutiny
-                    </button>
-                </div>
-            </form>
 
+                <!-- Submit Button -->
+                    <div class="flex justify-end mb-8">
+                        <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition duration-200">
+                            Submit Scrutiny
+                        </button>
+                    </div>
+                </form>
         </x-admin.container>
     </main>
 

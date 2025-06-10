@@ -87,7 +87,7 @@ class LoginController extends Controller {
 
             // Check if user has the scrutiny-admin role
             if ($admin->hasRole('scrutiny-admin')) {
-                return to_route('scrutiny.dashboard'); // Change this to scrutiny dashboard route
+                return to_route('scrutiny.index'); // Change this to scrutiny dashboard route
             }
 
             return to_route('admin.dashboard');

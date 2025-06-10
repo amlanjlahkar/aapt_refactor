@@ -92,6 +92,10 @@ Route::prefix('user/efiling/register')->middleware(['auth', PreventBackHistory::
 
     Route::get('/payments/{case_file_id}/edit', [CasePaymentController::class, 'edit'])
         ->name('payments.edit');
+        
+    Route::get('/case-files/{case_file_id}', [CaseFileController::class, 'show'])
+    ->name('casefiles.show');
+    
 });
 // 1}}}
 
@@ -135,9 +139,13 @@ Route::post('/email/verification-notification', function (Request $request) {
 
 // Scrutiny routes {{{1
 Route::prefix('scrutiny')->middleware('auth:admin')->group(function () {
-    Route::get('/', [ScrutinyController::class, 'index'])->name('scrutiny.dashboard');
+    Route::get('/', [ScrutinyController::class, 'index'])->name('scrutiny.index');
     Route::get('/create/{caseFileId}', [ScrutinyController::class, 'create'])->name('scrutiny.create');
     Route::post('/store', [ScrutinyController::class, 'store'])->name('scrutiny.store');
-    // Route::get('/cases/{caseFileId}', [ScrutinyController::class, 'show'])->name('cases.show');
+    Route::get('/scrutiny/casefiles/{case}', [ScrutinyController::class, 'show'])
+                ->name('scrutiny.casefiles.show')
+                ->middleware('role:registry-reviewer|section-officer|department-head');
+
+
 });
 // 1}}}

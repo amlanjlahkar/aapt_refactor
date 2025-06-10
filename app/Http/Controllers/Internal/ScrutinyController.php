@@ -7,18 +7,80 @@ use Illuminate\Validation\Rule;
 use App\Models\Scrutiny;
 use App\Models\Efiling\CaseFile;
 use Illuminate\Http\Request;
+use App\Models\Objection;
+use Illuminate\Support\Facades\Auth;
 
 class ScrutinyController extends Controller
 {
     public function index()
     {
-        $cases = CaseFile::where('case_status', 'pending')->get();
-        return view('scrutiny.list-pending-cases', compact('cases'));
+        $admin = Auth::guard('admin')->user();
+
+        // Get the role (assumes each admin has only one role)
+        $role = $admin->roles->pluck('name')->first();
+
+       $levelMap = [
+                        'scrutiny-admin' => 1,         
+                        'registry-reviewer' => 1,
+                        'section-officer' => 2,
+                        'department-head' => 3,
+                    ];
+
+
+        // Filter admin's roles to only scrutiny roles
+        $role = $admin->roles->pluck('name')->intersect(array_keys($levelMap))->first();
+
+        $currentLevel = $levelMap[$role] ?? null;
+
+
+        if (!$currentLevel) {
+            abort(403, 'Unauthorized role');
+        }
+
+        $cases = CaseFile::where('case_status', 'pending')
+            ->with(['scrutinies' => function ($q) {
+                $q->latest('created_at');
+            }])
+            ->get()
+            ->filter(function ($case) use ($currentLevel) {
+                $latest = $case->scrutinies->first();
+
+                // Level 1: show if no scrutiny or scrutiny level is 1 and not forwarded
+                if ($currentLevel == 1) {
+                    return !$latest || $latest->level == 1;
+                }
+
+                // Level 2: show if latest scrutiny is level 1 and forwarded
+                if ($currentLevel == 2) {
+                    return $latest && $latest->level == 1 && $latest->status == 'forwarded';
+                }
+
+                // Level 3: show if latest scrutiny is level 2 and forwarded
+                if ($currentLevel == 3) {
+                    return $latest && $latest->level == 2 && $latest->status == 'forwarded';
+                }
+
+                return false;
+            })
+            ->map(function ($case) {
+                $latestScrutiny = $case->scrutinies->first();
+                $case->scrutiny_status = $latestScrutiny ? ucfirst($latestScrutiny->status) : 'Not Started';
+                $case->scrutiny_level = $latestScrutiny ? $latestScrutiny->level : null;
+                return $case;
+            });
+
+        return view('scrutiny.scrutiny-case-list', compact('cases'));
     }
+
 
     public function create($caseFileId)
     {
-        $case = CaseFile::findOrFail($caseFileId);
+        $case = CaseFile::with(['scrutinies' => function ($q) {
+            $q->latest('created_at');
+        }])->findOrFail($caseFileId);
+
+        $latestScrutiny = $case->scrutinies->first();
+        $nextLevel = $latestScrutiny ? $latestScrutiny->level + 1 : 1;
 
         $checklists = [
             [1, 'IS THE APPLICATION IN THE PROPER FORM? (THREE COMPLETE PAPERS BOOKS IN FORM-I IN TWO COMPILATIONS)', 'YES'],
@@ -51,7 +113,7 @@ class ScrutinyController extends Controller
             [20.5, 'LIST OF EVENT WITH DATES/SYNOPSIS', ''],
         ];
 
-        return view('scrutiny.scrutinize-case-form', compact('case', 'checklists'));
+        return view('scrutiny.scrutinize-case-form', compact('case', 'checklists', 'nextLevel'));
     }
 
 
@@ -59,25 +121,23 @@ class ScrutinyController extends Controller
     
     public function store(Request $request)
     {
-        $user = auth()->user(); // Add this line before validation
+        $user = auth()->user(); // Get the current user
 
         $request->validate([
             'case_file_id' => 'required|exists:case_files,id',
             'filing_number' => ['required',
-                                    Rule::unique('scrutiny')->where(function ($query) use ($request) {
-                                        return $query->where('case_file_id', $request->case_file_id)
-                                                    ->where('level', $request->level);
-                                    }),
-                                ],
+                Rule::unique('scrutiny')->where(function ($query) use ($request) {
+                    return $query->where('case_file_id', $request->case_file_id)
+                                ->where('level', $request->level);
+                }),
+            ],
             'objection_status' => 'required|in:defect,defect_free',
             'scrutiny_status' => 'required|in:Pending,Forwarded,Rejected,Completed',
             'scrutiny_date' => 'required|date',
-            'remarks' => 'nullable|string|max:500',
-            'responses' => 'nullable|array',             // Add validation for checklist responses
-            'remarks_checklist' => 'nullable|array',     // Remarks per checklist item
+            'responses' => 'nullable|array',
+            'remarks_checklist' => 'nullable|array',
         ]);
 
-        $user = auth()->user();
         $case = CaseFile::findOrFail($request->case_file_id);
 
         $scrutiny = new Scrutiny($request->all());
@@ -90,36 +150,47 @@ class ScrutinyController extends Controller
             default => 'Rejected',
         };
 
-        // Assign other_objection explicitly if present
+        // Assign other_objection if present
         $scrutiny->other_objection = $request->input('other_objection');
 
-        // Store remarks in appropriate field depending on level
+        // Store remarks based on scrutiny level
         if ($scrutiny->level == 1) {
-            $scrutiny->remarks_registry = $request->remarks;
+            $scrutiny->remarks_registry = $request->input('remarks_registry');
         } elseif ($scrutiny->level == 2) {
-            $scrutiny->remarks_section_officer = $request->remarks;
+            $scrutiny->remarks_section_officer = $request->input('remarks_section_officer');
         } elseif ($scrutiny->level == 3) {
-            $scrutiny->remarks_dept_head = $request->remarks;
+            $scrutiny->remarks_dept_head = $request->input('remarks_dept_head');
         }
 
         $scrutiny->save();
 
-        // Update case status based on objection_status and level
+        // Update case status
         if ($request->objection_status === 'defect') {
             $case->case_status = 'defect';
         } elseif ($request->objection_status === 'defect_free' && $scrutiny->level === 3) {
             $case->case_status = 'defect_free';
         }
+
+        // Update scrutiny_level to progress to next level if defect_free
+        if ($request->objection_status === 'defect_free') {
+            if ($scrutiny->level < 3) {
+                $case->scrutiny_level = $scrutiny->level + 1;
+            } else {
+                $case->scrutiny_level = 3; // Keep at final level
+            }
+        } elseif ($request->objection_status === 'defect') {
+            $case->scrutiny_level = $scrutiny->level; // Stay at current level
+        }
+
         $case->save();
 
-        // Handle objections if objection_status is 'defect' and responses present
+        // Handle objections
         if ($request->objection_status === 'defect' && is_array($request->responses)) {
             $responses = $request->input('responses');
             $remarksChecklist = $request->input('remarks_checklist', []);
 
             foreach ($responses as $defectNo => $response) {
                 if (strtoupper($response) === 'NO') {
-                    // Create or update objection for this defect code
                     Objection::updateOrCreate(
                         [
                             'case_file_id' => $request->case_file_id,
@@ -133,7 +204,6 @@ class ScrutinyController extends Controller
                         ]
                     );
                 } else {
-                    // Delete objection if defect resolved or not applicable
                     Objection::where('case_file_id', $request->case_file_id)
                         ->where('filing_number', $request->filing_number)
                         ->where('objection_code', $defectNo)
@@ -141,7 +211,7 @@ class ScrutinyController extends Controller
                 }
             }
         } elseif ($request->objection_status === 'defect_free') {
-            // If defect_free, delete all objections for this case & filing_number
+            // Delete all objections if scrutiny is defect-free
             Objection::where('case_file_id', $request->case_file_id)
                 ->where('filing_number', $request->filing_number)
                 ->delete();
@@ -150,11 +220,10 @@ class ScrutinyController extends Controller
         return redirect()->route('scrutiny.index')->with('success', 'Scrutiny submitted successfully.');
     }
 
-    // public function show($caseFileId)
-    // {
-    //     $case = CaseFile::findOrFail($caseFileId);
+    public function show(CaseFile $case): View
+    {
+        return view('admin.scrutiny.show', compact('case'));
+    }
 
-    //     // eager-load anything else you need, e.g. ->with('documents')
-    //     return view('scrutiny.view_case', compact('case'));
-    // }
+
 }
