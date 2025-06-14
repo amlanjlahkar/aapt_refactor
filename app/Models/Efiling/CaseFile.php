@@ -17,6 +17,7 @@ class CaseFile extends Model {
         'filing_date',
         'step',
         'status',
+        'user_id',
     ];
 
     protected $casts = [
@@ -38,5 +39,9 @@ class CaseFile extends Model {
 
     public function payment(): HasMany {
         return $this->hasMany(CasePayment::class);
+    }
+
+    public function user(): BelongsTo {
+        return $this->belongsTo(User::class);
     }
 }

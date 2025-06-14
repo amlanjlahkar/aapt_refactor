@@ -76,6 +76,7 @@ class CaseFileController extends Controller {
         $form_data = $request->all();
         $form_data['filing_number'] = $this->generateFilingNumber();
         $form_data['filing_date'] = now();
+        $form_data['user_id'] = Auth::id();
 
         $validated = Validator::make($form_data, [
             'filing_number' => 'required|string|max:15|unique:case_files',
@@ -87,6 +88,7 @@ class CaseFileController extends Controller {
             'filed_by' => 'required|in:Advocate,Applicant in Person,Intervener',
             'step' => 'nullable|integer',
             'status' => 'nullable|string',
+            'user_id' => 'required|integer',
         ])->validate();
 
         $case_file = CaseFile::create($validated);
