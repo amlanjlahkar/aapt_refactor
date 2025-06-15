@@ -11,6 +11,7 @@ use App\Http\Controllers\Internal\ScrutinyController;
 use App\Http\Controllers\Internal\Department\DepartmentUserController;
 use App\Http\Controllers\Internal\Department\DepartmentUserRoleController;
 use App\Http\Controllers\UserDashboardController;
+use App\Http\Controllers\Admin\CaseRegistrationController;
 use App\Http\Middleware\PreventBackHistory;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -100,7 +101,16 @@ Route::prefix('user/efiling/register')->middleware(['auth', PreventBackHistory::
 // 1}}}
 
 // Admin routes {{{1
-Route::view('admin/dashboard', 'admin.dashboard')->middleware('auth:admin')->name('admin.dashboard');
+Route::get('admin/dashboard', function () {
+    $admin = Auth::guard('admin')->user();
+
+    if ($admin && $admin->hasRole('Registrar')) {
+        return redirect()->route('admin.registration.index'); // This loads case-list-registration.blade.php
+    }
+
+    return view('admin.dashboard');
+})->middleware('auth:admin')->name('admin.dashboard');
+
 
 Route::prefix('admin/auth')->group(function () {
     Route::get('/login', [LoginController::class, 'showAdminLoginPage'])->name('admin.auth.login.form');
@@ -143,9 +153,17 @@ Route::prefix('scrutiny')->middleware('auth:admin')->group(function () {
     Route::get('/create/{caseFileId}', [ScrutinyController::class, 'create'])->name('scrutiny.create');
     Route::post('/store', [ScrutinyController::class, 'store'])->name('scrutiny.store');
     Route::get('/scrutiny/casefiles/{case}', [ScrutinyController::class, 'show'])
-                ->name('scrutiny.casefiles.show')
-                ->middleware('role:registry-reviewer|section-officer|department-head');
+                ->name('scrutiny.show');
+                // ->middleware('role:registry-reviewer|section-officer|department-head');
+    Route::get('/case-files/view/{case_file_id}', [CaseFileController::class, 'viewFiledCase'])->name('case-file.view');
 
 
+});
+// 1}}}
+
+// case registration routes {{{1
+Route::middleware(['auth:admin', 'role:Registrar'])->prefix('registration')->name('admin.registration.')->group(function () {
+    Route::get('/', [CaseRegistrationController::class, 'index'])->name('index');
+    Route::post('/register', [CaseRegistrationController::class, 'generateCaseNo'])->name('generate');
 });
 // 1}}}

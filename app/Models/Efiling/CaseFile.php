@@ -2,6 +2,7 @@
 
 namespace App\Models\Efiling;
 
+use App\Models\Scrutiny;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -40,15 +41,27 @@ class CaseFile extends Model {
         return $this->hasMany(CasePayment::class);
     }
 
-    public function scrutinies()
+    public function scrutiny()
     {
-        return $this->hasMany(\App\Models\Scrutiny::class, 'case_file_id');
+        return $this->hasOne(Scrutiny::class);
     }
 
     public function latestScrutiny()
     {
-        return $this->hasOne(\App\Models\Scrutiny::class)->latestOfMany();
+        return $this->hasOne(Scrutiny::class, 'case_file_id')->latestOfMany();
     }
+
+    public function scrutinies()
+    {
+        return $this->hasMany(Scrutiny::class, 'case_file_id');
+    }
+
+    public function completedScrutiny()
+    {
+        return $this->hasOne(Scrutiny::class)->where('scrutiny_status', 'Completed');
+    }
+
+
 
 
 }

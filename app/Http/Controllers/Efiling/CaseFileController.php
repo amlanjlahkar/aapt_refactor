@@ -137,4 +137,13 @@ class CaseFileController extends Controller {
     public function destroy(CaseFile $caseFile): void {
         //
     }
+
+    public function viewFiledCase($case_file_id): View
+    {
+        $case_file = CaseFile::with(['petitioners', 'respondents', 'documents', 'payment'])->findOrFail($case_file_id);
+
+        // Adjust this view as needed
+        return view('internal.scrutiny.show-case', compact('case_file'));
+    }
+
 }
