@@ -5,20 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class JudgeMaster extends Model
+class BenchType extends Model
 {
     use HasFactory;
-
-    protected $table = 'judge_master';
+    protected $table = 'bench_types';
 
     protected $fillable = [
-        'judge_name',
-        'desg_id',
-        'judge_code',
-        'display',
-        'from_date',
-        'to_date',
-        'priority',
-        'judge_short_name',
+        'type_name',
+        'short_form',
     ];
 }

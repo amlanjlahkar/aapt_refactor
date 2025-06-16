@@ -28,13 +28,19 @@
                     >
                         Admin User
                     </x-nav-item>
-                    <a
+                    <!-- <a
                         href="#"
                         class="font-medium text-gray-400 hover:font-semibold hover:text-gray-50"
                     >
                         Advocates
-                    </a>
-                    <a
+                    </a> -->
+                    <x-nav-item
+                        route="admin.internal.bench_compositions.index"
+                        url_pattern="admin/internal/bench_compositions"
+                    >
+                        Bench Composition
+                    </x-nav-item>
+                    <!-- <a
                         href="#"
                         class="font-medium text-gray-400 hover:font-semibold hover:text-gray-50"
                     >
@@ -69,14 +75,14 @@
                         class="font-medium text-gray-400 hover:font-semibold hover:text-gray-50"
                     >
                         Ministries
-                    </a>
+                    </a> -->
                     <x-nav-item
                         route="admin.internal.dept.show"
                         url_pattern="admin/internal/dept*"
                     >
                         Departments
                     </x-nav-item>
-                    <a
+                    <!-- <a
                         href="#"
                         class="font-medium text-gray-400 hover:font-semibold hover:text-gray-50"
                     >
@@ -93,7 +99,7 @@
                         class="font-medium text-gray-400 hover:font-semibold hover:text-gray-50"
                     >
                         Permissions
-                    </a>
+                    </a> -->
                 </div>
             </div>
             <div class="flex flex-col">

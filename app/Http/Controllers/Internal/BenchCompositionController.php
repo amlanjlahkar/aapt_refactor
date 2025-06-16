@@ -14,7 +14,7 @@ class BenchCompositionController extends Controller
     public function index()
     {
         $benchCompositions = BenchComposition::with(['court', 'judge', 'benchType'])->get();
-        return view('admin.internal.bench_composition.index', compact('benchCompositions'));
+        return view('admin.internal.bench_compositions.index', compact('benchCompositions'));
     }
 
     public function create()
@@ -22,7 +22,7 @@ class BenchCompositionController extends Controller
         $courts = Court::all();
         $judges = JudgeMaster::all();
         $benchTypes = BenchType::all();
-        return view('admin.internal.bench_composition.create', compact('courts', 'judges', 'benchTypes'));
+        return view('admin.internal.bench_compositions.create', compact('courts', 'judges', 'benchTypes'));
     }
 
     public function store(Request $request)
@@ -38,7 +38,7 @@ class BenchCompositionController extends Controller
 
         BenchComposition::create($validated);
 
-        return redirect()->route('bench-composition.index')->with('success', 'Bench composition added successfully.');
+        return redirect()->route('admin.internal.bench_compositions.index')->with('success', 'Bench composition added successfully.');
     }
 
     public function edit($id)
@@ -48,7 +48,7 @@ class BenchCompositionController extends Controller
         $judges = JudgeMaster::all();
         $benchTypes = BenchType::all();
 
-        return view('admin.internal.bench_composition.edit', compact('benchComposition', 'courts', 'judges', 'benchTypes'));
+        return view('admin.internal.bench_compositions.edit', compact('benchComposition', 'courts', 'judges', 'benchTypes'));
     }
 
     public function update(Request $request, $id)
@@ -65,7 +65,7 @@ class BenchCompositionController extends Controller
         $bench = BenchComposition::findOrFail($id);
         $bench->update($validated);
 
-        return redirect()->route('bench-composition.index')->with('success', 'Bench composition updated successfully.');
+        return redirect()->route('admin.internal.bench_compositions.index')->with('success', 'Bench composition updated successfully.');
     }
 
     public function destroy($id)
@@ -73,6 +73,6 @@ class BenchCompositionController extends Controller
         $bench = BenchComposition::findOrFail($id);
         $bench->delete();
 
-        return redirect()->route('bench-composition.index')->with('success', 'Bench composition deleted.');
+        return redirect()->route('admin.internal.bench_compositions.index')->with('success', 'Bench composition deleted.');
     }
 }

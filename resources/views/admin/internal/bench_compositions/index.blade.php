@@ -3,7 +3,7 @@
     <main class="grow bg-cover bg-center" style="background-image: url('{{ asset('images/gavel.jpg') }}')">
         <x-admin.container header="Bench Composition List">
             <div class="mb-4 flex justify-end">
-                <a href="{{ route('admin.internal.bench_composition.create') }}" class="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700">
+                <a href="{{ route('admin.internal.bench_compositions.create') }}" class="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700">
                     Add New
                 </a>
             </div>
@@ -31,12 +31,15 @@
                             <td class="border px-4 py-2">{{ $bench->to_date }}</td>
                             <td class="border px-4 py-2">{{ $bench->display ? 'Yes' : 'No' }}</td>
                             <td class="border px-4 py-2">
-                                <a href="#" class="text-blue-600 hover:underline">Edit</a> |
-                                <form method="POST" action="#" class="inline">
+                                <a href="{{ route('admin.internal.bench_compositions.edit', $bench->id) }}" class="text-blue-600 hover:underline">Edit</a> |
+ 
+                                <form method="POST" action="{{ route('admin.internal.bench_compositions.destroy', $bench->id) }}" class="inline">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="text-red-600 hover:underline">Delete</button>
                                 </form>
+
+
                             </td>
                         </tr>
                     @empty

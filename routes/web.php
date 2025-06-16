@@ -16,6 +16,7 @@ use App\Http\Middleware\PreventBackHistory;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Internal\BenchCompositionController;
 
 Route::view('/', 'home')->name('home');
 Route::get('/login', [LoginController::class, 'showLoginPage'])->name('login');
@@ -111,13 +112,14 @@ Route::get('admin/dashboard', function () {
     return view('admin.dashboard');
 })->middleware('auth:admin')->name('admin.dashboard');
 
-
+// admin auth routes
 Route::prefix('admin/auth')->group(function () {
     Route::get('/login', [LoginController::class, 'showAdminLoginPage'])->name('admin.auth.login.form');
     Route::post('/login', [LoginController::class, 'loginAdmin'])->name('admin.auth.login.attempt');
     Route::post('/logout', [LoginController::class, 'logoutAdmin'])->middleware(['auth:admin', PreventBackHistory::class])->name('admin.auth.logout');
 });
 
+// dept routes
 Route::prefix('admin/internal/dept')->middleware(['auth:admin', PreventBackHistory::class])->group(function () {
     Route::view('/', 'admin.internal.department.show')->name('admin.internal.dept.show');
     Route::get('/users', [DepartmentUserController::class, 'index'])->name('admin.internal.dept.users.index');
@@ -126,6 +128,18 @@ Route::prefix('admin/internal/dept')->middleware(['auth:admin', PreventBackHisto
     Route::get('/roles', [DepartmentUserRoleController::class, 'index'])->name('admin.internal.dept.roles.index');
     Route::get('/roles/create', [DepartmentUserRoleController::class, 'create'])->name('admin.internal.dept.roles.create');
     Route::post('/roles/store', [DepartmentUserRoleController::class, 'store'])->name('admin.internal.dept.roles.store');
+});
+
+
+// bench composition routes 
+Route::prefix('admin/internal/bench_compositions')->middleware(['auth:admin', PreventBackHistory::class])->name('admin.internal.bench_compositions.')->group(function () {
+    Route::get('/', [BenchCompositionController::class, 'index'])->name('index');
+    Route::get('/create', [BenchCompositionController::class, 'create'])->name('create');
+    Route::post('/store', [BenchCompositionController::class, 'store'])->name('store');
+    Route::get('/{id}/edit', [BenchCompositionController::class, 'edit'])->name('edit');
+    Route::put('/{id}/update', [BenchCompositionController::class, 'update'])->name('update');
+    Route::delete('/{id}', [BenchCompositionController::class, 'destroy'])->name('destroy');
+
 });
 // 1}}}
 
