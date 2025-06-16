@@ -11,7 +11,7 @@ use App\Http\Controllers\Internal\ScrutinyController;
 use App\Http\Controllers\Internal\Department\DepartmentUserController;
 use App\Http\Controllers\Internal\Department\DepartmentUserRoleController;
 use App\Http\Controllers\UserDashboardController;
-use App\Http\Controllers\Admin\CaseRegistrationController;
+use App\Http\Controllers\Internal\CaseRegistrationController;
 use App\Http\Middleware\PreventBackHistory;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -162,7 +162,8 @@ Route::prefix('scrutiny')->middleware('auth:admin')->group(function () {
 // 1}}}
 
 // case registration routes {{{1
-Route::middleware(['auth:admin', 'role:Registrar'])->prefix('registration')->name('admin.registration.')->group(function () {
+Route::middleware(['auth:admin'])->prefix('registration')->name('admin.registration.')->group(function () {
+
     Route::get('/', [CaseRegistrationController::class, 'index'])->name('index');
     Route::post('/register', [CaseRegistrationController::class, 'generateCaseNo'])->name('generate');
 });

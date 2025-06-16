@@ -18,6 +18,11 @@ class CaseFile extends Model {
         'filing_date',
         'step',
         'status',
+        'case_reg_no',
+        'case_reg_year',
+        'date_of_registration',
+        'case_status',
+
     ];
 
     protected $casts = [
@@ -48,8 +53,9 @@ class CaseFile extends Model {
 
     public function latestScrutiny()
     {
-        return $this->hasOne(Scrutiny::class, 'case_file_id')->latestOfMany();
+        return $this->hasOne(Scrutiny::class, 'case_file_id')->orderByDesc('id');
     }
+
 
     public function scrutinies()
     {
