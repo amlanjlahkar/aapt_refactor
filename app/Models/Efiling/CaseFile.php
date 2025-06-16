@@ -5,6 +5,9 @@ namespace App\Models\Efiling;
 use App\Models\Scrutiny;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Efiling\Petitioner;
+use App\Models\Efiling\Respondent;
+
 
 class CaseFile extends Model {
     protected $fillable = [
@@ -31,13 +34,12 @@ class CaseFile extends Model {
     ];
 
     public function petitioners(): HasMany {
-        return $this->hasMany(Petitioner::class);
+    return $this->hasMany(Petitioner::class, 'case_file_id');
     }
 
     public function respondents(): HasMany {
-        return $this->hasMany(Respondent::class);
+        return $this->hasMany(Respondent::class, 'case_file_id');
     }
-
     public function documents(): HasMany {
         return $this->hasMany(CaseDocument::class);
     }

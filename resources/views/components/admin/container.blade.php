@@ -40,6 +40,13 @@
                     >
                         Bench Composition
                     </x-nav-item>
+
+                    <x-nav-item
+                        route="admin.internal.notices.index"
+                        url_pattern="admin/internal/notices*"
+                    >
+                        Notices
+                    </x-nav-item>
                     <!-- <a
                         href="#"
                         class="font-medium text-gray-400 hover:font-semibold hover:text-gray-50"

@@ -17,6 +17,7 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Internal\BenchCompositionController;
+use App\Http\Controllers\Internal\NoticeController;
 
 Route::view('/', 'home')->name('home');
 Route::get('/login', [LoginController::class, 'showLoginPage'])->name('login');
@@ -141,6 +142,20 @@ Route::prefix('admin/internal/bench_compositions')->middleware(['auth:admin', Pr
     Route::delete('/{id}', [BenchCompositionController::class, 'destroy'])->name('destroy');
 
 });
+
+// notice routes
+Route::prefix('admin/internal/notices')->middleware(['auth:admin', PreventBackHistory::class])->name('admin.internal.notices.')->group(function () {
+    Route::get('/', [NoticeController::class, 'index'])->name('index');
+    Route::get('/create', [NoticeController::class, 'create'])->name('create');
+    Route::post('/store', [NoticeController::class, 'store'])->name('store');
+    Route::get('/{id}/edit', [NoticeController::class, 'edit'])->name('edit');
+    Route::put('/{id}/update', [NoticeController::class, 'update'])->name('update');
+    Route::delete('/{id}', [NoticeController::class, 'destroy'])->name('destroy');
+    Route::get('/{id}', [NoticeController::class, 'show'])->name('show');
+    Route::get('/{id}/download', [NoticeController::class, 'downloadPdf'])->name('download'); 
+});
+
+
 // 1}}}
 
 // Mail verficaiton {{{1
