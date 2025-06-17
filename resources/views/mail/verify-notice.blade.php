@@ -1,6 +1,11 @@
 <x-layout title="Verify Mail">
     @include('partials.header')
-    <main class="grow">
+    <main
+        class="grow bg-cover bg-center"
+        style="
+            background-image: url('{{ asset('images/supreme_court.jpg') }}');
+        "
+    >
         @if (session('success'))
             <div
                 id="flash"

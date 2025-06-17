@@ -15,14 +15,27 @@
                 enctype="multipart/form-data"
             >
                 @csrf
-                <div class="col-span-2 flex flex-col gap-2.5">
+                <div class="col-span-2 flex flex-col">
                     <div
-                        class="mb-2 flex flex-row gap-1.5 text-xl font-semibold"
+                        class="mb-5 flex flex-row justify-start items-center gap-2.5"
                     >
-                        {{-- <p>Upload Documents</p> --}}
+                        <label class="font-medium" for="document_type">
+                            Document Type :
+                        </label>
+                        <select
+                            name="document_type"
+                            class="rounded-sm border border-gray-300 bg-white px-4 py-2 text-gray-700 focus:ring-1 focus:ring-blue-600"
+                        >
+                            <option value="" selected disabled>Select Document Type</option>
+                            <option value="Vakalatnama">Vakalatnama</option>
+                            <option value="Petition">Petition</option>
+                            <option value="Annexures">Annexures</option>
+                            <option value="Affidavit">Affidavit</option>
+                        </select>
                     </div>
+
                     <label
-                        for="payment_receipt"
+                        for="document"
                         class="flex cursor-pointer flex-col items-center justify-center rounded-sm border-2 border-dashed border-gray-300 bg-gray-50 p-6 hover:bg-gray-200"
                     >
                         <div
@@ -47,8 +60,8 @@
                             No file selected
                         </p>
                         <input
-                            id="payment_receipt"
-                            name="payment_receipt"
+                            id="document"
+                            name="document"
                             type="file"
                             class="hidden"
                             accept=".jpg,.jpeg,.png,.pdf"
@@ -82,7 +95,7 @@
     @include('partials.footer-alt')
 
     <script>
-        const fileInput = document.getElementById('payment_receipt')
+        const fileInput = document.getElementById('document')
         const fileNameDisplay = document.getElementById('fileNameDisplay')
 
         fileInput.addEventListener('change', function () {

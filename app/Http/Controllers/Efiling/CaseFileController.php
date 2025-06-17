@@ -9,6 +9,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Browsershot\Browsershot;
 use Spatie\LaravelPdf\Facades\Pdf;
@@ -39,7 +40,7 @@ class CaseFileController extends Controller {
             });
 
         // use a more detailed name including date and time
-        return $pdf->name('generated_case_file');
+        return $pdf->name('aapt_filled_form_' . $case_file->filing_number);
     }
 
     /**

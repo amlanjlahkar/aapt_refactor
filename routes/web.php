@@ -85,21 +85,6 @@ Route::prefix('user/efiling/register')->middleware(['auth', PreventBackHistory::
 
     Route::get('/review', [CaseFileController::class, 'show'])->name('user.efiling.register.review');
     Route::get('/summary/{case_file_id?}', [CaseFileController::class, 'generatePdf']); // only for testing
-
-    Route::get('/case-files/{case_file_id}/edit', [CaseFileController::class, 'edit'])
-        ->name('case-files.edit');
-
-    Route::get('/petitioners/{case_file_id}/edit', [PetitionerController::class, 'edit'])
-        ->name('petitioners.edit');
-
-    Route::get('/respondents/{case_file_id}/edit', [RespondentController::class, 'edit'])
-        ->name('respondents.edit');
-
-    Route::get('/documents/{case_file_id}/edit', [CaseDocumentController::class, 'edit'])
-        ->name('documents.edit');
-
-    Route::get('/payments/{case_file_id}/edit', [CasePaymentController::class, 'edit'])
-        ->name('payments.edit');
 });
 // 2}}}
 // 1}}}

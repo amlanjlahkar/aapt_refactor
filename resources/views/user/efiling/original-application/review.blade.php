@@ -243,23 +243,36 @@
                         step="4"
                         :case_file="$case_file"
                     />
-                    @if (! empty($case_file->documents))
+                    @if (empty($case_file->document))
                         <div
                             class="mb-6 grid grid-cols-1 rounded-sm bg-gray-200 p-2"
                         >
                             <p class="p-2">No documents found</p>
                         </div>
                     @else
-                        @foreach ($case_file->documents as $doc)
-                            @if (! empty($doc->document_path))
+                        @foreach ($case_file->document as $doc)
+                            @if (! empty($doc->document))
                                 <div
                                     class="mb-6 grid grid-cols-2 rounded-sm bg-gray-200 p-2"
                                 >
                                     <p class="col-span-2 p-2">
                                         <span class="font-medium">
-                                            Document
+                                            Document :
                                         </span>
-                                        : {{ $doc->document_path }}
+                                    <a
+                                        href="{{ asset('storage/' . $doc->document) }}"
+                                        target="_blank"
+                                        class="underline"
+                                    >
+                                        <span
+                                            class="flex flex-row items-center gap-1.5"
+                                        >
+                                            <x-fas-hand-point-right
+                                                class="h-4 w-4"
+                                            />
+                                            View uploaded document
+                                        </span>
+                                    </a>
                                     </p>
                                 </div>
                             @endif

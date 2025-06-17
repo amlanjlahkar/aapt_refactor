@@ -68,7 +68,7 @@
             >
                 <a href="{{ route('user.cases.check_case_status') }}">
                     <div
-                        class="cursor-pointer rounded border-1 border-transparent bg-white p-4 text-center shadow-sm hover:border-gray-400 hover:bg-gray-300"
+                        class="cursor-pointer rounded border-1 border-transparent bg-white p-4 text-center shadow-sm hover:border-gray-300 hover:bg-gray-200"
                     >
                         <p class="font-medium text-gray-700">
                             Check Case Status
@@ -76,7 +76,7 @@
                     </div>
                 </a>
                 <div
-                    class="cursor-pointer rounded border-1 border-transparent bg-white p-4 text-center shadow-sm hover:border-gray-400 hover:bg-gray-300"
+                    class="cursor-pointer rounded border-1 border-transparent bg-white p-4 text-center shadow-sm hover:border-gray-300 hover:bg-gray-200"
                 >
                     <p class="font-medium text-gray-700">Edit Profile</p>
                 </div>
@@ -84,7 +84,7 @@
                     href="{{ route('user.efiling.register.step1.create', ['step' => 1]) }}"
                 >
                     <div
-                        class="cursor-pointer rounded border-1 border-transparent bg-white p-4 text-center shadow-sm hover:border-gray-400 hover:bg-gray-300"
+                        class="cursor-pointer rounded border-1 border-transparent bg-white p-4 text-center shadow-sm hover:border-gray-300 hover:bg-gray-200"
                     >
                         <p class="font-medium text-gray-700">New Case Filing</p>
                     </div>
@@ -92,5 +92,5 @@
             </div>
         </x-user.container>
     </main>
-    @include('partials.footer')
+    @include('partials.footer-alt')
 </x-layout>

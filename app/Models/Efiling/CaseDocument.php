@@ -10,6 +10,7 @@ class CaseDocument extends Model {
         'case_file_id',
         'document',
         'document_type',
+        'mimetype',
         'original_name',
     ];
 

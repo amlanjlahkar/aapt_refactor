@@ -57,7 +57,7 @@ class CaseDocumentController extends Controller {
         ])->validate();
 
         if ($document && $document->isValid()) {
-            $validated['document_path'] ??= $document->store('docs', 'public');
+            $validated['document'] = $document->store('docs', 'public');
         }
 
         CaseDocument::create($validated);

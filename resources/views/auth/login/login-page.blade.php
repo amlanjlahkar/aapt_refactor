@@ -1,7 +1,12 @@
 <x-layout title="Login">
     @include('partials.header')
     @include('partials.navbar')
-    <main class="grow">
+    <main
+        class="grow bg-cover bg-center"
+        style="
+            background-image: url('{{ asset('images/supreme_court.jpg') }}');
+        "
+    >
         <div
             class="m-10 mx-auto max-w-xl overflow-hidden rounded bg-white p-6 border border-gray-300"
         >
