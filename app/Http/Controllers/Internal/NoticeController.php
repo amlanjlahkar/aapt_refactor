@@ -78,12 +78,19 @@ class NoticeController extends Controller
    public function downloadPdf($id)
     {
         $notice = Notice::with(['case.petitioners', 'case.respondents'])->findOrFail($id);
-
-        $pdf = DomPDF::loadView('admin.internal.notices.show_notice', [
+        
+        $pdf = DomPDF::loadView('admin.internal.notices.pdf_notice', [
             'notice' => $notice,
-            'isPdf' => true,
-        ])->setPaper('a4', 'portrait');
-
+        ])
+        ->setPaper('a4', 'portrait')
+        ->setOptions([
+            'defaultFont' => 'times-roman',
+            'isRemoteEnabled' => true,
+            'isHtml5ParserEnabled' => true,
+            'chroot' => public_path(),
+            'debugKeepTemp' => true, // Add this for debugging
+        ]);
+        
         return $pdf->download('notice_' . $notice->id . '.pdf');
     }
 

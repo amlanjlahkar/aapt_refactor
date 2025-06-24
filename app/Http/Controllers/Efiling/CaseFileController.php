@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Validator;
 use Spatie\Browsershot\Browsershot;
 use Spatie\LaravelPdf\Facades\Pdf;
 use Spatie\LaravelPdf\PdfBuilder;
+use App\Models\BenchComposition;
+use Carbon\Carbon;
+use App\Models\CaseAllocation;
+use App\Models\Internal\Purpose\PurposeMaster;
+
 
 class CaseFileController extends Controller {
     private function generateRefNumber(): string {
@@ -52,10 +57,189 @@ class CaseFileController extends Controller {
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource(for case Allocation).
      */
-    public function index(): void {
-        //
+    
+    public function index(Request $request): View
+    {
+        $cases = collect(); // default empty collection
+        
+        // Set default values for sequential search
+        $defaultCaseType = 'Original Application';
+        $defaultCaseNo = session('next_case_no', 1);
+        $defaultYear = session('next_case_year', date('Y'));
+        
+        // Use defaults if not provided
+        $caseType = $request->input('case_type', $defaultCaseType);
+        $caseNo = $request->input('case_no', $defaultCaseNo);
+        $year = $request->input('year', $defaultYear);
+        
+        // Always search for the specific case (no user input allowed)
+        if ($request->filled('bench_id') && $request->filled('date')) {
+            $query = CaseFile::query();
+            
+            // Fixed search criteria - USE case_reg_year instead of whereYear('created_at')
+            $query->where('case_type', $caseType)
+                ->where('case_reg_no', $caseNo)
+                ->where('case_reg_year', $year)  // Changed this line
+                ->where('case_status', 'registered');
+            
+            // Get the results with related petitioners and respondents
+            $cases = $query->with(['petitioners', 'respondents'])->latest()->get();
+            
+            // Filter out cases that are already allocated to this bench on the selected date
+            $benchId = $request->input('bench_id');
+            $selectedDate = $request->input('date');
+            
+            $cases = $cases->filter(function ($case) use ($benchId, $selectedDate) {
+                $existingAllocation = CaseAllocation::where([
+                    'case_file_id' => $case->id,
+                    'bench_id' => $benchId,
+                    'causelist_date' => $selectedDate,
+                ])->exists();
+                
+                return !$existingAllocation; // Only include cases that are NOT already allocated
+            });
+            
+            // Store current search parameters in session for next search
+            session([
+                'current_case_no' => $caseNo,
+                'current_case_year' => $year
+            ]);
+            
+            // Debug: Add this temporarily to see what's being searched
+            \Log::info('Search Parameters:', [
+                'case_type' => $caseType,
+                'case_reg_no' => $caseNo,
+                'case_reg_year' => $year,
+                'case_status' => 'registered',
+                'results_count' => $cases->count()
+            ]);
+        }
+        
+        // Use current date if no date provided
+        $selectedDate = $request->input('date') ? Carbon::parse($request->input('date')) : now();
+        
+        $benches = BenchComposition::with(['court', 'judge', 'benchType'])
+            ->where('display', true)
+            ->whereDate('from_date', '<=', $selectedDate)
+            ->orderBy('court_no')
+            ->orderBy('bench_type')
+            ->get();
+
+        
+        
+        $purposes = PurposeMaster::orderBy('purpose_name')->get();
+
+        return view('admin.efiling.case_files.list_case', [
+            'cases' => $cases,
+            'benches' => $benches,
+            'purposes' => $purposes, // Add this line
+            'selectedDate' => $selectedDate,
+            'filters' => [
+                'date' => $request->input('date'),
+                'bench_id' => $request->input('bench_id'),
+                'case_type' => $caseType,
+                'case_no' => $caseNo,
+                'year' => $year
+            ],
+        ]);
+    }
+
+
+
+
+    /**
+     * Store a newly created allocation in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function storeAllocation(Request $request)
+    {
+        $validated = $request->validate([
+            'case_id' => 'required|exists:case_files,id',
+            'bench_id' => 'required|exists:bench_compositions,id',
+            'causelist_date' => 'required|date',
+            'purpose' => 'required|exists:purpose_master,id', // Changed validation
+            'current_case_no' => 'required|integer',
+            'current_year' => 'required|integer',
+        ]);
+
+        // Check for duplicate allocation
+        $existing = CaseAllocation::where([
+            'case_file_id' => $validated['case_id'],
+            'bench_id' => $validated['bench_id'],
+            'causelist_date' => $validated['causelist_date'],
+        ])->first();
+
+        if ($existing) {
+            return back()->with('error', 'This case is already allocated to the selected bench on this date.');
+        }
+
+        // Get the next serial number for this causelist date and bench
+        $nextSerialNo = CaseAllocation::where('causelist_date', $validated['causelist_date'])
+            ->where('bench_id', $validated['bench_id'])
+            ->max('serial_no') + 1;
+
+        // Create the allocation
+        CaseAllocation::create([
+            'case_file_id' => $validated['case_id'],
+            'bench_id' => $validated['bench_id'],
+            'causelist_date' => $validated['causelist_date'],
+            'purpose_id' => $validated['purpose'], // using  purpose_id directly
+            'serial_no' => $nextSerialNo,
+            'status' => 'Draft',
+            'entry_date' => now(),
+            'user_id' => auth('admin')->id(),
+            'priority' => 0,
+        ]);
+
+        // Calculate next case number and year for sequential search
+        $nextCaseNo = $validated['current_case_no'] + 1;
+        $nextYear = $validated['current_year'];
+        
+        // Check if we need to move to next year
+        $maxCaseNoForYear = CaseFile::where('case_type', 'Original Application')
+            ->where('case_reg_year', $nextYear) // Use case_reg_year instead of whereYear('created_at')
+            ->max('case_reg_no');
+        
+        // If next case number exceeds max for current year, move to next year and reset to 1
+        if ($maxCaseNoForYear && $nextCaseNo > $maxCaseNoForYear + 10) { // +10 buffer for new cases
+            $nextYear = $nextYear + 1;
+            $nextCaseNo = 1;
+        }
+        
+        // Store next case details in session
+        session([
+            'next_case_no' => $nextCaseNo,
+            'next_case_year' => $nextYear
+        ]);
+
+        // Redirect back to search for next case automatically
+        return redirect()->route('admin.efiling.case_files.index', [
+            'date' => $validated['causelist_date'],
+            'bench_id' => $validated['bench_id'],
+            'case_type' => 'Original Application',
+            'case_no' => $nextCaseNo,
+            'year' => $nextYear
+        ])->with('success', 'Case allocated successfully to the selected bench. Searching for next case...');
+    }
+
+    /**
+     * Get the next available case number for the current year.
+     *
+     * @param  int  $year
+     * @return int
+     */
+    private function getNextAvailableCaseNumber($year)
+    {
+        $lastCase = CaseFile::where('case_type', 'Original Application')
+            ->whereYear('created_at', $year)
+            ->orderBy('case_reg_no', 'desc')
+            ->first();
+        
+        return $lastCase ? $lastCase->case_reg_no + 1 : 1;
     }
 
     /**

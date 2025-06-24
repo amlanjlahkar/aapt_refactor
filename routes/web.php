@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Internal\BenchCompositionController;
 use App\Http\Controllers\Internal\NoticeController;
+use App\Http\Controllers\Internal\CauseListController;
 
 Route::view('/', 'home')->name('home');
 Route::get('/login', [LoginController::class, 'showLoginPage'])->name('login');
@@ -155,6 +156,30 @@ Route::prefix('admin/internal/notices')->middleware(['auth:admin', PreventBackHi
     Route::get('/{id}/download', [NoticeController::class, 'downloadPdf'])->name('download'); 
 });
 
+//  case listing and allocation routes
+Route::prefix('admin/efiling/case_files')
+    ->middleware(['auth:admin'])
+    ->name('admin.efiling.case_files.')
+    ->group(function () {
+        Route::get('/', [CaseFileController::class, 'index'])->name('index');
+        Route::post('/allocate', [CaseFileController::class, 'storeAllocation'])->name('allocate');
+});
+    
+
+// Cause List routes
+Route::prefix('admin/internal/causelists')
+    ->middleware(['auth:admin', PreventBackHistory::class])
+    ->name('admin.internal.causelists.')
+    ->group(function () {
+        Route::get('/', [CauseListController::class, 'index'])->name('index');
+        Route::post('/{id}/prepare', [CauseListController::class, 'prepare'])->name('prepare');
+        Route::post('/{id}/publish', [CauseListController::class, 'publish'])->name('publish');
+        Route::get('/{id}/view', [CauseListController::class, 'view'])->name('view');
+        Route::post('/{id}/unpublish', [CauseListController::class, 'unpublish'])->name('unpublish');
+        Route::get('/{id}/download-pdf', [CauseListController::class, 'downloadPDF'])->name('download-pdf');
+    });
+
+
 
 // 1}}}
 
@@ -197,3 +222,13 @@ Route::middleware(['auth:admin'])->prefix('registration')->name('admin.registrat
     Route::post('/register', [CaseRegistrationController::class, 'generateCaseNo'])->name('generate');
 });
 // 1}}}
+
+// Reset case session values
+Route::get('/reset-case-session', function () {
+    session([
+        'next_case_no' => 1,
+        'next_case_year' => date('Y'),
+    ]);
+
+    return redirect()->back()->with('status', 'Case session values reset.');
+});

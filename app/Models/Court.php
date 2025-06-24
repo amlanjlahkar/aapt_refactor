@@ -13,4 +13,9 @@ class Court extends Model
         'name', // assuming your courts table has a 'name' column
         'court_no',
     ];
+
+    public function benchCompositions()
+    {
+        return $this->hasMany(BenchComposition::class, 'court_no');
+    }
 }

@@ -47,6 +47,46 @@
                     >
                         Notices
                     </x-nav-item>
+
+                    <!-- Listing Dropdown -->
+                    <div x-data="{ open: false }" class="relative">
+                        <button
+                            @click="open = !open"
+                            class="flex w-full items-center justify-between px-2 py-2 font-medium text-gray-400 hover:text-white"
+                        >
+                            <span>Listing</span>
+                            <svg
+                                :class="{ 'rotate-180': open }"
+                                class="h-4 w-4 transform transition-transform"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                            >
+                                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.96l3.71-3.73a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.08 0L5.23 8.27a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+
+                        <div
+                            x-show="open"
+                            x-cloak
+                            class="ml-4 mt-2 space-y-2 pl-2 border-l border-gray-500"
+                        >
+                            <x-nav-item
+                                route="admin.efiling.case_files.index"
+                                url_pattern="admin/efiling/case_files*"
+                            >
+                                List Case
+                            </x-nav-item>
+                            <br>
+                            <x-nav-item
+                                route="admin.internal.causelists.index"
+                                url_pattern="admin/internal/causelists*"
+                            >
+                                Prepare CauseList
+                            </x-nav-item>
+                        </div>
+                    </div>
+
+                    
                     <!-- <a
                         href="#"
                         class="font-medium text-gray-400 hover:font-semibold hover:text-gray-50"

@@ -69,7 +69,21 @@ class CaseFile extends Model {
         return $this->hasOne(Scrutiny::class)->where('scrutiny_status', 'Completed');
     }
 
-
+    public function getPartyNameAttribute()
+    {
+        $petitionerNames = $this->petitioners->pluck('pet_name')->filter()->join(', ');
+        $respondentNames = $this->respondents->pluck('res_name')->filter()->join(', ');
+    
+        if ($petitionerNames && $respondentNames) {
+            return $petitionerNames . ' vs ' . $respondentNames;
+        } elseif ($petitionerNames) {
+            return $petitionerNames . ' vs [Respondent]';
+        } elseif ($respondentNames) {
+            return '[Petitioner] vs ' . $respondentNames;
+        }
+    
+        return 'ABC vs XYZ';
+    }
 
 
 }

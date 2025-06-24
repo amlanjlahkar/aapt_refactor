@@ -21,4 +21,9 @@ class JudgeMaster extends Model
         'priority',
         'judge_short_name',
     ];
+     
+    public function benchCompositions()
+    {
+        return $this->hasMany(BenchComposition::class, 'judge_id');
+    }
 }

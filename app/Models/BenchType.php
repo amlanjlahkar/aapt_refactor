@@ -14,4 +14,10 @@ class BenchType extends Model
         'type_name',
         'short_form',
     ];
+
+     
+    public function benchType()
+    {
+        return $this->belongsTo(BenchType::class, 'bench_type', 'id');
+    }
 }
