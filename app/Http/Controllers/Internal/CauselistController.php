@@ -34,12 +34,19 @@ class CauseListController extends Controller
                 return back()->with('error', 'No cases found for this causelist.');
             }
 
+            // Check if status is draft
+            if ($representative->status !== CaseAllocation::STATUS_DRAFT) {
+                return back()->with('error', 'Only draft causelists can be prepared.');
+            }
+
+            // Update status to prepared
             CaseAllocation::whereIn('id', $caseAllocations->pluck('id'))
                 ->update([
                     'status' => CaseAllocation::STATUS_PREPARED,
                     'updated_at' => now()
                 ]);
 
+            // Generate PDF
             $pdf = $this->generateCauseListPDF($representative);
             $filename = $this->generateCauseListFilename(
                 Carbon::parse($representative->causelist_date),
@@ -62,16 +69,18 @@ class CauseListController extends Controller
         try {
             DB::beginTransaction();
             
+            $representative = CaseAllocation::findOrFail($id);
             $caseAllocations = $this->getCaseAllocationsByGroup($id);
             
             if ($caseAllocations->isEmpty()) {
                 return back()->with('error', 'No cases found for this causelist.');
             }
 
-            if ($caseAllocations->first()->status !== CaseAllocation::STATUS_PREPARED) {
+            if ($representative->status !== CaseAllocation::STATUS_PREPARED) {
                 return back()->with('error', 'Causelist must be prepared before publishing.');
             }
 
+            // Update status to published
             CaseAllocation::whereIn('id', $caseAllocations->pluck('id'))
                 ->update([
                     'status' => CaseAllocation::STATUS_PUBLISHED,
@@ -90,20 +99,15 @@ class CauseListController extends Controller
         }
     }
 
-
     public function view($id)
     {
         try {
             $causelist = CaseAllocation::with(['bench.judge', 'caseFile', 'purpose'])
                                      ->findOrFail($id);
             
-            if (!$causelist->published_at && $causelist->status !== 'prepared') {
-                return back()->with('error', 'This causelist is not prepared or published yet.');
-            }
-
             $cases = $this->getCaseAllocationsByGroup($id);
             
-            return view('admin.internal.causelist.view', compact('causelist', 'cases'));
+            return view('admin.internal.causelist.view_causelist', compact('causelist', 'cases'));
             
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to load causelist: ' . $e->getMessage());
@@ -115,15 +119,21 @@ class CauseListController extends Controller
         try {
             DB::beginTransaction();
             
+            $representative = CaseAllocation::findOrFail($id);
             $caseAllocations = $this->getCaseAllocationsByGroup($id);
             
             if ($caseAllocations->isEmpty()) {
                 return back()->with('error', 'No cases found for this causelist.');
             }
 
+            if ($representative->status !== CaseAllocation::STATUS_PUBLISHED) {
+                return back()->with('error', 'Only published causelists can be unpublished.');
+            }
+
+            // Revert status back to draft
             CaseAllocation::whereIn('id', $caseAllocations->pluck('id'))
                 ->update([
-                    'status' => CaseAllocation::STATUS_PREPARED,
+                    'status' => CaseAllocation::STATUS_DRAFT,
                     'published_by' => null,
                     'published_at' => null,
                     'updated_at' => now()
@@ -139,52 +149,68 @@ class CauseListController extends Controller
         }
     }
 
-    public function downloadPDF($id)
+    public function downloadPdf($id)
     {
         try {
+            // Get the representative case allocation record
             $representative = CaseAllocation::findOrFail($id);
-            $pdf = $this->generateCauseListPDF($representative);
             
-            $filename = $this->generateCauseListFilename(
-                Carbon::parse($representative->causelist_date),
-                $representative->bench_id
-            );
+            // Get all case allocations for this group (same date, type, bench)
+            $cases = $this->getCaseAllocationsByGroup($id);
+
+            // Check if causelist is prepared or published
+            if (!in_array($representative->status, [CaseAllocation::STATUS_PREPARED, CaseAllocation::STATUS_PUBLISHED])) {
+                return redirect()->back()->with('error', 'PDF can only be generated for Prepared or Published causelists.');
+            }
+
+            $data = [
+                'causelist' => $representative, // Using representative as causelist
+                'cases' => $cases,
+                'generated_at' => now()->format('d-m-Y H:i:s')
+            ];
+
+            $pdf = PDF::loadView('admin.internal.causelist.pdf_causelist', $data);
+            
+            $filename = 'causelist_' . ($representative->bench->court_no ?? 'unknown') . '_' . 
+                    \Carbon\Carbon::parse($representative->causelist_date)->format('d-m-Y') . '.pdf';
             
             return $pdf->download($filename);
+            
         } catch (\Exception $e) {
-            return back()->with('error', 'Failed to generate PDF: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error generating PDF: ' . $e->getMessage());
         }
     }
 
     private function getCauseListGroups()
     {
-        return CaseAllocation::with(['bench.judge'])
+        // Get all case allocations grouped by causelist_date, causelist_type, and bench_id
+        $groups = CaseAllocation::with(['bench.judge'])
             ->select([
                 'causelist_date', 
                 'causelist_type', 
                 'bench_id',
-                DB::raw('MIN(id) as id'),
-                DB::raw('MAX(published_at) as published_at'),
-                DB::raw('MAX(status) as status'),
-                DB::raw('COUNT(*) as total_cases'),
-                DB::raw("MAX(CASE WHEN status = '".CaseAllocation::STATUS_PUBLISHED."' THEN 1 ELSE 0 END) as is_published"),
-                DB::raw("MAX(CASE WHEN status = '".CaseAllocation::STATUS_PREPARED."' THEN 1 ELSE 0 END) as is_prepared")
+                DB::raw('MIN(id) as representative_id'),
+                DB::raw('COUNT(*) as total_cases')
             ])
             ->groupBy(['causelist_date', 'causelist_type', 'bench_id'])
             ->orderByDesc('causelist_date')
             ->orderBy('bench_id')
-            ->get()
-            ->map(function ($item) {
-                $representative = CaseAllocation::where('causelist_date', $item->causelist_date)
-                    ->where('causelist_type', $item->causelist_type)
-                    ->where('bench_id', $item->bench_id)
-                    ->first();
-                
-                $item->id = $representative ? $representative->id : $item->id;
-                $item->is_published = (bool) $item->is_published;
-                $item->is_prepared = (bool) $item->is_prepared;
-                return $item;
-            });
+            ->get();
+
+        // For each group, get the representative record with full details including status
+        return $groups->map(function ($group) {
+            $representative = CaseAllocation::with(['bench.judge'])
+                ->where('causelist_date', $group->causelist_date)
+                ->where('causelist_type', $group->causelist_type)
+                ->where('bench_id', $group->bench_id)
+                ->first();
+
+            if ($representative) {
+                $representative->total_cases = $group->total_cases;
+                return $representative;
+            }
+            return null;
+        })->filter();
     }
 
     private function getCaseAllocationsByGroup($representativeId)

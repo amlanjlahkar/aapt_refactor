@@ -53,7 +53,7 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            @forelse($causeListGroups ?? [] as $causelist)
+                            @forelse($causeListGroups as $causelist)
                                 <tr class="hover:bg-gray-50">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                         {{ $causelist->bench->court_no ?? 'N/A' }}
@@ -66,7 +66,8 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">
                                         <div class="flex items-center gap-2">
-                                            @if(!$causelist->is_prepared && !$causelist->is_published)
+                                            @if($causelist->status === 'Draft')
+                                                {{-- Show Prepare Button for Draft Status --}}
                                                 <form method="POST" action="{{ route('admin.internal.causelists.prepare', $causelist->id) }}" class="inline">
                                                     @csrf
                                                     <button type="submit" 
@@ -74,7 +75,8 @@
                                                         Prepare
                                                     </button>
                                                 </form>
-                                            @elseif($causelist->is_prepared && !$causelist->is_published)
+                                            @elseif($causelist->status === 'Prepared')
+                                                {{-- Show Publish Button for Prepared Status --}}
                                                 <form method="POST" action="{{ route('admin.internal.causelists.publish', $causelist->id) }}" class="inline">
                                                     @csrf
                                                     <button type="submit" 
@@ -82,15 +84,8 @@
                                                         Publish
                                                     </button>
                                                 </form>
-                                                <a href="{{ route('admin.internal.causelists.view', $causelist->id) }}" 
-                                                class="px-3 py-1.5 bg-gray-600 text-white text-xs rounded hover:bg-gray-700 transition font-medium">
-                                                    View Causelist
-                                                </a>
-                                            @else
-                                                <a href="{{ route('admin.internal.causelists.view', $causelist->id) }}" 
-                                                class="px-3 py-1.5 bg-gray-600 text-white text-xs rounded hover:bg-gray-700 transition font-medium">
-                                                    View Causelist
-                                                </a>
+                                            @elseif($causelist->status === 'Published')
+                                                {{-- Show Unpublish Button for Published Status --}}
                                                 <form method="POST" action="{{ route('admin.internal.causelists.unpublish', $causelist->id) }}" class="inline">
                                                     @csrf
                                                     <button type="submit" 
@@ -99,6 +94,10 @@
                                                         Unpublish
                                                     </button>
                                                 </form>
+                                                
+                                            @else
+                                                {{-- Fallback if status doesn't match expected values --}}
+                                                <span class="text-red-500 text-xs">Unknown status: {{ $causelist->status }}</span>
                                             @endif
                                         </div>
                                     </td>
@@ -114,24 +113,17 @@
                     </table>
                 </div>
 
-                {{-- Status Message --}}
-                @if(session('success') && str_contains(session('success'), 'prepared'))
-                    <div class="mt-6 p-4 bg-green-50 rounded-lg">
-                        <p class="text-green-800 font-medium">Cause list prepared successfully.</p>
-                    </div>
-                @endif
-
                 {{-- Published Lists Section --}}
                 @php
                     $publishedCauselists = $causeListGroups->filter(function($causelist) {
-                        return $causelist->is_published;
+                        return in_array($causelist->status, ['Prepared', 'Published']);
                     });
                 @endphp
 
                 @if($publishedCauselists->isNotEmpty())
                     <div class="mt-8">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Published Lists</h3>
-                        
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Published Causelists</h3>
+
                         <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
@@ -144,6 +136,9 @@
                                         </th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Causelist Date
+                                        </th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Status
                                         </th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Action
@@ -161,6 +156,12 @@
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                                 {{ \Carbon\Carbon::parse($causelist->causelist_date)->format('d-m-Y') }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                <span class="px-2 py-1 text-xs rounded-full 
+                                                    {{ $causelist->status === 'Published' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800' }}">
+                                                    {{ $causelist->status }}
+                                                </span>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm">
                                                 <a href="{{ route('admin.internal.causelists.view', $causelist->id) }}" 
