@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Internal\BenchCompositionController;
 use App\Http\Controllers\Internal\NoticeController;
 use App\Http\Controllers\Internal\CauseListController;
+use App\Http\Controllers\Internal\CaseProceedingController;
 
 Route::view('/', 'home')->name('home');
 Route::get('/login', [LoginController::class, 'showLoginPage'])->name('login');
@@ -177,7 +178,20 @@ Route::prefix('admin/internal/causelists')
         Route::get('/{id}/view', [CauseListController::class, 'view'])->name('view');
         Route::post('/{id}/unpublish', [CauseListController::class, 'unpublish'])->name('unpublish');
         Route::get('/{id}/download-pdf', [CauseListController::class, 'downloadPDF'])->name('download-pdf');
-    });
+});
+
+
+// Case proceeding routes
+Route::get('/internal/case-proceeding', [\App\Http\Controllers\Internal\CaseProceedingController::class, 'index'])->name('internal.case_proceeding.index');
+Route::get('/internal/case-proceeding/search', [\App\Http\Controllers\Internal\CaseProceedingController::class, 'search'])->name('internal.case_proceeding.search');
+Route::post('/internal/case-proceeding/store', [\App\Http\Controllers\Internal\CaseProceedingController::class, 'store'])->name('internal.case_proceeding.store');
+
+
+Route::get('/internal/case-proceeding/{id}', [\App\Http\Controllers\Internal\CaseProceedingController::class, 'show'])->name('internal.case_proceeding.show');
+Route::get('/internal/case-proceeding/history/{caseId}', [\App\Http\Controllers\Internal\CaseProceedingController::class, 'history'])->name('internal.case_proceeding.history');
+Route::get('/internal/case-proceeding/{id}/edit', [\App\Http\Controllers\Internal\CaseProceedingController::class, 'edit'])->name('internal.case_proceeding.edit');
+Route::put('/internal/case-proceeding/{id}', [\App\Http\Controllers\Internal\CaseProceedingController::class, 'update'])->name('internal.case_proceeding.update');
+Route::delete('/internal/case-proceeding/{id}', [\App\Http\Controllers\Internal\CaseProceedingController::class, 'destroy'])->name('internal.case_proceeding.destroy');
 
 
 

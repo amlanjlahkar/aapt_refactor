@@ -85,7 +85,13 @@
                             </x-nav-item>
                         </div>
                     </div>
-
+    
+                    <x-nav-item
+                        route="internal.case_proceeding.index"
+                        url_pattern="internal/case-proceeding*"
+                    >
+                        Proceedings
+                    </x-nav-item>
                     
                     <!-- <a
                         href="#"
